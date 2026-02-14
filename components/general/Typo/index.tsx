@@ -14,7 +14,7 @@ function TypoMain(props: any) {
     )
 }
 
-type ColorType = 'primary' | 'secondary' | 'inverted';
+type ColorType = 'primary' | 'secondary' | 'inverted' | 'brand' | 'correct' | 'wrong' | 'background-secondary' | 'background-third' | 'border';
 type FontWeightType = 'light' | 'regular' | 'medium' | 'semi-bold' | 'bold';
 
 interface TypoProps {
