@@ -1,0 +1,12 @@
+.container{
+    padding: $s-12;
+    background-color: $background-primary;
+    border-radius: $s-16;
+}
+
+.button{
+    width: 100%;
+    padding: $s-12 !important;
+    background-color: $brand-primary !important;
+    border-radius: $s-16 !important;
+}

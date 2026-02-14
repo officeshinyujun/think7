@@ -6,6 +6,8 @@ import { VStack } from "@/components/general/VStack";
 import Typo from "@/components/general/Typo";
 import Header from "@/components/general/Header";
 import StricSection from "@/components/main/Stric/StricSection";
+import IssueSection from "@/components/main/Issue/IssueSection";
+import ThinkSection from "@/components/main/Think/ThinkSection";
 
 export default function Home() {
 
@@ -42,6 +44,10 @@ export default function Home() {
           strict : false
         }
       ]
+    },
+    issue : {
+      editor : "김민준",
+      title : "AI가 세상을 지배할까?"
     }
   }
 
@@ -52,6 +58,11 @@ export default function Home() {
         strictDay={dummyData.strict.strictDay}
         thisWeek={dummyData.strict.thisWeek}
       />
+      <IssueSection
+        editor={dummyData.issue.editor}
+        title={dummyData.issue.title}
+      />  
+      <ThinkSection />
     </VStack>    
   );
 
