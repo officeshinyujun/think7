@@ -46,7 +46,7 @@ export default function Article() {
             <VStack fullWidth align="start" justify="start"  className={s.buttonContainer}>
                 <div className={s.gradient}/>
                 <VStack fullWidth align="center" justify="center" className={s.buttonContainerTwo}>
-                    <Button className={s.button}>
+                    <Button className={s.button} onClick={() => router.push("/article/question")}>
                         <Typo.MD
                             color="inverted"
                             fontWeight="semi-bold"
