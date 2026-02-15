@@ -9,6 +9,8 @@ import StricSection from "@/components/main/Stric/StricSection";
 import IssueSection from "@/components/main/Issue/IssueSection";
 import ThinkSection from "@/components/main/Think/ThinkSection";
 import BottomBar from "@/components/general/BottomBar";
+import ReportPreview from "@/components/main/ReportPreview";
+import GrowthChart from "@/components/main/GrowthChart";
 
 export default function Home() {
 
@@ -62,8 +64,9 @@ export default function Home() {
       <IssueSection
         editor={dummyData.issue.editor}
         title={dummyData.issue.title}
-      />  
-      <ThinkSection />
+      />
+      <ReportPreview />
+      <GrowthChart />  
       <BottomBar /> 
     </VStack>    
   );

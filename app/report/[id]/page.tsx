@@ -7,8 +7,7 @@ import Header from "@/components/general/Header";
 import Section from "@/components/record/Section";
 import { HStack } from "@/components/general/HStack";
 import Button from "@/components/general/Button";
-import {useRouter} from "next/navigation";
-import BottomBar from "@/components/general/BottomBar";
+import { useRouter } from "next/navigation";
 
 const dummyData = {
     day : "2026년 1월 3일",
@@ -66,8 +65,10 @@ const dummyData = {
   ]
 }
 
-export default function Record() {
+export default function ReportDetail() {
+
     const router = useRouter();
+
     return (
         <VStack fullWidth align="start" justify="start" gap={24} className={s.container}>
             <Header/>
@@ -76,7 +77,7 @@ export default function Record() {
                     color="primary"
                     fontWeight="bold"
                 >
-                    오늘의 사고 점수는 <span style={{color:"#3D7BFF"}}>{dummyData.summary.score}</span>점입니다.
+                    {dummyData.day}의 사고 점수는 <span style={{color:"#3D7BFF"}}>{dummyData.summary.score}</span>점입니다.
                 </Typo.XL>
                 <Typo.MD
                     color="primary"
@@ -181,7 +182,9 @@ export default function Record() {
                     <Typo.SM color="primary" fontWeight="medium">{dummyData.growth.comment}</Typo.SM>
                 </VStack>
              </Section>
-             <BottomBar/>
+             <Button className={s.nextButton} onClick={() => router.push('/report')}>
+                <Typo.MD color="inverted" fontWeight="bold">돌아가기</Typo.MD>
+             </Button>
         </VStack>
     )
 }

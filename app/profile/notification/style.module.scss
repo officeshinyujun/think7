@@ -1,0 +1,47 @@
+.container {
+    min-height: 100vh;
+    padding: $s-16;
+    background-color: $background-secondary;
+    padding-bottom: 120px;
+}
+
+.item {
+    width: 100%;
+    padding: $s-20;
+    background-color: $background-primary;
+    border-radius: $s-16;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.toggle {
+    width: 48px;
+    height: 28px;
+    border-radius: 100px;
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    background-color: $background-third;
+
+    &.active {
+        background-color: $brand-primary;
+
+        .knob {
+            transform: translateX(20px);
+            background-color: white;
+        }
+    }
+}
+
+.knob {
+    width: 24px;
+    height: 24px;
+    background-color: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    transition: transform 0.2s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}

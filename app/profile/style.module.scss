@@ -1,0 +1,52 @@
+.container {
+    min-height: 100vh;
+    padding: $s-16;
+    background-color: $background-secondary;
+    padding-bottom: 120px;
+}
+
+.profileCard {
+    background-color: $background-primary;
+    padding: $s-24;
+    border-radius: $s-24;
+    width: 100%;
+}
+
+.avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background-color: $background-third;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.subscriptionCard {
+    background-color: $brand-primary;
+    padding: $s-20;
+    border-radius: $s-20;
+    width: 100%;
+}
+
+.menuItem {
+    width: 100%;
+    padding: $s-16;
+    background-color: $background-primary;
+    border-radius: $s-16;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    &:hover {
+        background-color: $background-third;
+    }
+}
+
+.logoutButton {
+    width: 100%;
+    padding: $s-16;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}

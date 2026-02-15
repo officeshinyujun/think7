@@ -1,0 +1,90 @@
+.container {
+    min-height: 100vh;
+    padding: $s-16;
+    background-color: $background-secondary;
+    padding-bottom: 120px;
+    background: linear-gradient(180deg, #F5F7FA 0%, #F3F3F7 100%);
+}
+
+.heroSection {
+    padding: $s-32 $s-24;
+    text-align: center;
+    background-color: white;
+    border-radius: $s-24;
+    margin-bottom: $s-24;
+    box-shadow: 0 4px 20px rgba(61, 123, 255, 0.05);
+}
+
+.featureList {
+    background-color: white;
+    padding: $s-24;
+    border-radius: $s-24;
+    margin-bottom: $s-24;
+}
+
+.featureItem {
+    padding: $s-16 0;
+    border-bottom: 1px solid $border-primary;
+    
+    &:last-child {
+        border-bottom: none;
+    }
+}
+
+.pricingCard {
+    background: linear-gradient(135deg, $brand-primary 0%, #2A5ECC 100%);
+    padding: $s-32 $s-24;
+    border-radius: $s-24;
+    text-align: center;
+    color: white;
+    margin-bottom: $s-24;
+    box-shadow: 0 8px 30px rgba(61, 123, 255, 0.3);
+}
+
+.priceTag {
+    font-size: 32px;
+    font-weight: 800;
+    margin: $s-16 0;
+}
+
+.ctaButton {
+    width: 100%;
+    padding: $s-16;
+    background-color: $background-primary !important;
+    border-radius: $s-12;
+    margin-top: $s-16;
+    cursor: pointer;
+    transition: transform 0.1s;
+    
+    &:active {
+        transform: scale(0.98);
+    }
+}
+
+.comparisonTable {
+    background-color: white;
+    padding: $s-24;
+    border-radius: $s-24;
+    width: 100%;
+}
+
+.tableRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: $s-12 0;
+    border-bottom: 1px solid $border-primary;
+    
+    &:last-child {
+        border-bottom: none;
+    }
+}
+
+.checkIcon {
+    color: $brand-primary;
+}
+
+.xIcon {
+    color: $text-secondary;
+    opacity: 0.3;
+}

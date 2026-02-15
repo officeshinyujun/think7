@@ -1,0 +1,22 @@
+.container {
+    min-height: 100vh;
+    padding: $s-16;
+    background-color: $background-secondary;
+    padding-bottom: 120px;
+}
+
+.item {
+    width: 100%;
+    padding: $s-20;
+    background-color: $background-primary;
+    border-radius: $s-16;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    &:hover {
+        background-color: $background-third;
+    }
+}
