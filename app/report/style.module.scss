@@ -1,6 +1,58 @@
-.container{
-    padding: $s-16;
+.container {
+    width: 100%;
+    min-height: 100vh;
     background-color: $background-secondary;
-    height: 100%;
+    padding: $s-20;
     padding-bottom: 120px;
+    
+    @media (min-width: 768px) {
+        padding: 0;
+        padding-bottom: 0;
+        background-color: $background-secondary;
+        display: flex;
+        flex-direction: row;
+    }
+}
+
+.mobileHeader {
+    @media (min-width: 768px) {
+        display: none;
+    }
+}
+
+.mobileBottomBar {
+    @media (min-width: 768px) {
+        display: none;
+    }
+}
+
+.desktopContent {
+    width: 100%;
+    
+    @media (min-width: 768px) {
+        margin-left: 280px;
+        padding: 40px;
+        max-width: calc(100% - 280px);
+    }
+}
+
+.gridContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    @media (min-width: 768px) {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 24px;
+        max-width: 800px; // Limit width for report list to keep it readable
+        margin: 0 auto;
+    }
+}
+
+.reportListWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
 }

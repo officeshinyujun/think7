@@ -2,7 +2,7 @@
     padding: $s-24;
     background-color: white;
     border-radius: $s-24;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid $border-primary; // Added border for better visibility without shadow
 }
 
 .header {

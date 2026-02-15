@@ -6,9 +6,18 @@ import QuestionSection from "@/components/article/Question/QuestionSection";
 import Button from "@/components/general/Button";
 import Typo from "@/components/general/Typo";
 import { useRouter } from "next/navigation";
+import { HStack } from "@/components/general/HStack";
+import { ChevronLeft } from "lucide-react";
 
 export default function Question() {
     const router = useRouter();
+
+    const articleData = {
+        title : "“석주는 관하여”",
+        editor : "NBM 정여진 기자",
+        content : "Lorem Ipsum is simply dummy text of the printing and  typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of  type and scrambled it to make a type specimen book. It has survived not  only five centuries, but also the leap into electronic typesetting,  remaining essentially unchanged. It was popularised in the 1960s with  the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker  including versions of Lorem Ipsum.Lorem Ipsum is simply dummy text of the printing and  typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of  type and scrambled it to make a type specimen book. It has survived not  only five centuries, but also the leap into electronic typesetting,  remaining essentially unchanged. It was popularised in the 1960s with  the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker  including versions of Lorem Ipsum.Lorem Ipsum is simply dummy text of the printing and  typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of  type and scrambled it to make a type specimen book. It has survived not  only five centuries, but also the leap into electronic typesetting,  remaining essentially unchanged. It was popularised in the 1960s with  the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker  including versions of Lorem Ipsum."
+    }
+
     const quizData = [
         {
             title: "Q1. 위 글의 내용과 일치하지 않는 것은?",
@@ -53,18 +62,34 @@ export default function Question() {
     ]
 
     return (
-        <VStack fullHeight fullWidth align="start" justify="start" gap={12} className={s.container}>
-            {quizData.map((item, index) => (
-                <QuestionSection
-                    key={index}
-                    title={item.title}
-                    question={item.question}
-                />
-            ))}
-            <Button
-                className={s.button}
-                onClick={() => router.push("/record")}
-            ><Typo.MD color="inverted">제출</Typo.MD></Button>
-        </VStack>
+        <div className={s.desktopContainer}>
+            <div className={s.articleColumn}>
+                <VStack fullWidth align="start" justify="start" gap={8} className={s.header}>
+                    <HStack fullWidth align="center" justify="between" gap={6}>
+                        <Typo.XL color="primary" fontWeight="bold">{articleData.title}</Typo.XL>
+                         <HStack align="center" gap={4} onClick={() => router.back()} style={{cursor: 'pointer'}}>
+                            <ChevronLeft size={20} color="#8B847F" />
+                            <Typo.SM color="secondary" fontWeight="medium">이전으로</Typo.SM>
+                        </HStack>
+                    </HStack>
+                    <Typo.SM color="secondary" fontWeight="medium">{articleData.editor}</Typo.SM>
+                </VStack>
+                <Typo.MD color="primary" fontWeight="regular" className={s.content}>{articleData.content}</Typo.MD>
+            </div>
+
+            <VStack fullHeight fullWidth align="start" justify="start" gap={12} className={s.questionColumn}>
+                {quizData.map((item, index) => (
+                    <QuestionSection
+                        key={index}
+                        title={item.title}
+                        question={item.question}
+                    />
+                ))}
+                <Button
+                    className={s.button}
+                    onClick={() => router.push("/analysis")}
+                ><Typo.MD color="inverted">제출</Typo.MD></Button>
+            </VStack>
+        </div>
     )
 }

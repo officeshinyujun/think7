@@ -11,6 +11,7 @@ import ThinkSection from "@/components/main/Think/ThinkSection";
 import BottomBar from "@/components/general/BottomBar";
 import ReportPreview from "@/components/main/ReportPreview";
 import GrowthChart from "@/components/main/GrowthChart";
+import Sidebar from "@/components/general/Sidebar";
 
 export default function Home() {
 
@@ -55,20 +56,40 @@ export default function Home() {
   }
 
   return (
-    <VStack fullWidth className={s.container} gap={16}>
-      <Header />
-      <StricSection
-        strictDay={dummyData.strict.strictDay}
-        thisWeek={dummyData.strict.thisWeek}
-      />
-      <IssueSection
-        editor={dummyData.issue.editor}
-        title={dummyData.issue.title}
-      />
-      <ReportPreview />
-      <GrowthChart />  
-      <BottomBar /> 
-    </VStack>    
+    <div className={s.container}>
+      <Sidebar />
+      
+      <div className={s.desktopContent}>
+          <div className={s.mobileHeader}>
+            <Header />
+          </div>
+
+          <div className={s.gridContainer}>
+            <div className={s.leftColumn}>
+                <IssueSection
+                    editor={dummyData.issue.editor}
+                    title={dummyData.issue.title}
+                />
+                <GrowthChart />
+            </div>
+
+            <div className={s.rightColumn}>
+                <StricSection
+                    strictDay={dummyData.strict.strictDay}
+                    thisWeek={dummyData.strict.thisWeek}
+                />
+                <ReportPreview />
+                <div className={s.mobileOnly}>
+                     <ThinkSection />
+                </div>
+            </div>
+          </div>
+
+          <div className={s.mobileBottomBar}>
+            <BottomBar /> 
+          </div>
+      </div>
+    </div>    
   );
 
 }

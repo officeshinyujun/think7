@@ -7,10 +7,18 @@ import Button from "@/components/general/Button";
 import { ChevronLeft } from "lucide-react";
 import { HStack } from "@/components/general/HStack";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function Article() {
 
     const router = useRouter();
+
+    useEffect(() => {
+        if (window.innerWidth >= 1024) {
+             router.replace("/article/question");
+        }
+    }, [router]);
+
     const dummyData = {
         title : "“석주는 관하여”",
         editor : "NBM 정여진 기자",
@@ -18,31 +26,47 @@ export default function Article() {
     }
 
     return (
-        <VStack fullWidth align="start" justify="start" className={s.container} gap={16}>
-            <VStack fullWidth align="start" justify="start" gap={8}>
-                <HStack fullWidth align="center" justify="between" gap={6}>
-                    <Typo.XL
-                        color="primary"
-                        fontWeight="bold"
-                    >{dummyData.title}</Typo.XL>
+        <div className={s.container}>
+            <VStack fullWidth align="start" justify="start" className={s.contentWrapper} gap={16}>
+                <VStack fullWidth align="start" justify="start" gap={8}>
+                    <HStack fullWidth align="center" justify="between" gap={6}>
+                        <Typo.XL
+                            color="primary"
+                            fontWeight="bold"
+                        >{dummyData.title}</Typo.XL>
+                        <Typo.SM
+                            color="secondary"
+                            fontWeight="medium"
+                            onClick={() => router.back()}
+                            style={{cursor: 'pointer'}}
+                        >
+                            이전으로
+                        </Typo.SM>
+                    </HStack>
                     <Typo.SM
                         color="secondary"
                         fontWeight="medium"
-                        onClick={() => router.back()}
-                    >
-                        이전으로
-                    </Typo.SM>
-                </HStack>
-                <Typo.SM
-                    color="secondary"
-                    fontWeight="medium"
-                >{dummyData.editor}</Typo.SM>
+                    >{dummyData.editor}</Typo.SM>
+                </VStack>
+                <div style={{lineHeight: '1.8'}}>
+                    <Typo.MD    
+                        color="primary"
+                        fontWeight="regular"
+                    >{dummyData.content}</Typo.MD>
+                </div>
+                
+                <div className={s.desktopButton}>
+                    <Button className={s.button} onClick={() => router.push("/article/question")}>
+                        <Typo.MD
+                            color="inverted"
+                            fontWeight="semi-bold"
+                        >문제 풀기</Typo.MD>
+                    </Button>
+                </div>
+
+                <div className={s.mobileSpacer} style={{width:"100%", minHeight:"100px"}}/>
             </VStack>
-            <Typo.MD    
-                color="primary"
-                fontWeight="regular"
-            >{dummyData.content}</Typo.MD>
-            <div style={{width:"100%", minHeight:"100px"}}/>
+            
             <VStack fullWidth align="start" justify="start"  className={s.buttonContainer}>
                 <div className={s.gradient}/>
                 <VStack fullWidth align="center" justify="center" className={s.buttonContainerTwo}>
@@ -54,6 +78,7 @@ export default function Article() {
                     </Button>
                 </VStack>
             </VStack>
-        </VStack>
+        </div>
     )
+
 }

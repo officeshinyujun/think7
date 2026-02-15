@@ -1,7 +1,74 @@
 .container {
-    padding: $s-16;
+    width: 100%;
+    min-height: 100vh;
     background-color: $background-secondary;
-    width: 100vw;
+    padding: $s-20;
+    padding-bottom: 120px; // For BottomBar on mobile
+    
+    @media (min-width: 768px) {
+        padding: 0;
+        padding-bottom: 0;
+        background-color: $background-secondary;
+        display: flex;
+        flex-direction: row;
+    }
+}
+
+.mobileHeader {
+    @media (min-width: 768px) {
+        display: none;
+    }
+}
+
+.mobileBottomBar {
+    @media (min-width: 768px) {
+        display: none;
+    }
+}
+
+.desktopContent {
+    width: 100%;
+    
+    @media (min-width: 768px) {
+        margin-left: 280px; // Sidebar width
+        padding: 40px;
+        max-width: calc(100% - 280px);
+    }
+}
+
+.gridContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    @media (min-width: 768px) {
+        display: grid;
+        grid-template-columns: 2fr 1fr; // 2:1 ratio for Main vs Side
+        gap: 24px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+}
+
+.leftColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.rightColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+// Ensure cards take full height in grid if needed
+.card {
     height: 100%;
-    padding-bottom: 120px;
+}
+
+.mobileOnly {
+    @media (min-width: 768px) {
+        display: none;
+    }
 }

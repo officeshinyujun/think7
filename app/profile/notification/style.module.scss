@@ -1,35 +1,63 @@
 .container {
+    width: 100%;
     min-height: 100vh;
     padding: $s-16;
     background-color: $background-secondary;
     padding-bottom: 120px;
+
+    @media (min-width: 768px) {
+        padding: 0;
+        padding-bottom: 0;
+        display: flex;
+        flex-direction: row;
+    }
+}
+
+.desktopContent {
+    width: 100%;
+    
+    @media (min-width: 768px) {
+        margin-left: 280px;
+        padding: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+    }
+}
+
+.contentWrapper {
+    width: 100%;
+     @media (min-width: 768px) {
+        max-width: 800px;
+    }
 }
 
 .item {
     width: 100%;
     padding: $s-20;
-    background-color: $background-primary;
+    background-color: white;
     border-radius: $s-16;
     display: flex;
-    align-items: center;
     justify-content: space-between;
+    align-items: center;
+    // border removed
+    // Removed shadow
 }
 
 .toggle {
     width: 48px;
     height: 28px;
-    border-radius: 100px;
-    position: relative;
+    background-color: $background-third;
+    border-radius: 999px;
+    padding: 2px;
     cursor: pointer;
     transition: background-color 0.2s;
-    background-color: $background-third;
-
+    
     &.active {
         background-color: $brand-primary;
-
+        
         .knob {
             transform: translateX(20px);
-            background-color: white;
         }
     }
 }
@@ -39,9 +67,6 @@
     height: 24px;
     background-color: white;
     border-radius: 50%;
-    position: absolute;
-    top: 2px;
-    left: 2px;
     transition: transform 0.2s;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }

@@ -1,0 +1,59 @@
+.container {
+    display: none; // Default hidden on mobile
+    width: 280px;
+    height: 100vh;
+    background-color: white;
+    border-right: 1px solid $border-primary;
+    padding: $s-24;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    
+    @media (min-width: 768px) {
+        display: flex;
+    }
+}
+
+.logo {
+    cursor: pointer;
+
+}
+
+.menuItem {
+    padding: 12px 16px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    
+    &:hover {
+        background-color: $background-secondary;
+    }
+
+    &.active {
+        background-color: rgba(61, 123, 255, 0.1);
+    }
+}
+
+.userProfile {
+    padding: 12px 16px;
+    border-radius: 12px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.2s;
+    background-color: $background-secondary; // Slightly different background to separate
+
+    &:hover {
+        background-color: $background-third;
+    }
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: $background-third;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

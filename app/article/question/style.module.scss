@@ -1,6 +1,48 @@
-.container{
+.desktopContainer {
+    width: 100%;
+    min-height: 100vh;
+    background-color: $background-secondary;
+
+    @media (min-width: 1024px) {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        height: 100vh;
+        overflow: hidden;
+    }
+}
+
+.articleColumn {
+    display: none;
+
+    @media (min-width: 1024px) {
+        display: flex;
+        flex-direction: column;
+        padding: 40px;
+        background-color: white;
+        overflow-y: auto;
+        gap: 24px;
+        border-right: 1px solid $border-primary;
+    }
+}
+
+.questionColumn {
     padding: $s-16;
     background-color: $background-secondary;
+    
+    @media (min-width: 1024px) {
+        padding: 40px;
+        overflow-y: auto;
+        height: 100%;
+    }
+}
+
+.header {
+    border-bottom: 1px solid $border-primary;
+    padding-bottom: 24px;
+}
+
+.content {
+    line-height: 1.8;
 }
 
 .button {

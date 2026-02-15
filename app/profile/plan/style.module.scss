@@ -1,9 +1,36 @@
 .container {
+    width: 100%;
     min-height: 100vh;
     padding: $s-16;
     background-color: $background-secondary;
     padding-bottom: 120px;
     background: linear-gradient(180deg, #F5F7FA 0%, #F3F3F7 100%);
+
+     @media (min-width: 768px) {
+        padding: 0;
+        padding-bottom: 0;
+        display: flex;
+        flex-direction: row;
+    }
+}
+
+.desktopContent {
+    width: 100%;
+    
+    @media (min-width: 768px) {
+        margin-left: 280px;
+        padding: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+    }
+}
+
+.contentWrapper {
+    width: 100%;
+     @media (min-width: 768px) {
+        max-width: 800px;
+    }
 }
 
 .heroSection {
@@ -12,7 +39,7 @@
     background-color: white;
     border-radius: $s-24;
     margin-bottom: $s-24;
-    box-shadow: 0 4px 20px rgba(61, 123, 255, 0.05);
+    // border removed
 }
 
 .featureList {
@@ -20,6 +47,7 @@
     padding: $s-24;
     border-radius: $s-24;
     margin-bottom: $s-24;
+    // border removed
 }
 
 .featureItem {
@@ -38,7 +66,7 @@
     text-align: center;
     color: white;
     margin-bottom: $s-24;
-    box-shadow: 0 8px 30px rgba(61, 123, 255, 0.3);
+    // Removed shadow
 }
 
 .priceTag {
@@ -66,6 +94,7 @@
     padding: $s-24;
     border-radius: $s-24;
     width: 100%;
+    // border removed
 }
 
 .tableRow {

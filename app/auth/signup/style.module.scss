@@ -1,0 +1,36 @@
+.container {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    padding: 24px;
+}
+
+.content {
+    width: 100%;
+    max-width: 400px;
+}
+
+.input {
+    width: 100%;
+    padding: 16px;
+    border-radius: 12px;
+    border: 1px solid $border-primary;
+    background-color: $background-secondary;
+    font-size: 16px;
+    outline: none;
+    transition: all 0.2s;
+
+    &:focus {
+        border-color: $brand-primary;
+        background-color: white;
+    }
+}
+
+.signupButton {
+    width: 100%;
+    padding: 16px;
+    border-radius: 12px;
+}

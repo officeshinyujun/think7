@@ -1,8 +1,71 @@
+.pageWrapper {
+    width: 100vw;
+    min-height: 100vh;
+    background-color: $background-secondary;
+
+    @media (min-width: 1024px) {
+        display: flex;
+        flex-direction: row;
+    }
+}
+
+.sidebarWrapper {
+    display: none;
+
+    @media (min-width: 1024px) {
+        display: block;
+        width: 280px;
+        min-width: 280px;
+        border-right: 1px solid #E5E5E5;
+        height: 100vh;
+        position: sticky;
+        top: 0;
+        background-color: white;
+    }
+}
+
 .container{
     min-height: 100vh;
     padding: $s-16;
     background-color: $background-secondary;
     padding-bottom: 120px;
+
+    @media (min-width: 1024px) {
+        flex: 1;
+        padding: 40px;
+        padding-bottom: 40px;
+        justify-content: start;
+        align-items: center;
+    }
+}
+
+.contentContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    
+    @media (min-width: 1024px) {
+        max-width: 800px;
+    }
+}
+
+.mobileHeader {
+    width: 100%;
+    @media (min-width: 1024px) {
+        display: none;
+    }
+}
+
+.bottomBar {
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    
+    @media (min-width: 1024px) {
+        display: none;
+    }
 }
 
 .progressBarBackground {

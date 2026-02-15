@@ -1,8 +1,43 @@
 .container {
+    width: 100%;
     min-height: 100vh;
     padding: $s-16;
     background-color: $background-secondary;
     padding-bottom: 120px;
+    
+    @media (min-width: 768px) {
+        padding: 0;
+        padding-bottom: 0;
+        background-color: $background-secondary;
+        display: flex;
+        flex-direction: row;
+    }
+}
+
+.mobileHeader {
+    @media (min-width: 768px) {
+        display: none;
+    }
+}
+
+.mobileBottomBar {
+    @media (min-width: 768px) {
+        display: none;
+    }
+}
+
+.desktopContent {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    
+    @media (min-width: 768px) {
+        margin-left: 280px;
+        padding: 40px;
+        max-width: 100%;
+        padding-right: 40px; // Add right padding for balance
+    }
 }
 
 .profileCard {
