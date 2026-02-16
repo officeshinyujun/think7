@@ -64,26 +64,18 @@ export default function Home() {
             <Header />
           </div>
 
-          <div className={s.gridContainer}>
-            <div className={s.leftColumn}>
-                <IssueSection
-                    editor={dummyData.issue.editor}
-                    title={dummyData.issue.title}
-                />
-                <GrowthChart />
-            </div>
-
-            <div className={s.rightColumn}>
-                <StricSection
-                    strictDay={dummyData.strict.strictDay}
-                    thisWeek={dummyData.strict.thisWeek}
-                />
-                <ReportPreview />
-                <div className={s.mobileOnly}>
-                     <ThinkSection />
-                </div>
-            </div>
-          </div>
+          <VStack className={s.gridContainer} gap={24}>
+            <IssueSection
+                editor={dummyData.issue.editor}
+                title={dummyData.issue.title}
+            />
+            <GrowthChart />
+            <StricSection
+                strictDay={dummyData.strict.strictDay}
+                thisWeek={dummyData.strict.thisWeek}
+            />
+            <ReportPreview />
+          </VStack>
 
           <div className={s.mobileBottomBar}>
             <BottomBar /> 

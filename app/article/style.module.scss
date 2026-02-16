@@ -1,27 +1,23 @@
+// Mobile View Styles
+.mobileView {
+    display: block;
+    width: 100%;
+
+    @media (min-width: 768px) {
+        display: none;
+    }
+}
+
 .container{
     width: 100vw;
-    height: 100vh;
+    min-height: 100vh;
     background-color: $background-secondary;
     padding: $s-16;
     overflow-y: scroll;
-
-    @media (min-width: 1024px) {
-        display: flex;
-        justify-content: center;
-        padding: 40px;
-    }
 }
 
 .contentWrapper {
     width: 100%;
-    
-    @media (min-width: 1024px) {
-        max-width: 800px;
-        background-color: white;
-        padding: 40px;
-        border-radius: 24px;
-        // box-shadow removed for flat design
-    }
 }
 
 .buttonContainer{
@@ -34,10 +30,6 @@
     position: fixed;
     bottom: 0;
     left: 0;
-
-    @media (min-width: 1024px) {
-        display: none; // Hide fixed button on desktop, put it inline
-    }
 }
 
 .buttonContainerTwo{
@@ -53,18 +45,51 @@
     width: 100% !important;
 }
 
-.desktopButton {
+.mobileSpacer {
+    // Spacer for mobile bottom button
+}
+
+// Desktop Split View Styles
+.desktopSplitView {
     display: none;
-    
-    @media (min-width: 1024px) {
-        display: block;
-        margin-top: 40px;
-        width: 100%;
+
+    @media (min-width: 768px) {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        height: 100vh;
+        overflow: hidden;
+        background-color: $background-secondary;
+        width: 100vw;
     }
 }
 
-.mobileSpacer {
-    @media (min-width: 1024px) {
-        display: none;
+.articleColumn {
+    @media (min-width: 768px) {
+        display: flex;
+        flex-direction: column;
+        padding: 40px;
+        background-color: white;
+        overflow-y: auto;
+        gap: 24px;
+        border-right: 1px solid $border-primary;
     }
 }
+
+.questionColumn {
+    @media (min-width: 768px) {
+        padding: 40px;
+        overflow-y: auto;
+        height: 100%;
+        background-color: $background-secondary;
+    }
+}
+
+.header {
+    border-bottom: 1px solid $border-primary;
+    padding-bottom: 24px;
+}
+
+.content {
+    line-height: 1.8;
+}
+

@@ -25,7 +25,7 @@ export default function StricSection({ strictDay, thisWeek }: Props) {
                     fontWeight="bold"
                 >{strictDay}일째</Typo.XL>
             </HStack>
-            <HStack align="center" justify="between" fullWidth gap={10}>
+            <HStack align="center" justify="center" fullWidth gap={12}>
                 {thisWeek.map((item, index) => (
                     <StricCard
                         key={index}

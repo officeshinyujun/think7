@@ -15,6 +15,7 @@
 }
 
 .mobileHeader {
+    margin-bottom: $s-16;
     @media (min-width: 768px) {
         display: none;
     }
@@ -37,29 +38,12 @@
 }
 
 .gridContainer {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+    width: 100%;
 
     @media (min-width: 768px) {
-        display: grid;
-        grid-template-columns: 2fr 1fr; // 2:1 ratio for Main vs Side
-        gap: 24px;
         max-width: 1200px;
         margin: 0 auto;
     }
-}
-
-.leftColumn {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-}
-
-.rightColumn {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
 }
 
 // Ensure cards take full height in grid if needed

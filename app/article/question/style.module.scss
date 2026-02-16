@@ -3,7 +3,7 @@
     min-height: 100vh;
     background-color: $background-secondary;
 
-    @media (min-width: 1024px) {
+    @media (min-width: 768px) {
         display: grid;
         grid-template-columns: 1fr 1fr;
         height: 100vh;
@@ -11,10 +11,11 @@
     }
 }
 
+
 .articleColumn {
     display: none;
 
-    @media (min-width: 1024px) {
+    @media (min-width: 768px) {
         display: flex;
         flex-direction: column;
         padding: 40px;
@@ -25,16 +26,18 @@
     }
 }
 
+
 .questionColumn {
     padding: $s-16;
     background-color: $background-secondary;
     
-    @media (min-width: 1024px) {
+    @media (min-width: 768px) {
         padding: 40px;
         overflow-y: auto;
         height: 100%;
     }
 }
+
 
 .header {
     border-bottom: 1px solid $border-primary;
