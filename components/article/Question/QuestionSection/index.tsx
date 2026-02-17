@@ -2,18 +2,18 @@ import Typo from '@/components/general/Typo'
 import s from './style.module.scss'
 import { VStack } from "@/components/general/VStack"
 import QuestionBar from '../QuestionBar'
-import { useState } from 'react'
 
 interface Props {
     title : string;
     question : {
         number : number;
         content : string;
-    }[]
+    }[];
+    selected?: number | null;
+    onSelect?: (number: number) => void;
 }
 
-export default function QuestionSection({title, question}: Props) {
-    const [selected, setSelected] = useState<number | null>(null);
+export default function QuestionSection({title, question, selected, onSelect}: Props) {
 
     return (
         <VStack fullWidth align="start" justify="start" className={s.container} gap={10}>
@@ -28,7 +28,7 @@ export default function QuestionSection({title, question}: Props) {
                     content={item.content}
                     number={item.number}
                     isSelected={selected === item.number}
-                    onClick={() => setSelected(item.number)}
+                    onClick={() => onSelect && onSelect(item.number)}
                 />
             ))}
             </VStack>

@@ -7,16 +7,17 @@ import { HStack } from "@/components/general/HStack";
 import { TrendingUp } from "lucide-react";
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 
-export default function GrowthChart() {
-    const data = [
-        { day: '21일', score: 65 },
-        { day: '22일', score: 70 },
-        { day: '23일', score: 68 },
-        { day: '24일', score: 75 },
-        { day: '25일', score: 72 },
-        { day: '26일', score: 78 },
-        { day: '27일', score: 82 },
-    ];
+interface GrowthData {
+    day: string;
+    score: number;
+}
+
+interface Props {
+    data: GrowthData[];
+    growthRate?: number; // Optional percentage
+}
+
+export default function GrowthChart({ data, growthRate = 0 }: Props) {
 
     return (
         <VStack fullWidth align="start" justify="start" className={s.container}>
@@ -26,7 +27,7 @@ export default function GrowthChart() {
                     <Typo.MD color="primary" fontWeight="bold">사고력 성장</Typo.MD>
                 </HStack>
                 <div style={{padding: '4px 8px', backgroundColor: '#F3F3F7', borderRadius: '8px'}}>
-                    <Typo.XS color="brand" fontWeight="bold">+12% 성장</Typo.XS>
+                    <Typo.XS color="brand" fontWeight="bold">+{growthRate}% 성장</Typo.XS>
                 </div>
             </HStack>
 

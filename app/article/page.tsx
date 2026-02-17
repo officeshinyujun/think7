@@ -8,60 +8,67 @@ import { ChevronLeft } from "lucide-react";
 import { HStack } from "@/components/general/HStack";
 import { useRouter } from "next/navigation";
 import QuestionSection from "@/components/article/Question/QuestionSection"; // Import QuestionSection
+import { https } from "@/services/https";
+import { useAuth } from "@/contexts/AuthContext";
+import { useEffect, useState } from "react";
 
 export default function Article() {
-
     const router = useRouter();
+    const { user } = useAuth();
+    const [content, setContent] = useState<any>(null);
+    const [answers, setAnswers] = useState<{ [key: string]: number }>({}); // questionId -> selected number
 
-    const dummyData = {
-        title : "“석주는 관하여”",
-        editor : "NBM 정여진 기자",
-        content : "Lorem Ipsum is simply dummy text of the printing and  typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of  type and scrambled it to make a type specimen book. It has survived not  only five centuries, but also the leap into electronic typesetting,  remaining essentially unchanged. It was popularised in the 1960s with  the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker  including versions of Lorem Ipsum.Lorem Ipsum is simply dummy text of the printing and  typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of  type and scrambled it to make a type specimen book. It has survived not  only five centuries, but also the leap into electronic typesetting,  remaining essentially unchanged. It was popularised in the 1960s with  the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker  including versions of Lorem Ipsum.Lorem Ipsum is simply dummy text of the printing and  typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of  type and scrambled it to make a type specimen book. It has survived not  only five centuries, but also the leap into electronic typesetting,  remaining essentially unchanged. It was popularised in the 1960s with  the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker  including versions of Lorem Ipsum."
-    }
+    useEffect(() => {
+        https.content.getToday()
+            .then(res => setContent(res))
+            .catch(err => console.error(err));
+    }, []);
 
-    // Quiz Data for Desktop Split View
-    const quizData = [
-        {
-            title: "Q1. 위 글의 내용과 일치하지 않는 것은?",
-            question: [
-                { number: 1, content: "Lorem Ipsum은 1500년대부터 표준 더미 텍스트로 사용되었다." },
-                { number: 2, content: "전자 조판으로 넘어가면서 그 본질이 크게 변했다." },
-                { number: 3, content: "1960년대 Letraset 시트와 함께 대중화되었다." },
-                { number: 4, content: "Aldus PageMaker 같은 소프트웨어에도 포함되었다." },
-                { number: 5, content: "현재까지도 인쇄 및 조판 산업의 표준 모델이다." }
-            ]
-        },
-        {
-            title: "Q2. 위 글의 주제로 가장 적절한 것은?",
-            question: [
-                { number: 1, content: "Lorem Ipsum의 역사와 유래" },
-                { number: 2, content: "전자 조판 시스템의 발전 과정" },
-                { number: 3, content: "현대 출판 소프트웨어의 종류" },
-                { number: 4, content: "표준 더미 텍스트의 중요성" },
-                { number: 5, content: "인쇄 산업의 표준화 과정" }
-            ]
-        },
-        {
-            title: "Q3. 위 글에서 언급되지 않은 시기는?",
-            question: [
-                { number: 1, content: "1500년대" },
-                { number: 2, content: "1700년대" },
-                { number: 3, content: "1960년대" },
-                { number: 4, content: "최근 (Desktop Publishing 시대)" },
-                { number: 5, content: "전자 조판 도약기" }
-            ]
-        },
-        {
-            title: "Q4. 위 글을 통해 추론할 수 있는 내용은?",
-            question: [
-                { number: 1, content: "Lorem Ipsum은 의미 없는 단어들의 나열이다." },
-                { number: 2, content: "원래의 라틴어 문장에서 일부 단어를 변경했다." },
-                { number: 3, content: "인쇄소에서 활자 견본책을 만들기 위해 사용되었다." },
-                { number: 4, content: "현대 웹 디자인에서도 여전히 널리 사용된다." },
-                { number: 5, content: "모든 출판 소프트웨어가 Lorem Ipsum을 기본 제공한다." }
-            ]
+    const handleSubmit = async () => {
+        if (!content) return;
+        
+        // Map answers to backend format
+        const submission = content.questions.map((q: any) => {
+            const selectedNum = answers[q.id];
+            if (!selectedNum) return null;
+            // Options are 1-based index in QuestionSection
+            // Assuming options is string[]
+            const options = q.options || [];
+            const answerText = options[selectedNum - 1]; // number is 1-based
+            return {
+                question_id: q.id,
+                answer_text: answerText
+            };
+        }).filter((a: any) => a !== null);
+
+        if (submission.length < content.questions.length) {
+            alert("모든 문제에 답해주세요.");
+            return;
         }
-    ]
+
+        try {
+            const report = await https.analysis.submit({
+                userId: user?.id || '',
+                contentId: content.id,
+                answers: submission
+            });
+            router.push(`/report/${report.id}`);
+        } catch (error) {
+            console.error(error);
+            alert("제출에 실패했습니다.");
+        }
+    };
+
+    if (!content) return <div>Loading...</div>; // Or skeleton
+
+    const quizData = content.questions.map((q: any) => ({
+        id: q.id,
+        title: q.question_text,
+        question: (q.options || []).map((opt: string, idx: number) => ({
+            number: idx + 1,
+            content: opt
+        }))
+    }));
 
     return (
         <>
@@ -74,7 +81,7 @@ export default function Article() {
                                 <Typo.XL
                                     color="primary"
                                     fontWeight="bold"
-                                >{dummyData.title}</Typo.XL>
+                                >{content.title}</Typo.XL>
                                 <Typo.SM
                                     color="secondary"
                                     fontWeight="medium"
@@ -87,13 +94,13 @@ export default function Article() {
                             <Typo.SM
                                 color="secondary"
                                 fontWeight="medium"
-                            >{dummyData.editor}</Typo.SM>
+                            >{content.editor}</Typo.SM>
                         </VStack>
                         <div style={{lineHeight: '1.8'}}>
                             <Typo.MD    
                                 color="primary"
                                 fontWeight="regular"
-                            >{dummyData.content}</Typo.MD>
+                            >{content.body}</Typo.MD>
                         </div>
                         
                         <div className={s.mobileSpacer} style={{width:"100%", minHeight:"100px"}}/>
@@ -118,28 +125,30 @@ export default function Article() {
                  <div className={s.articleColumn}>
                     <VStack fullWidth align="start" justify="start" gap={8} className={s.header}>
                         <HStack fullWidth align="center" justify="between" gap={6}>
-                            <Typo.XL color="primary" fontWeight="bold">{dummyData.title}</Typo.XL>
+                            <Typo.XL color="primary" fontWeight="bold">{content.title}</Typo.XL>
                              <HStack align="center" gap={4} onClick={() => router.back()} style={{cursor: 'pointer'}}>
                                 <ChevronLeft size={20} color="#8B847F" />
                                 <Typo.SM color="secondary" fontWeight="medium">이전으로</Typo.SM>
                             </HStack>
                         </HStack>
-                        <Typo.SM color="secondary" fontWeight="medium">{dummyData.editor}</Typo.SM>
+                        <Typo.SM color="secondary" fontWeight="medium">{content.editor}</Typo.SM>
                     </VStack>
-                    <Typo.MD color="primary" fontWeight="regular" className={s.content}>{dummyData.content}</Typo.MD>
+                    <Typo.MD color="primary" fontWeight="regular" className={s.content}>{content.body}</Typo.MD>
                 </div>
 
                 <VStack fullHeight fullWidth align="start" justify="start" gap={12} className={s.questionColumn}>
-                    {quizData.map((item, index) => (
+                    {quizData.map((item: any, index: number) => (
                         <QuestionSection
                             key={index}
                             title={item.title}
                             question={item.question}
+                            selected={answers[item.id]}
+                            onSelect={(num) => setAnswers(prev => ({ ...prev, [item.id]: num }))}
                         />
                     ))}
                     <Button
                         className={s.button}
-                        onClick={() => router.push("/analysis")}
+                        onClick={handleSubmit}
                     ><Typo.MD color="inverted">제출</Typo.MD></Button>
                 </VStack>
             </div>

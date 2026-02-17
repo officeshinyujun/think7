@@ -7,20 +7,25 @@ import { HStack } from "@/components/general/HStack";
 import { ChevronRight, ClipboardCheck } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-export default function ReportPreview() {
+interface ReportData {
+    id: string;
+    date: string;
+    topic: string;
+    score: number;
+    feedback: string;
+}
+
+interface Props {
+    report?: ReportData | null;
+}
+
+export default function ReportPreview({ report }: Props) {
     const router = useRouter();
 
-    // Dummy data for the latest report
-    const latestReport = {
-        id: "1",
-        date: "2024.10.24",
-        topic: "AI와 인간의 공존",
-        score: 78,
-        feedback: "핵심 논지는 잘 파악했으나, 반론에 대한 고려가 조금 부족합니다."
-    };
+    if (!report) return null; // Or return empty state
 
     return (
-        <VStack fullWidth align="start" justify="start" className={s.container} onClick={() => router.push(`/report/${latestReport.id}`)}>
+        <VStack fullWidth align="start" justify="start" className={s.container} onClick={() => router.push(`/report/${report.id}`)}>
             <HStack fullWidth justify="between" align="center" className={s.header}>
                 <HStack gap={8} align="center">
                     <ClipboardCheck size={20} color="#3D7BFF" />
@@ -31,17 +36,17 @@ export default function ReportPreview() {
 
             <HStack fullWidth gap={16} align="center">
                 <div className={s.scoreContainer}>
-                    <Typo.XL color="brand" fontWeight="bold">{latestReport.score}</Typo.XL>
+                    <Typo.XL color="brand" fontWeight="bold">{report.score}</Typo.XL>
                 </div>
                 <VStack align="start" gap={4} style={{flex: 1}}>
-                    <Typo.XS color="secondary" fontWeight="medium">{latestReport.date}</Typo.XS>
-                    <Typo.MD color="primary" fontWeight="bold">{latestReport.topic}</Typo.MD>
+                    <Typo.XS color="secondary" fontWeight="medium">{report.date}</Typo.XS>
+                    <Typo.MD color="primary" fontWeight="bold">{report.topic}</Typo.MD>
                 </VStack>
             </HStack>
 
             <div className={s.feedback}>
                  <Typo.SM color="secondary" fontWeight="medium" style={{lineHeight: '1.4'}}>
-                    "{latestReport.feedback}"
+                    "{report.feedback}"
                  </Typo.SM>
             </div>
         </VStack>

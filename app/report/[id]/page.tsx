@@ -9,66 +9,24 @@ import { HStack } from "@/components/general/HStack";
 import Button from "@/components/general/Button";
 import { useRouter } from "next/navigation";
 import Sidebar from "@/components/general/Sidebar";
+import { https } from "@/services/https";
+import { useEffect, useState, use } from "react";
 
-const dummyData = {
-    day : "2026년 1월 3일",
-    summary : {
-        score : 85,
-        comment : "핵심 주장을 정확히 파악했지만, 숨겨진 전제 인식과 논리적 비약 탐지에서 일부 놓친 부분이 있습니다. 감정보다는 논리 기반 판단을 하려는 경향이 보입니다.",
-    },
-    dimension_scores: [
-    {
-      dimension: "핵심 주장을 파악",
-      score: 90,
-      status: "강점",
-      comment: "글의 중심 논지를 정확히 이해했습니다."
-    },
-    {
-      dimension: "전제 추론",
-      score: 62,
-      status: "보통",
-      comment: "작성자의 암묵적 가정을 일부 놓쳤습니다."
-    },
-    {
-      dimension: "논리적 비약 탐지",
-      score: 58,
-      status: "약점",
-      comment: "인과관계를 충분히 검증하지 않았습니다."
-    },
-    {
-      dimension: "반대 관점 구성",
-      score: 80,
-      status: "강점",
-      comment: "설득력 있는 반대 논리를 제시했습니다."
-    }
-  ],
-  thinking_type: {
-    type: "빠른 핵심 파악형",
-    description: "핵심을 빠르게 이해하지만, 논리 구조를 끝까지 검증하는 과정이 부족할 수 있습니다.",
-    strength: "핵심 파악 속도",
-    weakness: "전제 검증 부족"
-  },
-  growth: {
-    previous_average_score: 71,
-    current_score: 74,
-    trend: "up",
-    comment: "최근 전제 추론 능력이 향상되고 있습니다."
-  },
-  wrong_answer: [
-      {
-          number: 2,
-          question: "위 글의 주제로 가장 적절한 것은?",
-          wrong_answer: "전자 조판 시스템의 발전 과정",
-          correct_answer: "Lorem Ipsum의 역사와 유래",
-          relevant_part: "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s...",
-          explanation: "글의 초반부에서 Lorem Ipsum이 1500년대부터 사용되었다는 역사적 사실을 언급하고 있습니다."
-      }
-  ]
-}
 
-export default function ReportDetail() {
-
+export default function ReportDetail({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = use(params);
     const router = useRouter();
+    const [report, setReport] = useState<any>(null);
+
+    useEffect(() => {
+        if (id) {
+            https.report.get(id)
+                .then(res => setReport(res))
+                .catch(err => console.error(err));
+        }
+    }, [id]);
+
+    if (!report) return <div>Loading...</div>;
 
     return (
         <div className={s.container}>
@@ -85,19 +43,19 @@ export default function ReportDetail() {
                             color="primary"
                             fontWeight="bold"
                         >
-                            {dummyData.day}의 사고 점수는 <span style={{color:"#3D7BFF"}}>{dummyData.summary.score}</span>점입니다.
+                            {report.day}의 사고 점수는 <span style={{color:"#3D7BFF"}}>{report.summary?.score}</span>점입니다.
                         </Typo.XL>
                         <Typo.MD
                             color="primary"
                             fontWeight="medium"
                         >
-                            {dummyData.summary.comment}
+                            {report.summary?.comment}
                         </Typo.MD>
                     </VStack>
 
                     <Section title="영역별 분석">
                         <VStack fullWidth gap={16}>
-                            {dummyData.dimension_scores.map((item, index) => (
+                            {report.dimension_scores?.map((item: any, index: number) => (
                                 <VStack key={index} fullWidth gap={6}>
                                     <HStack fullWidth justify="between" align="center">
                                         <Typo.SM color="primary" fontWeight="semi-bold">{item.dimension}</Typo.SM>
@@ -119,7 +77,7 @@ export default function ReportDetail() {
                     
                     <Section title="오답 분석">
                         <VStack fullWidth gap={24}>
-                            {dummyData.wrong_answer.map((item, index) => (
+                            {report.wrong_answer?.map((item: any, index: number) => (
                                 <VStack key={index} fullWidth gap={12}>
                                     <VStack fullWidth gap={4}>
                                         <HStack gap={4} align="center">
@@ -155,17 +113,17 @@ export default function ReportDetail() {
                     <Section title="사고 유형 진단">
                         <VStack fullWidth gap={12}>
                             <VStack fullWidth gap={4}>
-                                <Typo.LG color="brand" fontWeight="bold">{dummyData.thinking_type.type}</Typo.LG>
-                                <Typo.SM color="primary" fontWeight="medium">{dummyData.thinking_type.description}</Typo.SM>
+                                <Typo.LG color="brand" fontWeight="bold">{report.thinking_type?.type}</Typo.LG>
+                                <Typo.SM color="primary" fontWeight="medium">{report.thinking_type?.description}</Typo.SM>
                             </VStack>
                             <HStack fullWidth gap={12}>
                                 <VStack className={s.typeBox} align="start" justify="center" gap={4}>
                                     <Typo.XS color="secondary">강점</Typo.XS>
-                                    <Typo.SM color="primary" fontWeight="bold">{dummyData.thinking_type.strength}</Typo.SM>
+                                    <Typo.SM color="primary" fontWeight="bold">{report.thinking_type?.strength}</Typo.SM>
                                 </VStack>
                                 <VStack className={s.typeBox} align="start" justify="center" gap={4}>
                                     <Typo.XS color="secondary">약점</Typo.XS>
-                                    <Typo.SM color="primary" fontWeight="bold">{dummyData.thinking_type.weakness}</Typo.SM>
+                                    <Typo.SM color="primary" fontWeight="bold">{report.thinking_type?.weakness}</Typo.SM>
                                 </VStack>
                             </HStack>
                         </VStack>
@@ -176,18 +134,18 @@ export default function ReportDetail() {
                             <HStack fullWidth justify="between" align="center" className={s.growthBox}>
                                 <VStack align="center" justify="center" gap={4}>
                                     <Typo.XS color="secondary">이전 평균</Typo.XS>
-                                    <Typo.MD color="primary" fontWeight="semi-bold">{dummyData.growth.previous_average_score}점</Typo.MD>
+                                    <Typo.MD color="primary" fontWeight="semi-bold">{report.growth?.previous_average_score || 0}점</Typo.MD>
                                 </VStack>
                                 <Typo.MD color="secondary">→</Typo.MD>
                                 <VStack align="center" justify="center" gap={4}>
                                     <Typo.XS color="secondary">이번 점수</Typo.XS>
-                                    <Typo.MD color="brand" fontWeight="bold">{dummyData.growth.current_score}점</Typo.MD>
+                                    <Typo.MD color="brand" fontWeight="bold">{report.growth?.current_score || 0}점</Typo.MD>
                                 </VStack>
                                 <div className={s.trendBadge}>
-                                    <Typo.XS color="brand" fontWeight="bold">+{dummyData.growth.current_score - dummyData.growth.previous_average_score} 상승</Typo.XS>
+                                    <Typo.XS color="brand" fontWeight="bold">+{ (report.growth?.current_score || 0) - (report.growth?.previous_average_score || 0)} 상승</Typo.XS>
                                 </div>
                             </HStack>
-                            <Typo.SM color="primary" fontWeight="medium">{dummyData.growth.comment}</Typo.SM>
+                            <Typo.SM color="primary" fontWeight="medium">{report.growth?.comment}</Typo.SM>
                         </VStack>
                     </Section>
                     <Button className={s.nextButton} onClick={() => router.push('/report')}>

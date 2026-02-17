@@ -7,9 +7,37 @@ import { HStack } from "@/components/general/HStack";
 import Button from "@/components/general/Button";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Login() {
     const router = useRouter();
+    const { login, googleLogin } = useAuth();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
+
+    const handleLogin = async () => {
+        if (!email || !password) {
+            setError('이메일과 비밀번호를 입력해주세요.');
+            return;
+        }
+        setError('');
+        setLoading(true);
+        try {
+            await login(email, password);
+            router.push('/');
+        } catch (err: any) {
+            setError(err?.response?.data?.message || '로그인에 실패했습니다.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter') handleLogin();
+    };
 
     return (
         <div className={s.container}>
@@ -21,10 +49,31 @@ export default function Login() {
                 </VStack>
 
                 <VStack fullWidth gap={16}>
-                    <input type="text" placeholder="이메일" className={s.input} />
-                    <input type="password" placeholder="비밀번호" className={s.input} />
-                    <Button onClick={() => router.push('/')} className={s.loginButton}>
-                        <Typo.MD color="inverted" fontWeight="bold">로그인</Typo.MD>
+                    {error && (
+                        <div className={s.errorMessage}>
+                            <Typo.SM color="wrong" fontWeight="medium">{error}</Typo.SM>
+                        </div>
+                    )}
+                    <input 
+                        type="email" 
+                        placeholder="이메일" 
+                        className={s.input} 
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        onKeyDown={handleKeyDown}
+                    />
+                    <input 
+                        type="password" 
+                        placeholder="비밀번호" 
+                        className={s.input}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        onKeyDown={handleKeyDown}
+                    />
+                    <Button onClick={handleLogin} className={s.loginButton} disabled={loading}>
+                        <Typo.MD color="inverted" fontWeight="bold">
+                            {loading ? '로그인 중...' : '로그인'}
+                        </Typo.MD>
                     </Button>
                 </VStack>
 
@@ -40,13 +89,16 @@ export default function Login() {
                 </div>
 
                 <VStack fullWidth gap={12}>
-                    <button className={s.socialButton}>
+                    <button className={s.socialButton} onClick={async () => {
+                        try {
+                            await googleLogin();
+                            router.push('/');
+                        } catch (err: any) {
+                            setError(err?.response?.data?.message || 'Google 로그인에 실패했습니다.');
+                        }
+                    }}>
                         <Image src="/google.png" alt="google" width={20} height={20} />
                         <Typo.SM color="primary" fontWeight="medium">Google로 시작하기</Typo.SM>
-                    </button>
-                    <button className={s.socialButton}>
-                        <Image src="/kakao.png" alt="kakao" width={20} height={20} />
-                        <Typo.SM color="primary" fontWeight="medium">Kakao로 시작하기</Typo.SM>
                     </button>
                 </VStack>
             </VStack>

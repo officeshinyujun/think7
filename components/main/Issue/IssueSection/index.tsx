@@ -7,9 +7,10 @@ import { useRouter } from "next/navigation";
 interface Props {
     editor : string;
     title : string;
+    completed?: boolean;
 }
 
-export default function IssueSection({editor, title}: Props) {
+export default function IssueSection({editor, title, completed}: Props) {
     const router = useRouter();
     return (
         <VStack fullWidth align="start" justify="center" className={s.container}gap={8} >
@@ -31,11 +32,15 @@ export default function IssueSection({editor, title}: Props) {
                     {editor} - 예상시간 7분
                 </Typo.XS>
             </VStack>
-            <Button className={s.button} onClick={() => router.push("/article")}>
+            <Button
+                className={s.button}
+                onClick={() => !completed && router.push("/article")}
+                style={completed ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
+            >
                 <Typo.MD
                     color="inverted"
                     fontWeight="medium"
-                >하러가기</Typo.MD>
+                >{completed ? '완료' : '하러가기'}</Typo.MD>
             </Button>
         </VStack>
     )

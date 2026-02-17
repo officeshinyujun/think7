@@ -8,28 +8,22 @@ import Header from "@/components/general/Header";
 import Section from "@/components/record/Section";
 import { useRouter } from "next/navigation";
 import Sidebar from "@/components/general/Sidebar";
+import { https } from "@/services/https";
+import { useAuth } from "@/contexts/AuthContext";
+import { useEffect, useState } from "react";
 
-const dummyData = [
-    {
-        day : "2026년 1월 3일",
-        comment : "핵심 논지는 잘 파악했으나, 반론에 대한 고려가 조금 부족합니다."
-    },
-    {
-        day : "2026년 1월 2일",
-        comment : "어휘력이 돋보이는 글쓰기였습니다."
-    },
-    {
-        day : "2026년 1월 1일",
-        comment : "논리적인 흐름이 매우 좋습니다."
-    },
-    {
-        day : "2025년 12월 31일",
-        comment : "창의적인 접근이 인상적입니다."
-    },
-]
 
 export default function Report() {
     const router = useRouter();
+    const { user } = useAuth();
+    const [reports, setReports] = useState<any[]>([]);
+
+    useEffect(() => {
+        if (!user) return;
+        https.report.getHistory(user.id)
+            .then(res => setReports(res))
+            .catch(err => console.error(err));
+    }, [user]);
 
     return (
         <div className={s.container}>
@@ -42,13 +36,18 @@ export default function Report() {
 
                 <div className={s.gridContainer}>
                     <div className={s.reportListWrapper}>
-                        {dummyData.map((item, index) => (
-                            <div key={index} style={{width: '100%', cursor: 'pointer'}} onClick={() => router.push(`/report/${index}`)}>
+                        {reports.map((item, index) => (
+                            <div key={item.id} style={{width: '100%', cursor: 'pointer'}} onClick={() => router.push(`/report/${item.id}`)}>
                                 <Section title={item.day}>
-                                    <Typo.MD color="primary" fontWeight="semi-bold">{item.comment}</Typo.MD>
+                                    <Typo.MD color="primary" fontWeight="semi-bold">{item.summary?.comment || "분석 결과 없음"}</Typo.MD>
                                 </Section>
                             </div>
                         ))}
+                        {reports.length === 0 && (
+                             <div style={{padding: 20, textAlign: 'center'}}>
+                                <Typo.MD color="secondary" fontWeight="medium">아직 리포트가 없습니다.</Typo.MD>
+                             </div>
+                        )}
                     </div>
                 </div>
 
