@@ -4,6 +4,7 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import { https, User } from '@/services/https';
 import { signInWithPopup } from 'firebase/auth';
 import { auth, googleProvider } from '@/services/firebase';
+import { useRouter, usePathname } from 'next/navigation';
 
 interface AuthContextType {
   user: User | null;
@@ -39,6 +40,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
     setIsLoading(false);
   }, []);
+
+  const router = useRouter();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    if (isLoading) return;
+
+    const publicPaths = ['/landing', '/auth/login', '/auth/signup'];
+    const isPublicPath = publicPaths.includes(pathname);
+
+    if (!user && !isPublicPath) {
+      router.push('/landing');
+    }
+  }, [user, isLoading, pathname, router]);
 
   const saveAuth = (res: { user: User; token: string }) => {
     setUser(res.user);

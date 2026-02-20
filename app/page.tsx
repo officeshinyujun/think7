@@ -25,11 +25,7 @@ export default function Home() {
   const [reportHistory, setReportHistory] = useState<any[]>([]);
 
   useEffect(() => {
-    if (isLoading) return;
-    if (!user) {
-      router.push('/landing');
-      return;
-    }
+    if (isLoading || !user) return;
     const fetchData = async () => {
       try {
         const [todayContent, profile, history] = await Promise.all([
