@@ -32,9 +32,9 @@ export default function ReportDetail({ params }: { params: Promise<{ id: string 
     const PremiumLockOverlay = () => (
         <VStack align="start" justify="start" gap={12} className={s.lockOverlay}>
             <Typo.MD color="primary" fontWeight="bold">Premium 리포트에서만 확인 가능합니다</Typo.MD>
-            <Button 
-                className={s.nextButton} 
-                style={{width: 'auto', padding: '8px 16px', height: 'auto', marginTop: '12px'}}
+            <Button
+                className={s.nextButton}
+                style={{ width: 'auto', padding: '8px 16px', height: 'auto', marginTop: '12px' }}
                 onClick={() => router.push('/profile/plan')}
             >
                 <Typo.SM color="inverted" fontWeight="bold">업그레이드 하러가기</Typo.SM>
@@ -45,22 +45,22 @@ export default function ReportDetail({ params }: { params: Promise<{ id: string 
     return (
         <div className={s.container}>
             <Sidebar />
-            
+
             <div className={s.desktopContent}>
                 <div className={s.contentWrapper}>
                     <div className="mobileOnly">
-                        <Header/>
+                        <Header />
                     </div>
-                
+
                     <VStack fullWidth gap={8}>
                         <Typo.XL
                             color="primary"
                             fontWeight="bold"
                         >
-                            {report.day}의 사고 점수는 <span style={{color:"#3D7BFF"}}>{report.summary?.score}</span>점입니다.
+                            {report.day}의 사고 점수는 <span className={s.scoreHighlight}>{report.summary?.score}</span>점입니다.
                         </Typo.XL>
                         <Typo.MD
-                            color="primary"
+                            color="secondary"
                             fontWeight="medium"
                         >
                             {report.summary?.comment}
@@ -70,10 +70,10 @@ export default function ReportDetail({ params }: { params: Promise<{ id: string 
                     <Section title="영역별 분석">
                         <VStack fullWidth gap={16}>
                             {report.dimension_scores?.map((item: any, index: number) => (
-                                <VStack key={index} fullWidth gap={6}>
+                                <VStack key={index} fullWidth gap={8} className={s.dimensionCard}>
                                     <HStack fullWidth justify="between" align="center">
                                         <Typo.SM color="primary" fontWeight="semi-bold">{item.dimension}</Typo.SM>
-                                        <HStack gap={6} align="center">
+                                        <HStack gap={8} align="center">
                                             <div className={s.statusBadge}>
                                                 <Typo.XS color="brand" fontWeight="medium">{item.status}</Typo.XS>
                                             </div>
@@ -81,47 +81,69 @@ export default function ReportDetail({ params }: { params: Promise<{ id: string 
                                         </HStack>
                                     </HStack>
                                     <div className={s.progressBarBackground}>
-                                        <div className={s.progressBarFill} style={{width: `${item.score}%`}} />
+                                        <div className={s.progressBarFill} style={{ width: `${item.score}%` }} />
                                     </div>
                                     <Typo.XS color="secondary" fontWeight="regular">{item.comment}</Typo.XS>
                                 </VStack>
                             ))}
                         </VStack>
                     </Section>
-                    
+
                     <Section title="오답 분석">
                         <VStack fullWidth gap={24}>
                             {report.wrong_answer?.map((item: any, index: number) => (
-                                <VStack key={index} fullWidth gap={12}>
-                                    <VStack fullWidth gap={4}>
-                                        <HStack gap={4} align="center">
-                                            <Typo.MD color="primary" fontWeight="bold">Q{item.number}. {item.question}</Typo.MD>
-                                        </HStack>
-                                    </VStack>
-                                    
-                                    <VStack fullWidth className={s.wrongBox} gap={12}>
-                                        <VStack fullWidth gap={4}>
+                                <VStack key={index} fullWidth gap={16} className={s.wrongAnswerCard}>
+                                    <HStack gap={8} align="center">
+                                        <div className={s.questionNumber}>Q{item.number}</div>
+                                        <Typo.MD color="primary" fontWeight="bold">{item.question}</Typo.MD>
+                                    </HStack>
+
+                                    <div className={s.answerGrid}>
+                                        <VStack className={s.answerItemWrong} gap={4}>
                                             <Typo.XS color="secondary">내가 고른 답</Typo.XS>
-                                            <Typo.SM color="wrong" fontWeight="medium" style={{textDecoration: 'line-through'}}>{item.wrong_answer}</Typo.SM>
+                                            <Typo.SM color="wrong" fontWeight="medium" style={{ textDecoration: 'line-through' }}>{item.wrong_answer}</Typo.SM>
                                         </VStack>
-                                        <VStack fullWidth gap={4}>
+                                        <VStack className={s.answerItemCorrect} gap={4}>
                                             <Typo.XS color="secondary">정답</Typo.XS>
                                             <Typo.SM color="brand" fontWeight="bold">{item.correct_answer}</Typo.SM>
                                         </VStack>
-                                    </VStack>
+                                    </div>
 
-                                    <VStack fullWidth className={s.explanationBox} gap={8}>
-                                        <Typo.XS color="secondary">관련 지문</Typo.XS>
-                                        <Typo.SM color="primary" fontWeight="medium" style={{backgroundColor: 'rgba(61, 123, 255, 0.1)', padding: '8px', borderRadius: '8px'}}>
-                                            "{item.relevant_part}"
-                                        </Typo.SM>
-                                        <div style={{height: '4px'}} />
-                                        <Typo.XS color="secondary">해설</Typo.XS>
+                                    <VStack fullWidth className={s.explanationBox} gap={12}>
+                                        <Typo.XS color="secondary" fontWeight="semi-bold">문제 관련 문장</Typo.XS>
+                                        <div className={s.relevantPartBox}>
+                                            <Typo.SM color="primary" fontWeight="medium">
+                                                &ldquo;{item.relevant_part}&rdquo;
+                                            </Typo.SM>
+                                        </div>
+
+                                        {item.taxonomy && item.taxonomy.some((tax: any) => tax.occurred) && (
+                                            <>
+                                                <div className={s.sectionDivider} />
+                                                <Typo.XS color="secondary" fontWeight="semi-bold">오류 유형 분석</Typo.XS>
+                                                <VStack fullWidth gap={8} className={s.taxonomyBox}>
+                                                    {item.taxonomy.map((tax: any, tIndex: number) => (
+                                                        tax.occurred && (
+                                                            <div key={tIndex} className={s.taxonomyItem}>
+                                                                <div className={s.taxonomyDot} />
+                                                                <VStack gap={2}>
+                                                                    <Typo.SM color="wrong" fontWeight="bold">{tax.category}</Typo.SM>
+                                                                    <Typo.XS color="primary" fontWeight="regular">{tax.detail}</Typo.XS>
+                                                                </VStack>
+                                                            </div>
+                                                        )
+                                                    ))}
+                                                </VStack>
+                                            </>
+                                        )}
+
+                                        <div className={s.sectionDivider} />
+                                        <Typo.XS color="secondary" fontWeight="semi-bold">해설</Typo.XS>
                                         {item.explanation ? (
                                             <Typo.SM color="primary" fontWeight="regular">{item.explanation}</Typo.SM>
                                         ) : (
-                                            <HStack align="center" gap={4} onClick={() => router.push('/profile/plan')} style={{cursor:'pointer', padding: '8px 0'}}>
-                                                <Lock size={14} color="#3D7BFF"/>
+                                            <HStack align="center" gap={4} onClick={() => router.push('/profile/plan')} className={s.premiumLink}>
+                                                <Lock size={14} color="#3D7BFF" />
                                                 <Typo.SM color="brand" fontWeight="bold">프리미엄 해설 보기</Typo.SM>
                                             </HStack>
                                         )}
@@ -167,7 +189,7 @@ export default function ReportDetail({ params }: { params: Promise<{ id: string 
                                         <Typo.MD color="brand" fontWeight="bold">{report.growth?.current_score || 0}점</Typo.MD>
                                     </VStack>
                                     <div className={s.trendBadge}>
-                                        <Typo.XS color="brand" fontWeight="bold">+{ (report.growth?.current_score || 0) - (report.growth?.previous_average_score || 0)} 상승</Typo.XS>
+                                        <Typo.XS color="brand" fontWeight="bold">+{(report.growth?.current_score || 0) - (report.growth?.previous_average_score || 0)} 상승</Typo.XS>
                                     </div>
                                 </HStack>
                                 <Typo.SM color="primary" fontWeight="medium">{report.growth?.trend === "LOCKED" ? "분석된 성장 피드백이 여기에 표시됩니다." : report.growth?.comment}</Typo.SM>

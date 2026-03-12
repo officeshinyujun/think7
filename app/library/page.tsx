@@ -79,20 +79,20 @@ export default function Library() {
 
     return (
         <HStack fullWidth align="start" justify="start" className={s.container}>
-            <Sidebar/>
+            <Sidebar />
             <div className={s.pageContent}>
                 <VStack fullWidth align="start" justify="start" gap={20} className={s.inner}>
                     {/* Header */}
                     <HStack fullWidth align="center" justify="between">
                         <Typo.XL color="primary" fontWeight="bold">콘텐츠 라이브러리</Typo.XL>
                         {isPremium ? (
-                            <button 
+                            <button
                                 onClick={() => setShowCreateModal(true)}
                                 style={{
-                                    padding: '8px', 
-                                    borderRadius: '50%', 
-                                    backgroundColor: '#3D7BFF', 
-                                    border: 'none', 
+                                    padding: '8px',
+                                    borderRadius: '50%',
+                                    backgroundColor: '#3D7BFF',
+                                    border: 'none',
                                     cursor: 'pointer',
                                     display: 'flex',
                                     alignItems: 'center',
@@ -145,7 +145,7 @@ export default function Library() {
 
                     {/* Free Content List */}
                     {!loading && freeContents.length > 0 && (
-                        <VStack fullWidth gap={12}>
+                        <VStack fullWidth gap={16}>
                             {freeContents.map(content => (
                                 <div
                                     key={content.id}
@@ -262,12 +262,12 @@ export default function Library() {
                 </VStack>
             </div>
             <div className={s.mobileBottomBar}>
-                <BottomBar/>
+                <BottomBar />
             </div>
-            
+
             {showCreateModal && (
-                <CreateContentModal 
-                    onClose={() => setShowCreateModal(false)} 
+                <CreateContentModal
+                    onClose={() => setShowCreateModal(false)}
                     onSuccess={() => {
                         setLoading(true);
                         const topic = selectedTopic === '전체' ? undefined : selectedTopic;
@@ -276,7 +276,7 @@ export default function Library() {
                                 setContents(data);
                                 setLoading(false);
                             });
-                    }} 
+                    }}
                 />
             )}
         </HStack>
