@@ -55,6 +55,37 @@
     }
 }
 
+.typeContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    width: 100%;
+}
+
+.typeChip {
+    padding: 8px 12px;
+    border: 1px solid $border-primary;
+    border-radius: $s-12;
+    background-color: $background-secondary;
+    color: $text-secondary;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+
+    &:hover {
+        background-color: $background-third;
+    }
+}
+
+.typeChipActive {
+    background-color: rgba($brand-primary, 0.1);
+    border-color: $brand-primary;
+    color: $brand-primary;
+    font-weight: 700;
+}
+
 .submitButton {
     height: 48px;
     border-radius: $s-12;

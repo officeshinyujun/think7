@@ -17,6 +17,7 @@ interface CreateContentModalProps {
 
 export default function CreateContentModal({ onClose, onSuccess }: CreateContentModalProps) {
     const [topic, setTopic] = useState('');
+    const [type, setType] = useState('시사/일반');
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
 
@@ -25,7 +26,7 @@ export default function CreateContentModal({ onClose, onSuccess }: CreateContent
         
         setIsLoading(true);
         try {
-            await https.content.generate(topic);
+            await https.content.generate(topic, type);
             onSuccess();
             onClose();
         } catch (error) {
@@ -47,8 +48,24 @@ export default function CreateContentModal({ onClose, onSuccess }: CreateContent
                         </button>
                     </HStack>
 
-                    <VStack fullWidth align="start" gap={8}>
-                        <Typo.SM color="secondary" fontWeight="medium">주제</Typo.SM>
+                    <VStack fullWidth align="start" gap={16}>
+                        <VStack fullWidth align="start" gap={8}>
+                            <Typo.SM color="secondary" fontWeight="medium">진행 방식</Typo.SM>
+                            <div className={s.typeContainer}>
+                                {['시사/일반', '논리/주장', '철학/인문', '과학/기술', '비즈니스/경제'].map((t) => (
+                                    <div 
+                                        key={t}
+                                        className={`${s.typeChip} ${type === t ? s.typeChipActive : ''}`}
+                                        onClick={() => setType(t)}
+                                    >
+                                        <Typo.SM color={type === t ? 'brand' : 'secondary'} fontWeight={type === t ? 'bold' : 'medium'}>{t}</Typo.SM>
+                                    </div>
+                                ))}
+                            </div>
+                        </VStack>
+
+                        <VStack fullWidth align="start" gap={8}>
+                            <Typo.SM color="secondary" fontWeight="medium">주제</Typo.SM>
                         <input
                             type="text"
                             className={s.input}
@@ -60,6 +77,7 @@ export default function CreateContentModal({ onClose, onSuccess }: CreateContent
                         <Typo.XS color="secondary" fontWeight="regular">
                             원하는 주제를 입력하면 AI가 맞춤형 문제를 생성해드립니다.
                         </Typo.XS>
+                        </VStack>
                     </VStack>
 
                     <Button 

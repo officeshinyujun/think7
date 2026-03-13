@@ -165,8 +165,8 @@ export const https = {
       });
       return response.data;
     },
-    generate: async (topic: string): Promise<Content> => {
-      const response = await apiClient.post<Content>('/content/generate', { topic });
+    generate: async (topic: string, type?: string): Promise<Content> => {
+      const response = await apiClient.post<Content>('/content/generate', { topic, type });
       return response.data;
     },
   },
