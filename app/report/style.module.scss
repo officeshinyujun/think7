@@ -4,18 +4,18 @@
     background-color: $background-secondary;
     padding: $s-20;
     padding-bottom: 120px;
-    
+
     @media (min-width: 768px) {
         padding: 0;
         padding-bottom: 0;
-        background-color: $background-secondary;
         display: flex;
         flex-direction: row;
+        height: 100vh;
+        overflow: hidden;
     }
 }
 
 .mobileHeader {
-    margin-bottom: $s-16;
 
     @media (min-width: 768px) {
         display: none;
@@ -30,10 +30,15 @@
 
 .desktopContent {
     width: 100%;
-    height: 100vh;
-    overflow-y: auto;
-    
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: start;
+    gap: 16px;
+
     @media (min-width: 768px) {
+        height: 100vh;
+        overflow-y: auto;
         padding: 40px;
         flex: 1;
     }

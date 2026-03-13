@@ -31,10 +31,10 @@
 
 .desktopContent {
     width: 100%;
-    height: 100vh;
-    overflow-y: auto;
-    
+
     @media (min-width: 768px) {
+        height: 100vh;
+        overflow-y: auto;
         padding: 40px;
         flex: 1;
     }

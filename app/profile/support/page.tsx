@@ -4,7 +4,7 @@ import { VStack } from "@/components/general/VStack";
 import Typo from "@/components/general/Typo";
 import s from "./style.module.scss";
 import { HStack } from "@/components/general/HStack";
-import { ChevronLeft, ChevronRight, MessageCircleQuestion, Mail, Ticket } from "lucide-react";
+import { ChevronLeft, ChevronRight, MessageCircleQuestion, Mail, Ticket, FileText } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Sidebar from "@/components/general/Sidebar";
 
@@ -12,9 +12,10 @@ export default function Support() {
     const router = useRouter();
 
     const menuItems = [
-        { icon: <MessageCircleQuestion size={20} color="#484848"/>, title: "자주 묻는 질문 (FAQ)", link: "#" },
-        { icon: <Mail size={20} color="#484848"/>, title: "문의하기", link: "mailto:support@think7.com" },
-        { icon: <Ticket size={20} color="#484848"/>, title: "버그 신고", link: "#" },
+        { icon: <MessageCircleQuestion size={20} color="#484848"/>, title: "자주 묻는 질문 (FAQ)", link: "/profile/support/faq" },
+        { icon: <Mail size={20} color="#484848"/>, title: "문의하기", link: "/profile/support/contact" },
+        { icon: <Ticket size={20} color="#484848"/>, title: "버그 신고", link: "/profile/support/bug-report" },
+        { icon: <FileText size={20} color="#484848"/>, title: "이용약관", link: "/profile/support/terms" },
     ]
 
     return (
@@ -30,7 +31,7 @@ export default function Support() {
 
                     <VStack fullWidth gap={12}>
                         {menuItems.map((item, index) => (
-                            <div key={index} className={s.item}>
+                            <div key={index} className={s.item} onClick={() => router.push(item.link)}>
                                 <HStack gap={12} align="center">
                                     {item.icon}
                                     <Typo.MD color="primary" fontWeight="medium">{item.title}</Typo.MD>

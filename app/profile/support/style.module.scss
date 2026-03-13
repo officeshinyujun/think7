@@ -1,7 +1,7 @@
 .container {
     width: 100%;
     min-height: 100vh;
-    padding: $s-16;
+    padding: $s-20;
     background-color: $background-secondary;
     padding-bottom: 120px;
 
@@ -17,7 +17,7 @@
     width: 100%;
     height: 100vh;
     overflow-y: auto;
-    
+
     @media (min-width: 768px) {
         padding: 40px;
         flex: 1;
@@ -29,7 +29,8 @@
 
 .contentWrapper {
     width: 100%;
-     @media (min-width: 768px) {
+
+    @media (min-width: 768px) {
         max-width: 800px;
     }
 }
@@ -43,11 +44,76 @@
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
-    // border removed
-    // Removed shadow
     transition: transform 0.2s;
-    
+
     &:hover {
-        transform: translateY(-2px);
+        transform: none;
     }
+}
+
+// ─── Form Styles ───
+
+.formInput {
+    width: 100%;
+    padding: $s-16;
+    border: 1px solid $border-primary;
+    border-radius: $s-12;
+    font-size: 14px;
+    background-color: $background-primary;
+    color: $text-primary;
+    outline: none;
+    transition: border-color 0.2s;
+
+    &:focus {
+        border-color: $brand-primary;
+    }
+
+    &:disabled {
+        background-color: $background-secondary;
+        color: $text-secondary;
+    }
+}
+
+.formTextarea {
+    width: 100%;
+    padding: $s-16;
+    border: 1px solid $border-primary;
+    border-radius: $s-12;
+    font-size: 14px;
+    background-color: $background-primary;
+    color: $text-primary;
+    outline: none;
+    resize: vertical;
+    min-height: 120px;
+    font-family: inherit;
+    line-height: 1.6;
+    transition: border-color 0.2s;
+
+    &:focus {
+        border-color: $brand-primary;
+    }
+}
+
+.chipGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $s-8;
+}
+
+.chip {
+    padding: $s-8 $s-16;
+    border-radius: 999px;
+    border: 1px solid $border-primary;
+    background-color: $background-primary;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+        border-color: $brand-primary;
+    }
+}
+
+.chipActive {
+    background-color: $brand-primary !important;
+    border-color: $brand-primary !important;
 }

@@ -85,7 +85,7 @@ export default function Library() {
                 <div className={s.mobileHeader}>
                     <Header />
                 </div>
-                <VStack fullWidth align="start" justify="start" gap={20} className={s.inner}>
+                <VStack fullWidth align="start" justify="start" gap={16 } className={s.inner}>
                     {/* Header */}
                     <HStack fullWidth align="center" justify="between">
                         <Typo.XL color="primary" fontWeight="bold">콘텐츠 라이브러리</Typo.XL>
