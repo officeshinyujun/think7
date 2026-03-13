@@ -3,6 +3,7 @@
 import Image from "next/image";
 import s from "./page.module.scss";
 import { VStack } from "@/components/general/VStack";
+import { HStack } from "@/components/general/HStack";
 import Typo from "@/components/general/Typo";
 import Header from "@/components/general/Header";
 import StricSection from "@/components/main/Stric/StricSection";
@@ -111,10 +112,10 @@ export default function Home() {
   } : null;
 
   return (
-    <div className={s.container}>
+    <HStack fullWidth align="start" justify="start" className={s.container}>
       <Sidebar />
       
-      <div className={s.desktopContent}>
+      <div className={s.pageContent}>
           <div className={s.mobileHeader}>
             <Header />
           </div>
@@ -140,7 +141,7 @@ export default function Home() {
             <BottomBar /> 
           </div>
       </div>
-    </div>    
+    </HStack>    
   );
 
 }

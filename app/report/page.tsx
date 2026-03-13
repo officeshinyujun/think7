@@ -1,6 +1,7 @@
 'use client';
 
 import { VStack } from "@/components/general/VStack";
+import { HStack } from "@/components/general/HStack";
 import Typo from "@/components/general/Typo";
 import s from "./style.module.scss";
 import BottomBar from "@/components/general/BottomBar";
@@ -26,17 +27,17 @@ export default function Report() {
     }, [user]);
 
     return (
-        <div className={s.container}>
+        <HStack fullWidth align="start" justify="start" className={s.container}>
             <Sidebar />
 
-            <div className={s.desktopContent}>
+            <div className={s.pageContent}>
                 <div className={s.mobileHeader}>
                     <Header/>
                 </div>
 
-                <Typo.XL color="primary" fontWeight="bold">리포트</Typo.XL>
+                <VStack fullWidth align="start" justify="start" gap={16} className={s.gridContainer}>
+                    <Typo.XL color="primary" fontWeight="bold" style={{ height: 36, display: 'flex', alignItems: 'center' }}>리포트</Typo.XL>
 
-                <div className={s.gridContainer}>
                     <div className={s.reportListWrapper}>
                         {reports.map((item, index) => (
                             <div key={item.id} style={{width: '100%', cursor: 'pointer'}} onClick={() => router.push(`/report/${item.id}`)}>
@@ -51,12 +52,12 @@ export default function Report() {
                              </div>
                         )}
                     </div>
-                </div>
-
-                <div className={s.mobileBottomBar}>
-                    <BottomBar/>
-                </div>
+                </VStack>
             </div>
-        </div>
+            
+            <div className={s.mobileBottomBar}>
+                <BottomBar/>
+            </div>
+        </HStack>
     )
 }

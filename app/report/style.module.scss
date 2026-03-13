@@ -1,59 +1,43 @@
 .container {
-    width: 100%;
-    min-height: 100vh;
+    width: 100vw;
+    height: 100vh;
     background-color: $background-secondary;
-    padding: $s-20;
-    padding-bottom: 120px;
 
     @media (min-width: 768px) {
-        padding: 0;
-        padding-bottom: 0;
         display: flex;
-        flex-direction: row;
-        height: 100vh;
         overflow: hidden;
     }
 }
 
-.mobileHeader {
-
-    @media (min-width: 768px) {
-        display: none;
-    }
-}
-
-.mobileBottomBar {
-    @media (min-width: 768px) {
-        display: none;
-    }
-}
-
-.desktopContent {
+.pageContent {
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-    justify-content: start;
-    gap: 16px;
+    height: 100vh;
+    overflow-y: auto;
+    padding: $s-20;
+    padding-bottom: 120px;
 
     @media (min-width: 768px) {
-        height: 100vh;
-        overflow-y: auto;
         padding: 40px;
+        padding-bottom: 40px;
         flex: 1;
     }
 }
 
+.mobileHeader {
+    margin-bottom: $s-16;
+
+    @media (min-width: 768px) {
+        display: none;
+    }
+}
+
 .gridContainer {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
     gap: 16px;
-    width: 100%;
-
-    @media (min-width: 768px) {
-        max-width: 800px;
-        margin: 0 auto;
-    }
 }
 
 .reportListWrapper {
@@ -61,4 +45,10 @@
     flex-direction: column;
     gap: 16px;
     width: 100%;
+}
+
+.mobileBottomBar {
+    @media (min-width: 768px) {
+        display: none;
+    }
 }

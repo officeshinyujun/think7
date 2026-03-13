@@ -44,13 +44,14 @@ export default function Profile() {
     const emailPrefix = user.email ? user.email.split('@')[0] : "사용자";
 
     return (
-        <div className={s.container}>
+        <HStack fullWidth align="start" justify="start" className={s.container}>
             <Sidebar />
 
-            <div className={s.desktopContent}>
+            <div className={s.pageContent}>
                 <div className={s.mobileHeader}>
                     <Header/>
                 </div>
+                <div className={s.inner}>
                 
                 {/* User Info */}
                 <HStack fullWidth align="center" gap={16} className={s.profileCard}>
@@ -135,11 +136,12 @@ export default function Profile() {
                         <Typo.SM color="wrong" fontWeight="medium">로그아웃</Typo.SM>
                     </HStack>
                 </div>
+                </div>
 
                 <div className={s.mobileBottomBar}>
                     <BottomBar/>
                 </div>
             </div>
-        </div>
+        </HStack>
     )
 }

@@ -1,17 +1,10 @@
 .container {
-    width: 100%;
-    min-height: 100vh;
+    width: 100vw;
+    height: 100vh;
     background-color: $background-secondary;
-    padding: $s-20;
-    padding-bottom: 120px; // For BottomBar on mobile
-    
+
     @media (min-width: 768px) {
-        padding: 0;
-        padding-bottom: 0;
-        background-color: $background-secondary;
         display: flex;
-        flex-direction: row;
-        height: 100vh;
         overflow: hidden;
     }
 }
@@ -29,13 +22,16 @@
     }
 }
 
-.desktopContent {
+.pageContent {
     width: 100%;
+    height: 100vh;
+    overflow-y: auto;
+    padding: $s-20;
+    padding-bottom: 120px;
 
     @media (min-width: 768px) {
-        height: 100vh;
-        overflow-y: auto;
         padding: 40px;
+        padding-bottom: 40px;
         flex: 1;
     }
 }
@@ -44,7 +40,7 @@
     width: 100%;
 
     @media (min-width: 768px) {
-        max-width: 1200px;
+        max-width: 800px;
         margin: 0 auto;
     }
 }

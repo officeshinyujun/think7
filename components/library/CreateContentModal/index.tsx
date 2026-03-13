@@ -63,18 +63,18 @@ export default function CreateContentModal({ onClose, onSuccess }: CreateContent
                     </VStack>
 
                     <Button 
-                        style={{ width: '100%' }}
+                        style={{ width: '100%', backgroundColor: 'var(--brand-primary)' }}
                         onClick={handleSubmit} 
                         disabled={isLoading || !topic.trim()}
                         className={`${s.submitButton} ${isLoading ? s.loading : ''}`}
                     >
                         {isLoading ? (
                             <HStack gap={8} align="center" justify="center">
-                                <Loader2 size={20} className={s.spinner} />
-                                <Typo.MD color="inverted" fontWeight="bold">생성 중...</Typo.MD>
+                                <Loader2 size={20} className={s.spinner} style={{ color: 'var(--bg-primary)' }} />
+                                <Typo.MD fontWeight="bold" style={{ color: 'var(--bg-primary)' }}>생성 중...</Typo.MD>
                             </HStack>
                         ) : (
-                            <Typo.MD color="brand" fontWeight="bold">생성하기</Typo.MD>
+                            <Typo.MD fontWeight="bold" style={{ color: 'var(--bg-primary)' }}>생성하기</Typo.MD>
                         )}
                     </Button>
                 </VStack>
