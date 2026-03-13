@@ -109,35 +109,35 @@ export default function ReportDetail({ params }: { params: Promise<{ id: string 
                                         </VStack>
                                     </div>
 
-                                    <VStack fullWidth className={s.explanationBox} gap={12}>
+                                    <VStack fullWidth gap={8}>
                                         <Typo.XS color="secondary" fontWeight="semi-bold">문제 관련 문장</Typo.XS>
                                         <div className={s.relevantPartBox}>
                                             <Typo.SM color="primary" fontWeight="medium">
                                                 &ldquo;{item.relevant_part}&rdquo;
                                             </Typo.SM>
                                         </div>
+                                    </VStack>
 
-                                        {item.taxonomy && item.taxonomy.some((tax: any) => tax.occurred) && (
-                                            <>
-                                                <div className={s.sectionDivider} />
-                                                <Typo.XS color="secondary" fontWeight="semi-bold">오류 유형 분석</Typo.XS>
-                                                <VStack fullWidth gap={8} className={s.taxonomyBox}>
-                                                    {item.taxonomy.map((tax: any, tIndex: number) => (
-                                                        tax.occurred && (
-                                                            <div key={tIndex} className={s.taxonomyItem}>
-                                                                <div className={s.taxonomyDot} />
-                                                                <VStack gap={2}>
-                                                                    <Typo.SM color="wrong" fontWeight="bold">{tax.category}</Typo.SM>
-                                                                    <Typo.XS color="primary" fontWeight="regular">{tax.detail}</Typo.XS>
-                                                                </VStack>
-                                                            </div>
-                                                        )
-                                                    ))}
-                                                </VStack>
-                                            </>
-                                        )}
+                                    {item.taxonomy && item.taxonomy.some((tax: any) => tax.occurred) && (
+                                        <VStack fullWidth gap={8}>
+                                            <Typo.XS color="secondary" fontWeight="semi-bold">오류 유형 분석</Typo.XS>
+                                            <VStack fullWidth gap={8} className={s.taxonomyBox}>
+                                                {item.taxonomy.map((tax: any, tIndex: number) => (
+                                                    tax.occurred && (
+                                                        <div key={tIndex} className={s.taxonomyItem}>
+                                                            <div className={s.taxonomyDot} />
+                                                            <VStack gap={2}>
+                                                                <Typo.SM color="wrong" fontWeight="bold">{tax.category}</Typo.SM>
+                                                                <Typo.XS color="primary" fontWeight="regular">{tax.detail}</Typo.XS>
+                                                            </VStack>
+                                                        </div>
+                                                    )
+                                                ))}
+                                            </VStack>
+                                        </VStack>
+                                    )}
 
-                                        <div className={s.sectionDivider} />
+                                    <VStack fullWidth gap={8}>
                                         <Typo.XS color="secondary" fontWeight="semi-bold">해설</Typo.XS>
                                         {item.explanation ? (
                                             <Typo.SM color="primary" fontWeight="regular">{item.explanation}</Typo.SM>
@@ -160,16 +160,16 @@ export default function ReportDetail({ params }: { params: Promise<{ id: string 
                                     <Typo.LG color="brand" fontWeight="bold">{report.thinking_type?.type === "LOCKED" ? "논리적 전략가형" : report.thinking_type?.type}</Typo.LG>
                                     <Typo.SM color="primary" fontWeight="medium">{report.thinking_type?.type === "LOCKED" ? "분석된 사고 유형 설명이 여기에 표시됩니다." : report.thinking_type?.description}</Typo.SM>
                                 </VStack>
-                                <HStack fullWidth gap={12}>
+                                <div className={s.typeGrid}>
                                     <VStack className={s.typeBox} align="start" justify="center" gap={4}>
                                         <Typo.XS color="secondary">강점</Typo.XS>
-                                        <Typo.SM color="primary" fontWeight="bold">{report.thinking_type?.type === "LOCKED" ? "분석된 강점" : report.thinking_type?.strength}</Typo.SM>
+                                        <Typo.SM color="primary" fontWeight="medium">{report.thinking_type?.type === "LOCKED" ? "분석된 강점" : report.thinking_type?.strength}</Typo.SM>
                                     </VStack>
                                     <VStack className={s.typeBox} align="start" justify="center" gap={4}>
                                         <Typo.XS color="secondary">약점</Typo.XS>
-                                        <Typo.SM color="primary" fontWeight="bold">{report.thinking_type?.type === "LOCKED" ? "분석된 약점" : report.thinking_type?.weakness}</Typo.SM>
+                                        <Typo.SM color="primary" fontWeight="medium">{report.thinking_type?.type === "LOCKED" ? "분석된 약점" : report.thinking_type?.weakness}</Typo.SM>
                                     </VStack>
-                                </HStack>
+                                </div>
                             </VStack>
                             {report.thinking_type?.type === "LOCKED" && <PremiumLockOverlay />}
                         </div>

@@ -43,12 +43,10 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
+    width: 100%;
 
     @media (min-width: 768px) {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 24px;
-        max-width: 800px; // Limit width for report list to keep it readable
+        max-width: 800px;
         margin: 0 auto;
     }
 }

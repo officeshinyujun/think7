@@ -11,24 +11,24 @@ export default function BottomBar() {
     const pathname = usePathname();
     const linkData = [
         {
-            icon : <House size={20} color="#8B847F" />,
-            text : "홈",
-            link : "/"
+            icon: <House size={20} color="#8B847F" />,
+            text: "홈",
+            link: "/"
         },
         {
-            icon : <ClipboardCheck size={20} color="#8B847F" />,
-            text : "리포트",
-            link : "/report"
+            icon: <ClipboardCheck size={20} color="#8B847F" />,
+            text: "리포트",
+            link: "/report"
         },
         {
-            icon : <Book size={20} color="#8B847F" />,
-            text : "라이브러리",
-            link : "/library"
+            icon: <Book size={20} color="#8B847F" />,
+            text: "콘텐츠",
+            link: "/library"
         },
         {
-            icon : <User size={20} color="#8B847F" />,
-            text : "프로필",
-            link : "/profile"
+            icon: <User size={20} color="#8B847F" />,
+            text: "프로필",
+            link: "/profile"
         },
     ]
 

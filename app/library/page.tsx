@@ -13,6 +13,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Lock, Clock, ChevronRight, Sparkles, Crown, Plus, CalendarDays } from "lucide-react";
 import CreateContentModal from "@/components/library/CreateContentModal";
+import Header from "@/components/general/Header";
 
 const TOPICS = ['전체'];
 const DIFFICULTY_LABELS: Record<string, string> = {
@@ -81,6 +82,9 @@ export default function Library() {
         <HStack fullWidth align="start" justify="start" className={s.container}>
             <Sidebar />
             <div className={s.pageContent}>
+                <div className={s.mobileHeader}>
+                    <Header />
+                </div>
                 <VStack fullWidth align="start" justify="start" gap={20} className={s.inner}>
                     {/* Header */}
                     <HStack fullWidth align="center" justify="between">

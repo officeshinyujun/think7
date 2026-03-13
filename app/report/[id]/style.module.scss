@@ -2,7 +2,6 @@
     width: 100%;
     min-height: 100vh;
     background-color: $background-secondary;
-    padding-bottom: 120px;
 
     @media (min-width: 768px) {
         padding-bottom: 0;
@@ -30,7 +29,7 @@
     display: flex;
     flex-direction: column;
     gap: $s-24;
-    padding: $s-16;
+    padding: $s-20;
 
     @media (min-width: 768px) {
         max-width: 800px;
@@ -105,8 +104,12 @@
 
 .answerGrid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     gap: $s-12;
+
+    @media (min-width: 768px) {
+        grid-template-columns: 1fr 1fr;
+    }
 }
 
 .answerItem {
@@ -179,8 +182,20 @@
 
 // ─── 사고 유형 진단 ───
 
+.typeGrid {
+    display: flex;
+    flex-direction: column;
+    gap: $s-12;
+    width: 100%;
+
+    @media (min-width: 768px) {
+        flex-direction: row;
+    }
+}
+
 .typeBox {
     flex: 1;
+    width: 100%;
     background-color: $background-secondary;
     padding: $s-16;
     border-radius: $s-12;

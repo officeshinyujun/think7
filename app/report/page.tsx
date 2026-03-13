@@ -35,6 +35,7 @@ export default function Report() {
                 </div>
 
                 <div className={s.gridContainer}>
+                    <Typo.XL color="primary" fontWeight="bold">리포트</Typo.XL>
                     <div className={s.reportListWrapper}>
                         {reports.map((item, index) => (
                             <div key={item.id} style={{width: '100%', cursor: 'pointer'}} onClick={() => router.push(`/report/${item.id}`)}>
