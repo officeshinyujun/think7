@@ -34,7 +34,7 @@ export default function NotificationSettings() {
             <div className={s.desktopContent}>
                 <VStack fullWidth align="start" justify="start" gap={16} className={s.contentWrapper}>
                     <HStack fullWidth align="center" gap={8} style={{padding: '16px 0'}}>
-                        <ChevronLeft size={24} color="#111111" onClick={() => router.back()} style={{cursor: 'pointer'}}/>
+                        <ChevronLeft size={24} color="var(--text-primary)" onClick={() => router.back()} style={{cursor: 'pointer'}}/>
                         <Typo.LG color="primary" fontWeight="bold">알림 설정</Typo.LG>
                     </HStack>
 
@@ -63,7 +63,7 @@ export default function NotificationSettings() {
                                     border: '1px solid #E0E0E0',
                                     fontFamily: 'inherit',
                                     fontSize: '14px',
-                                    backgroundColor: 'white'
+                                    backgroundColor: 'var(--bg-primary)'
                                 }} />
                             </div>
                         </div>

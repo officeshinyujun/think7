@@ -7,7 +7,7 @@ import Button from "@/components/general/Button";
 
 export default function NotFound() {
   return (
-    <VStack fullHeight fullWidth justify="center" align="center" gap={24} style={{minHeight: '100vh', backgroundColor: 'white'}}>
+    <VStack fullHeight fullWidth justify="center" align="center" gap={24} style={{minHeight: '100vh', backgroundColor: 'var(--bg-secondary)'}}>
       <VStack align="center" gap={8}>
         <Typo.XL color="primary" fontWeight="bold">404</Typo.XL>
         <Typo.LG color="secondary" fontWeight="medium">페이지를 찾을 수 없습니다.</Typo.LG>

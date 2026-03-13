@@ -122,7 +122,7 @@ export default function AccountSettings() {
             <div className={s.desktopContent}>
                 <VStack fullWidth align="start" justify="start" gap={24} className={s.contentWrapper}>
                     <HStack fullWidth align="center" gap={8} style={{padding: '16px 0'}}>
-                        <ChevronLeft size={24} color="#111111" onClick={() => router.back()} style={{cursor: 'pointer'}}/>
+                        <ChevronLeft size={24} color="var(--text-primary)" onClick={() => router.back()} style={{cursor: 'pointer'}}/>
                         <Typo.LG color="primary" fontWeight="bold">계정 설정</Typo.LG>
                     </HStack>
 
@@ -149,7 +149,7 @@ export default function AccountSettings() {
                             {!showPasswordForm ? (
                                 <Button
                                     onClick={() => setShowPasswordForm(true)}
-                                    style={{width: '100%', padding: '16px', backgroundColor: '#F3F3F7', borderRadius: '12px', marginTop: '8px'}}
+                                    style={{width: '100%', padding: '16px', backgroundColor: 'var(--bg-secondary)', borderRadius: '12px', marginTop: '8px'}}
                                 >
                                     <Typo.MD color="primary" fontWeight="semi-bold">
                                         {isGoogleUser ? '비밀번호 설정' : '비밀번호 변경'}
@@ -228,7 +228,7 @@ export default function AccountSettings() {
                                                 setNewPassword('');
                                                 setConfirmPassword('');
                                             }}
-                                            style={{flex: 1, padding: '14px', backgroundColor: '#F3F3F7', borderRadius: '12px'}}
+                                            style={{flex: 1, padding: '14px', backgroundColor: 'var(--bg-secondary)', borderRadius: '12px'}}
                                         >
                                             <Typo.SM color="secondary" fontWeight="bold">취소</Typo.SM>
                                         </Button>
@@ -252,7 +252,7 @@ export default function AccountSettings() {
                         <VStack fullWidth gap={12}>
                             <Button
                                 onClick={() => { setShowDeleteReportModal(true); setDeleteError(''); }}
-                                style={{width: '100%', padding: '16px', backgroundColor: '#F3F3F7', borderRadius: '12px', justifyContent: 'flex-start'}}
+                                style={{width: '100%', padding: '16px', backgroundColor: 'var(--bg-secondary)', borderRadius: '12px', justifyContent: 'flex-start'}}
                             >
                                 <Typo.MD color="primary" fontWeight="medium">모든 리포트 기록 삭제</Typo.MD>
                             </Button>
@@ -296,7 +296,7 @@ export default function AccountSettings() {
                             <HStack fullWidth gap={8}>
                                 <Button
                                     onClick={() => setShowDeleteReportModal(false)}
-                                    style={{flex: 1, padding: '14px', backgroundColor: '#F3F3F7', borderRadius: '12px'}}
+                                    style={{flex: 1, padding: '14px', backgroundColor: 'var(--bg-secondary)', borderRadius: '12px'}}
                                 >
                                     <Typo.SM color="secondary" fontWeight="bold">취소</Typo.SM>
                                 </Button>
@@ -351,7 +351,7 @@ export default function AccountSettings() {
                             <HStack fullWidth gap={8}>
                                 <Button
                                     onClick={() => setShowDeleteAccountModal(false)}
-                                    style={{flex: 1, padding: '14px', backgroundColor: '#F3F3F7', borderRadius: '12px'}}
+                                    style={{flex: 1, padding: '14px', backgroundColor: 'var(--bg-secondary)', borderRadius: '12px'}}
                                 >
                                     <Typo.SM color="secondary" fontWeight="bold">취소</Typo.SM>
                                 </Button>

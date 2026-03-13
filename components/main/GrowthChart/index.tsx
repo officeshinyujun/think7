@@ -26,7 +26,7 @@ export default function GrowthChart({ data, growthRate = 0 }: Props) {
                     <TrendingUp size={20} color="#3D7BFF" />
                     <Typo.MD color="primary" fontWeight="bold">사고력 성장</Typo.MD>
                 </HStack>
-                <div style={{padding: '4px 8px', backgroundColor: '#F3F3F7', borderRadius: '8px'}}>
+                <div style={{padding: '4px 8px', backgroundColor: 'var(--bg-secondary)', borderRadius: '8px'}}>
                     <Typo.XS color="brand" fontWeight="bold">+{growthRate}% 성장</Typo.XS>
                 </div>
             </HStack>
@@ -34,7 +34,7 @@ export default function GrowthChart({ data, growthRate = 0 }: Props) {
             <div className={s.chartContainer}>
                 <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={data} margin={{ top: 5, right: 5, bottom: 5, left: -20 }}>
-                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F3F3F7"/>
+                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--text-secondary)"/>
                         <XAxis 
                             dataKey="day" 
                             tick={{fill: '#8B847F', fontSize: 10}} 

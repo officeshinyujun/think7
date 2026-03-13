@@ -57,7 +57,7 @@ export default function Terms() {
             <div className={s.desktopContent}>
                 <VStack fullWidth align="start" justify="start" gap={16} className={s.contentWrapper}>
                     <HStack fullWidth align="center" gap={8} style={{padding: '16px 0'}}>
-                        <ChevronLeft size={24} color="#111111" onClick={() => router.back()} style={{cursor: 'pointer'}}/>
+                        <ChevronLeft size={24} color="var(--text-primary)" onClick={() => router.back()} style={{cursor: 'pointer'}}/>
                         <Typo.LG color="primary" fontWeight="bold">이용약관</Typo.LG>
                     </HStack>
 

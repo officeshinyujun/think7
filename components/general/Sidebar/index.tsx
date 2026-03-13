@@ -8,11 +8,20 @@ import { VStack } from "@/components/general/VStack";
 import { HStack } from "@/components/general/HStack";
 import Image from "next/image";
 import { useAuth } from "@/contexts/AuthContext";
+import { useTheme } from "@/contexts/ThemeContext";
+import { useEffect, useState } from "react";
+import { Sun, Moon } from "lucide-react";
 
 export default function Sidebar() {
     const router = useRouter();
     const pathname = usePathname();
     const { user } = useAuth();
+    const { theme, toggleTheme } = useTheme();
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     const menuItems = [
         { icon: <House size={20} />, text: "홈", link: "/" },
@@ -27,9 +36,19 @@ export default function Sidebar() {
     return (
         <VStack className={s.container} justify="between" align="start">
             <VStack fullWidth align="start" justify="start" gap={16}>
-                <HStack className={s.logo} align="center" gap={10} onClick={() => router.push('/')}>
-                    <Image src="/think7_Logo.png" alt="logo" width={36} height={36} />
-                    <Typo.LG color="primary" fontWeight="bold">Think7</Typo.LG>
+                <HStack fullWidth justify="between" align="center">
+                    <HStack className={s.logo} align="center" gap={10} onClick={() => router.push('/')} style={{cursor: 'pointer'}}>
+                        <Image src="/think7_Logo.png" alt="logo" width={36} height={36} />
+                        <Typo.LG color="primary" fontWeight="bold">Think7</Typo.LG>
+                    </HStack>
+                    {mounted && (
+                        <div 
+                            onClick={(e) => { e.stopPropagation(); toggleTheme(); }}
+                            style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                        >
+                            {theme === 'dark' ? <Moon size={20} color="var(--text-secondary)" /> : <Sun size={20} color="var(--text-secondary)" />}
+                        </div>
+                    )}
                 </HStack>
                     {menuItems.map((item, index) => {
                         const isActive = pathname === item.link;
@@ -56,7 +75,7 @@ export default function Sidebar() {
                     })}
             </VStack>
 
-            <HStack className={s.userProfile} align="center" justify="between" onClick={() => router.push('/profile')}>
+        <HStack className={s.userProfile} align="center" justify="between" onClick={() => router.push('/profile')}>
                 <HStack align="center" gap={12}>
                     <div className={s.avatar}>
                         {user?.profile_image ? (
@@ -70,7 +89,9 @@ export default function Sidebar() {
                         <Typo.XS color="secondary" fontWeight="medium">{planLabel}</Typo.XS>
                     </VStack>
                 </HStack>
-                <Settings size={20} color="#8B847F" />
+                <HStack align="center" gap={12}>
+                    <Settings size={20} color="var(--text-secondary)" />
+                </HStack>
             </HStack>
         </VStack>
     )

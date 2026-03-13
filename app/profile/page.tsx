@@ -12,12 +12,20 @@ import Sidebar from "@/components/general/Sidebar";
 import { useRouter } from "next/navigation";
 import { https } from "@/services/https";
 import { useAuth } from "@/contexts/AuthContext";
+import { useTheme } from "@/contexts/ThemeContext";
 import { useEffect, useState } from "react";
+import { Sun, Moon } from "lucide-react";
 
 export default function Profile() {
     const router = useRouter();
     const { user: authUser, logout } = useAuth();
+    const { theme, toggleTheme } = useTheme();
     const [user, setUser] = useState<any>(null);
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     useEffect(() => {
         if (!authUser) return;
@@ -86,7 +94,7 @@ export default function Profile() {
                         )}
                     </Typo.SM>
                     {user.subscription_plan !== 'PREMIUM' && (
-                        <Button style={{width: '100%', backgroundColor: 'white', padding: '12px', borderRadius: '12px', marginTop: '8px'}} onClick={() => router.push('/profile/plan')}>
+                        <Button style={{width: '100%', backgroundColor: 'var(--bg-primary)', padding: '12px', borderRadius: '12px', marginTop: '8px'}} onClick={() => router.push('/profile/plan')}>
                             <Typo.SM color="brand" fontWeight="bold">업그레이드 하기</Typo.SM>
                         </Button>
                     )}
@@ -98,10 +106,10 @@ export default function Profile() {
                     
                     <HStack fullWidth justify="between" align="center" className={s.menuItem} onClick={() => router.push('/profile/account')}>
                         <HStack gap={12} align="center">
-                            <Settings size={20} color="#484848" />
+                            <Settings size={20} color="var(--text-primary)" />
                             <Typo.MD color="primary" fontWeight="medium">계정 설정</Typo.MD>
                         </HStack>
-                        <ChevronRight size={20} color="#8B847F" />
+                        <ChevronRight size={20} color="var(--text-secondary)" />
                     </HStack>
 
                     <HStack fullWidth justify="between" align="center" className={s.menuItem} onClick={() => router.push('/profile/notification')}>

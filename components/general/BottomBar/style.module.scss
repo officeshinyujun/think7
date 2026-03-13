@@ -4,6 +4,10 @@
     position:fixed;
     bottom:0;
     left:0;
+
+    :global([data-theme='dark']) & {
+        background: linear-gradient(180deg, rgba(10, 10, 15, 0.00) 0%, #0A0A0F 100%);
+    }
 }
 
 .contents{

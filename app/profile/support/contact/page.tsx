@@ -19,6 +19,7 @@ export default function Contact() {
     const [inquiryType, setInquiryType] = useState('');
     const [title, setTitle] = useState('');
     const [message, setMessage] = useState('');
+    const [email, setEmail] = useState(user?.email || '');
     const [submitted, setSubmitted] = useState(false);
 
     const handleSubmit = () => {
@@ -59,7 +60,7 @@ export default function Contact() {
             <div className={s.desktopContent}>
                 <VStack fullWidth align="start" justify="start" gap={16} className={s.contentWrapper}>
                     <HStack fullWidth align="center" gap={8} style={{padding: '16px 0'}}>
-                        <ChevronLeft size={24} color="#111111" onClick={() => router.back()} style={{cursor: 'pointer'}}/>
+                        <ChevronLeft size={24} color="var(--text-primary)" onClick={() => router.back()} style={{cursor: 'pointer'}}/>
                         <Typo.LG color="primary" fontWeight="bold">문의하기</Typo.LG>
                     </HStack>
 
@@ -113,8 +114,9 @@ export default function Contact() {
                             <Typo.SM color="secondary" fontWeight="medium">회신 이메일</Typo.SM>
                             <input
                                 className={s.formInput}
-                                value={user?.email || ''}
-                                disabled
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                placeholder="회신받을 이메일을 입력해주세요"
                             />
                         </VStack>
 

@@ -1,5 +1,37 @@
 @import url('https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.1/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css');
 
+:root {
+  /* Light Mode (Default) */
+  --bg-primary: #FDFDFE;
+  --bg-secondary: #F3F3F7;
+  --bg-third: #D9D9D9;
+
+  --brand-primary: #3D7BFF;
+
+  --text-primary: #111111;
+  --text-secondary: #8B847F;
+  --text-correct: #89DA7F;
+  --text-wrong: #DA7F7F;
+
+  --border-primary: #E6E6E6;
+}
+
+[data-theme='dark'] {
+  /* Dark Mode */
+  --bg-primary: #1A1A24;   /* Cards, slightly lighter */
+  --bg-secondary: #0A0A0F; /* Body, darkest */
+  --bg-third: #2A2A35;     /* Hovers/Dividers */
+
+  --brand-primary: #3D7BFF;
+
+  --text-primary: #FFFFFF;
+  --text-secondary: #A0A0A5;
+  --text-correct: #89DA7F;
+  --text-wrong: #FF7B7B;
+
+  --border-primary: #2A2A35;
+}
+
 *{
   padding: 0;
   margin: 0;

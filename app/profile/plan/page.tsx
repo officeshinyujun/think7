@@ -44,7 +44,7 @@ export default function PlanDetails() {
             <div className={s.desktopContent}>
                 <VStack fullWidth align="start" justify="start" gap={24} className={s.contentWrapper}>
                     <HStack fullWidth align="center" gap={8} style={{padding: '16px 0'}}>
-                        <ChevronLeft size={24} color="#111111" onClick={() => router.back()} style={{cursor: 'pointer'}}/>
+                        <ChevronLeft size={24} color="var(--text-primary)" onClick={() => router.back()} style={{cursor: 'pointer'}}/>
                         <Typo.LG color="primary" fontWeight="bold">요금제 상세</Typo.LG>
                     </HStack>
 

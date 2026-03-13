@@ -3,8 +3,10 @@
     min-height: 100vh;
     padding: $s-16;
     background-color: $background-secondary;
-    padding-bottom: 120px;
-    background: linear-gradient(180deg, #F5F7FA 0%, #F3F3F7 100%);
+
+    :global([data-theme='dark']) & {
+        background: $background-secondary;
+    }
 
      @media (min-width: 768px) {
         padding: 0;
@@ -38,14 +40,14 @@
 .heroSection {
     padding: $s-32 $s-24;
     text-align: center;
-    background-color: white;
+    background-color: $background-primary;
     border-radius: $s-24;
     margin-bottom: $s-24;
     // border removed
 }
 
 .featureList {
-    background-color: white;
+    background-color: $background-primary;
     padding: $s-24;
     border-radius: $s-24;
     margin-bottom: $s-24;
@@ -92,7 +94,7 @@
 }
 
 .comparisonTable {
-    background-color: white;
+    background-color: $background-primary;
     padding: $s-24;
     border-radius: $s-24;
     width: 100%;
