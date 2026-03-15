@@ -56,13 +56,14 @@ export default function NotificationSettings() {
                                     <div className={s.knob} />
                                 </div>
                             </div>
-                            <div style={{width: '100%', paddingTop: '12px', borderTop: '1px solid #F3F3F7'}}>
+                            <div style={{width: '100%', paddingTop: '12px', borderTop: '1px solid var(--border-primary)'}}>
                                 <input type="time" defaultValue="09:00" style={{
                                     padding: '8px 12px', 
                                     borderRadius: '8px', 
-                                    border: '1px solid #E0E0E0',
+                                    border: '1px solid var(--border-primary)',
                                     fontFamily: 'inherit',
                                     fontSize: '14px',
+                                    color: 'var(--text-primary)',
                                     backgroundColor: 'var(--bg-primary)'
                                 }} />
                             </div>

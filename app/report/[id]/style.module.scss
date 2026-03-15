@@ -245,6 +245,19 @@
     }
 }
 
+.coachBtn {
+    padding: $s-12 !important;
+    background-color: rgba($brand-primary, 0.1) !important;
+    border-radius: $s-12 !important;
+    width: 100%;
+    margin-top: $s-8;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+        background-color: rgba($brand-primary, 0.2) !important;
+    }
+}
+
 // ─── 잠금 섹션 ───
 
 .lockedSection {

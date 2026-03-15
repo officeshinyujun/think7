@@ -2,7 +2,7 @@
 
 import { useRouter, usePathname } from "next/navigation";
 import s from "./style.module.scss";
-import { House, ClipboardCheck, User, Settings, Book } from "lucide-react";
+import { House, ClipboardCheck, User, Settings, Book, BrainCircuit } from "lucide-react";
 import Typo from "@/components/general/Typo";
 import { VStack } from "@/components/general/VStack";
 import { HStack } from "@/components/general/HStack";
@@ -27,6 +27,7 @@ export default function Sidebar() {
         { icon: <House size={20} />, text: "홈", link: "/" },
         { icon: <ClipboardCheck size={20} />, text: "리포트", link: "/report" },
         { icon: <Book size={20} />, text: "라이브러리", link: "/library" },
+        { icon: <BrainCircuit size={20} />, text: "Review", link: "/review" },
         { icon: <User size={20} />, text: "프로필", link: "/profile" },
     ];
 

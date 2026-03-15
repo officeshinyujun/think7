@@ -1,7 +1,7 @@
 import { HStack } from "../HStack"
 import { VStack } from "../VStack"
 import s from "./style.module.scss"
-import { ClipboardCheck, House, User, Book } from "lucide-react"
+import { ClipboardCheck, House, User, Book, BrainCircuit } from "lucide-react"
 import BottomButton from "./BottomButton"
 import { usePathname, useRouter } from "next/navigation"
 
@@ -24,6 +24,11 @@ export default function BottomBar() {
             icon: <Book size={20} color="#8B847F" />,
             text: "콘텐츠",
             link: "/library"
+        },
+        {
+            icon: <BrainCircuit size={20} color="#8B847F" />,
+            text: "Review",
+            link: "/review"
         },
         {
             icon: <User size={20} color="#8B847F" />,

@@ -109,15 +109,6 @@ export default function ReportDetail({ params }: { params: Promise<{ id: string 
                                         </VStack>
                                     </div>
 
-                                    <VStack fullWidth gap={8}>
-                                        <Typo.XS color="secondary" fontWeight="semi-bold">문제 관련 문장</Typo.XS>
-                                        <div className={s.relevantPartBox}>
-                                            <Typo.SM color="primary" fontWeight="medium">
-                                                &ldquo;{item.relevant_part}&rdquo;
-                                            </Typo.SM>
-                                        </div>
-                                    </VStack>
-
                                     {item.taxonomy && item.taxonomy.some((tax: any) => tax.occurred) && (
                                         <VStack fullWidth gap={8}>
                                             <Typo.XS color="secondary" fontWeight="semi-bold">오류 유형 분석</Typo.XS>
@@ -128,7 +119,6 @@ export default function ReportDetail({ params }: { params: Promise<{ id: string 
                                                             <div className={s.taxonomyDot} />
                                                             <VStack gap={2}>
                                                                 <Typo.SM color="wrong" fontWeight="bold">{tax.category}</Typo.SM>
-                                                                <Typo.XS color="primary" fontWeight="regular">{tax.detail}</Typo.XS>
                                                             </VStack>
                                                         </div>
                                                     )
@@ -137,17 +127,13 @@ export default function ReportDetail({ params }: { params: Promise<{ id: string 
                                         </VStack>
                                     )}
 
-                                    <VStack fullWidth gap={8}>
-                                        <Typo.XS color="secondary" fontWeight="semi-bold">해설</Typo.XS>
-                                        {item.explanation ? (
-                                            <Typo.SM color="primary" fontWeight="regular">{item.explanation}</Typo.SM>
-                                        ) : (
-                                            <HStack align="center" gap={4} onClick={() => router.push('/profile/plan')} className={s.premiumLink}>
-                                                <Lock size={14} color="#3D7BFF" />
-                                                <Typo.SM color="brand" fontWeight="bold">프리미엄 해설 보기</Typo.SM>
-                                            </HStack>
-                                        )}
-                                    </VStack>
+                                    <Button 
+                                        className={s.coachBtn} 
+                                        style={{ marginTop: '8px' }}
+                                        onClick={() => router.push(`/review/${id}?qid=${item.number}`)}
+                                    >
+                                        <Typo.SM color="brand" fontWeight="bold">왜 틀렸는지 살펴보기 →</Typo.SM>
+                                    </Button>
                                 </VStack>
                             ))}
                         </VStack>

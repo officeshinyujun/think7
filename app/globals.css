@@ -38,3 +38,13 @@
   box-sizing: border-box;
   font-family: 'Wanted Sans', sans-serif;
 }
+
+.mobileOnly {
+  display: block;
+}
+
+@media (min-width: 768px) {
+  .mobileOnly {
+    display: none !important;
+  }
+}
