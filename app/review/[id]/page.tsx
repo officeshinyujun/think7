@@ -17,7 +17,11 @@ interface ChatMessage {
     isStructured?: boolean;
     analysis?: string;
     highlight_quote?: string;
+    evaluation?: string;
+    rating?: number;
     step?: number;
+    user_answer_quote?: string;
+    ideal_answer_quote?: string;
 }
 
 const QUICK_QUESTIONS = [
@@ -35,17 +39,36 @@ export default function ReviewCoach({ params }: { params: Promise<{ id: string }
     const qid = qidParam ? parseInt(qidParam, 10) : null;
 
     const [messages, setMessages] = useState<ChatMessage[]>([]);
+    const [report, setReport] = useState<any>(null);
+    const [article, setArticle] = useState<any>(null);
     const [inputValue, setInputValue] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [sessionId, setSessionId] = useState<string | undefined>(undefined);
     const [currentStep, setCurrentStep] = useState(1);
     const chatEndRef = useRef<HTMLDivElement>(null);
+    const initializationStarted = useRef(false);
 
     useEffect(() => {
-        if (id && qid && messages.length === 0) {
-            initCoach();
+        if (id && qid && messages.length === 0 && !initializationStarted.current) {
+            initializationStarted.current = true;
+            initOrRestoreCoach();
         }
     }, [id, qid]);
+
+    useEffect(() => {
+        if (id) {
+            https.report.get(id as string)
+                .then(res => {
+                    setReport(res);
+                    if (res.content_id) {
+                        https.content.get(res.content_id)
+                            .then(contentRes => setArticle(contentRes))
+                            .catch(err => console.error(err));
+                    }
+                })
+                .catch(err => console.error(err));
+        }
+    }, [id]);
 
     useEffect(() => {
         chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -54,8 +77,13 @@ export default function ReviewCoach({ params }: { params: Promise<{ id: string }
     const buildApiHistory = (msgs: ChatMessage[]) => msgs.map(m => ({
         role: m.role,
         content: m.isStructured ? JSON.stringify({
+            step: m.step,
+            evaluation: m.evaluation,
+            rating: m.rating,
             analysis: m.analysis,
             highlight_quote: m.highlight_quote,
+            user_answer_quote: m.user_answer_quote,
+            ideal_answer_quote: m.ideal_answer_quote,
             next_question: m.content
         }) : m.content
     }));
@@ -67,18 +95,71 @@ export default function ReviewCoach({ params }: { params: Promise<{ id: string }
             isStructured: true,
             analysis: res.analysis,
             highlight_quote: res.highlight_quote,
-            step: res.step
+            evaluation: res.evaluation,
+            rating: res.rating,
+            step: res.step,
+            user_answer_quote: res.user_answer_quote,
+            ideal_answer_quote: res.ideal_answer_quote
         };
         if (res.step) setCurrentStep(res.step);
         return [...prev, aiMsg];
     };
 
-    const initCoach = async () => {
+    const initOrRestoreCoach = async () => {
         setIsLoading(true);
         try {
-            const res = await https.report.coach(id, qid as number, []);
-            if (res.sessionId) setSessionId(res.sessionId);
-            setMessages(prev => applyCoachResponse(res, prev));
+            const existingSession = await https.report.getCoachSession(id, qid as number);
+
+            if (existingSession && existingSession.messages && existingSession.messages.length > 0) {
+                setSessionId(existingSession.id);
+                const restoredMessages: ChatMessage[] = existingSession.messages.map((m: any) => {
+                    if (m.role === 'assistant') {
+                        try {
+                            const parsed = JSON.parse(m.content);
+                            return {
+                                role: 'assistant',
+                                content: parsed.next_question || '',
+                                isStructured: true,
+                                analysis: parsed.analysis,
+                                highlight_quote: parsed.highlight_quote,
+                                evaluation: parsed.evaluation,
+                                rating: parsed.rating,
+                                step: parsed.step,
+                                user_answer_quote: parsed.user_answer_quote,
+                                ideal_answer_quote: parsed.ideal_answer_quote
+                            };
+                        } catch (e) {
+                            return { role: 'assistant', content: m.content };
+                        }
+                    } else {
+                        return { role: 'user', content: m.content };
+                    }
+                });
+
+                setMessages(restoredMessages);
+                const lastAiMsg = restoredMessages.filter(m => m.role === 'assistant').pop();
+                if (lastAiMsg && lastAiMsg.step) {
+                    setCurrentStep(lastAiMsg.step);
+                }
+            } else {
+                const res = await https.report.coach(id, qid as number, []);
+                if (res.sessionId) setSessionId(res.sessionId);
+                setMessages([
+                    {
+                        role: 'assistant',
+                        content: res.next_question || '',
+                        isStructured: true,
+                        analysis: res.analysis,
+                        highlight_quote: res.highlight_quote,
+                        evaluation: res.evaluation,
+                        rating: res.rating,
+                        step: res.step,
+                        user_answer_quote: res.user_answer_quote,
+                        ideal_answer_quote: res.ideal_answer_quote
+                    }
+                ]);
+                if (res.step) setCurrentStep(res.step);
+            }
         } catch (error) {
             console.error(error);
         } finally {
@@ -90,13 +171,16 @@ export default function ReviewCoach({ params }: { params: Promise<{ id: string }
         if (!text.trim() || isLoading) return;
 
         const userMsg: ChatMessage = { role: 'user', content: text };
-        const newHistory = [...messages, userMsg];
-        setMessages(newHistory);
+        const nextMessages = [...messages, userMsg];
+        
+        setMessages(nextMessages);
         setInputValue('');
         setIsLoading(true);
 
         try {
-            const res = await https.report.coach(id, qid as number, buildApiHistory(newHistory), sessionId);
+            const historyForApi = buildApiHistory(nextMessages);
+            const res = await https.report.coach(id, qid as number, historyForApi, sessionId);
+            
             if (res.sessionId) setSessionId(res.sessionId);
             setMessages(prev => applyCoachResponse(res, prev));
         } catch (error) {
@@ -109,12 +193,12 @@ export default function ReviewCoach({ params }: { params: Promise<{ id: string }
     const STEP_LABELS = ['글 구조', '내 답 분석', '논리 이해', '사고 훈련'];
 
     return (
-        <HStack fullWidth align="start" className={s.container}>
+        <div className={s.container}>
             <Sidebar />
 
-            <VStack fullWidth justify="center" align="center" className={s.desktopContent}>
-                <VStack fullWidth justify="start" className={s.contentWrapper}>
-                    <div className="mobileOnly">
+            <div className={s.desktopContent}>
+                <div className={s.contentWrapper}>
+                    <div className="mobileOnly" style={{ padding: '12px 20px', borderBottom: '1px solid var(--border-primary)' }}>
                         <Header />
                     </div>
 
@@ -124,13 +208,13 @@ export default function ReviewCoach({ params }: { params: Promise<{ id: string }
                             size={20}
                             color="var(--text-primary)"
                             onClick={() => router.back()}
-                            style={{ cursor: 'pointer', marginRight: '12px' }}
+                            style={{ cursor: 'pointer', marginRight: '12px', flexShrink: 0 }}
                         />
-                        <VStack align="start" gap={2}>
+                        <VStack align="start" gap={2} style={{ overflow: 'hidden' }}>
                             <Typo.MD color="primary" fontWeight="bold">Think Coach</Typo.MD>
-                            <HStack align="center" gap={4}>
+                            <HStack align="center" gap={8} className={s.stepContainer}>
                                 {STEP_LABELS.map((label, i) => (
-                                    <HStack key={i} align="center" gap={4}>
+                                    <HStack key={i} align="center" gap={4} style={{ flexShrink: 0 }}>
                                         <span className={`${s.stepDot} ${currentStep === i + 1 ? s.stepDotActive : ''}`} />
                                         <Typo.XS
                                             color={currentStep === i + 1 ? "brand" : "secondary"}
@@ -145,8 +229,26 @@ export default function ReviewCoach({ params }: { params: Promise<{ id: string }
                         </VStack>
                     </HStack>
 
-                    {/* Chat */}
-                    <div className={s.chatContainer}>
+                    <div className={s.readingArea}>
+                        {/* Article Column */}
+                        <div className={s.articleBox}>
+                            {article ? (
+                                <VStack fullWidth gap={16}>
+                                    <Typo.XL fontWeight="bold" color="primary">{article.title}</Typo.XL>
+                                    <Typo.MD color="primary" style={{ whiteSpace: 'pre-wrap', lineHeight: 1.8 }}>
+                                        {article.body}
+                                    </Typo.MD>
+                                </VStack>
+                            ) : (
+                                <VStack fullWidth justify="center" align="center" style={{ padding: '40px' }}>
+                                    <Loader2 className={s.spinner} size={28} color="var(--brand-primary)" />
+                                </VStack>
+                            )}
+                        </div>
+
+                        {/* Chat Column */}
+                        <div className={s.chatBoxContainer}>
+                            <div className={s.chatContainer}>
                         {messages.length === 0 && isLoading && (
                             <VStack fullWidth justify="center" align="center" style={{ padding: '40px' }}>
                                 <Loader2 className={s.spinner} size={28} color="var(--brand-primary)" />
@@ -167,6 +269,32 @@ export default function ReviewCoach({ params }: { params: Promise<{ id: string }
                                             Think Coach {msg.step ? `· Step ${msg.step}` : ''}
                                         </Typo.XS>
                                         <VStack fullWidth gap={12} className={s.botBubble}>
+                                            {msg.evaluation && (
+                                                idx === 0 ? (
+                                                    <Typo.SM color="primary" fontWeight="regular">{msg.evaluation}</Typo.SM>
+                                                ) : (
+                                                    <div className={`${s.evaluationBox} ${msg.rating !== undefined ? (msg.rating >= 70 ? s.evaluationPass : s.evaluationHint) : ''}`}>
+                                                        <Typo.SM color={msg.rating !== undefined && msg.rating < 70 ? "brand" : "primary"} fontWeight="medium">
+                                                            {msg.rating !== undefined ? (msg.rating >= 70 ? '✅ ' : '💡 ') : '💡 '}
+                                                            {msg.evaluation}
+                                                        </Typo.SM>
+                                                    </div>
+                                                )
+                                            )}
+
+                                            {msg.user_answer_quote && msg.ideal_answer_quote && (
+                                                <div className={s.comparisonContainer}>
+                                                    <div className={s.comparisonUser}>
+                                                        <div className={s.comparisonLabel}>내 답변 중 부족한 부분</div>
+                                                        <Typo.SM color="primary" fontWeight="regular">"{msg.user_answer_quote}"</Typo.SM>
+                                                    </div>
+                                                    <div className={s.comparisonIdeal}>
+                                                        <div className={s.comparisonLabel}>글에서 놓친 핵심</div>
+                                                        <Typo.SM color="primary" fontWeight="regular">"{msg.ideal_answer_quote}"</Typo.SM>
+                                                    </div>
+                                                </div>
+                                            )}
+
                                             {msg.highlight_quote && (
                                                 <div className={s.highlightBox}>
                                                     <Typo.SM color="primary" fontWeight="medium">"{msg.highlight_quote}"</Typo.SM>
@@ -195,15 +323,6 @@ export default function ReviewCoach({ params }: { params: Promise<{ id: string }
                         <div ref={chatEndRef} />
                     </div>
 
-                    {/* Quick Questions */}
-                    <HStack fullWidth gap={8} className={s.quickQuestions}>
-                        {QUICK_QUESTIONS.map((q, i) => (
-                            <button key={i} className={s.quickBtn} onClick={() => sendMessage(q.message)} disabled={isLoading}>
-                                <Typo.XS color="brand" fontWeight="semi-bold">{q.label}</Typo.XS>
-                            </button>
-                        ))}
-                    </HStack>
-
                     {/* Input */}
                     <HStack fullWidth align="center" className={s.inputArea}>
                         <input
@@ -211,16 +330,21 @@ export default function ReviewCoach({ params }: { params: Promise<{ id: string }
                             placeholder="생각을 자유롭게 입력해보세요..."
                             value={inputValue}
                             onChange={(e) => setInputValue(e.target.value)}
-                            onKeyDown={(e) => e.key === 'Enter' && sendMessage(inputValue)}
+                            onKeyDown={(e) => {
+                                if (e.nativeEvent.isComposing) return;
+                                if (e.key === 'Enter') sendMessage(inputValue);
+                            }}
                             disabled={isLoading}
                         />
                         <button className={s.sendButton} onClick={() => sendMessage(inputValue)} disabled={isLoading || !inputValue.trim()}>
                             <Send size={18} color="var(--bg-primary)" />
                         </button>
                     </HStack>
+                        </div>
+                    </div>
 
-                </VStack>
-            </VStack>
-        </HStack>
+                </div>
+            </div>
+        </div>
     )
 }

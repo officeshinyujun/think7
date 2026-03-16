@@ -54,25 +54,24 @@ export default function ReviewList() {
     }, [user?.id]);
 
     return (
-        <HStack fullWidth align="start" className={s.container}>
+        <HStack fullWidth align="start" justify="start" className={s.container}>
             <Sidebar />
 
-            <VStack fullWidth align="center" className={s.desktopContent}>
-                <VStack fullWidth justify="start" className={s.contentWrapper}>
-                    <div className="mobileOnly">
-                        <Header />
-                    </div>
-
+            <div className={s.pageContent}>
+                <div className={s.mobileHeader}>
+                    <Header />
+                </div>
+                <VStack fullWidth align="start" justify="start" gap={16} className={s.inner}>
                     {/* Header */}
-                    <VStack fullWidth align="start" className={s.pageHeader} gap={4}>
+                    <HStack fullWidth align="center" justify="between">
                         <Typo.XL color="primary" fontWeight="bold">Think Coach 기록</Typo.XL>
-                        <Typo.SM color="secondary">AI와 함께 탐구한 질문들을 다시 확인해보세요.</Typo.SM>
-                    </VStack>
+                    </HStack>
+                    <Typo.SM color="secondary" style={{ marginTop: '-8px' }}>AI와 함께 탐구한 질문들을 다시 확인해보세요.</Typo.SM>
 
                     {/* Session List */}
-                    <VStack fullWidth className={s.listArea} gap={12}>
+                    <VStack fullWidth gap={16} style={{ marginTop: '8px' }}>
                         {loading ? (
-                            <VStack fullWidth align="center" justify="center" style={{ paddingTop: '80px' }}>
+                            <VStack fullWidth align="center" justify="center" style={{ padding: '80px 0' }}>
                                 <Loader2 className={s.spinner} size={28} color="var(--brand-primary)" />
                                 <Typo.SM color="secondary" style={{ marginTop: '12px' }}>불러오는 중...</Typo.SM>
                             </VStack>
@@ -86,44 +85,45 @@ export default function ReviewList() {
                             sessions.map((session) => {
                                 const lastUserMsg = getLastUserMessage(session.messages);
                                 return (
-                                    <HStack
+                                    <div
                                         key={session.id}
-                                        fullWidth
-                                        justify="between"
-                                        align="center"
                                         className={s.sessionCard}
                                         onClick={() => router.push(`/review/${session.analysis_id}?qid=${session.question_number}`)}
                                     >
-                                        <HStack align="start" gap={16}>
+                                        <HStack align="start" gap={16} fullWidth>
                                             <div className={s.iconBox}>
                                                 <MessageSquare size={20} color="var(--brand-primary)" />
                                             </div>
-                                            <VStack align="start" gap={6}>
-                                                <Typo.SM color="primary" fontWeight="bold" className={s.questionText}>
+                                            <VStack align="start" gap={6} style={{ flex: 1 }}>
+                                                <Typo.MD color="primary" fontWeight="bold" className={s.questionText}>
                                                     {session.question_text}
-                                                </Typo.SM>
+                                                </Typo.MD>
                                                 {lastUserMsg && (
-                                                    <Typo.XS color="secondary" className={s.lastMessage}>
+                                                    <Typo.SM color="secondary" className={s.lastMessage}>
                                                         내 마지막 답변: {lastUserMsg}
-                                                    </Typo.XS>
+                                                    </Typo.SM>
                                                 )}
-                                                <HStack align="center" gap={8}>
+                                                <HStack align="center" gap={8} style={{ marginTop: '4px' }}>
                                                     <Typo.XS color="secondary">{formatDate(session.created_at)}</Typo.XS>
                                                     <div className={s.dot} />
                                                     <Typo.XS color="secondary">{session.messages.length}개 메시지</Typo.XS>
                                                 </HStack>
                                             </VStack>
+                                            <ChevronRight size={20} color="#C4C4C4" />
                                         </HStack>
-                                        <ChevronRight size={20} color="var(--text-secondary)" />
-                                    </HStack>
+                                    </div>
                                 );
                             })
                         )}
                     </VStack>
-                </VStack>
-            </VStack>
 
-            <BottomBar />
+                    <div style={{ height: 40 }} />
+                </VStack>
+            </div>
+
+            <div className={s.mobileBottomBar}>
+                <BottomBar />
+            </div>
         </HStack>
     );
 }

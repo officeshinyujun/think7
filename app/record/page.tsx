@@ -194,7 +194,9 @@ export default function Record() {
                 </div>
                  
                  <div className={s.bottomBar}>
-                    <BottomBar/>
+                    <div className="mobileOnly">
+                        <BottomBar/>
+                    </div>
                  </div>
             </VStack>
         </div>

@@ -175,6 +175,9 @@ export default function LandingPage() {
                         <button className={s.ctaPrimary} onClick={() => router.push('/auth/signup')}>
                             무료로 시작하기
                         </button>
+                        <button className={s.ctaSecondary} onClick={() => router.push('/tutorial')}>
+                            직접 체험해보기
+                        </button>
                         <button className={s.ctaGhost} onClick={() => router.push('/auth/login')}>
                             이미 계정이 있어요 →
                         </button>

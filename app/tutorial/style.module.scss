@@ -1,0 +1,259 @@
+@import "@/styles/variables.scss";
+
+.container {
+    background-color: var(--bg-primary);
+    min-height: 100vh;
+}
+
+.desktopContent {
+    max-width: 1280px;
+    height: 100vh;
+    padding: $s-24;
+    overflow: hidden;
+
+    @media (max-width: 768px) {
+        padding: 0;
+        height: auto;
+    }
+}
+
+.contentWrapper {
+    max-width: 1000px;
+    height: 100%;
+    background-color: var(--bg-primary);
+    position: relative;
+}
+
+// --- Tutorial Progress ---
+.tutorialProgress {
+    padding: $s-20 $s-16;
+    background-color: var(--bg-primary);
+    border-bottom: 1px solid var(--border-primary);
+    margin-bottom: $s-24;
+}
+
+.progressTrack {
+    height: 4px;
+    background-color: var(--bg-secondary);
+    border-radius: 2px;
+    margin-bottom: $s-8;
+    overflow: hidden;
+}
+
+.progressBar {
+    height: 100%;
+    background-color: var(--brand-primary);
+    transition: width 0.4s ease;
+}
+
+.progressLabels {
+    padding: 0 $s-4;
+}
+
+// --- Common ---
+.stepContainer {
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: 100px;
+}
+
+.tipBox {
+    padding: $s-12 $s-16;
+    background-color: rgba($brand-primary, 0.05);
+    border: 1px dashed rgba($brand-primary, 0.3);
+    border-radius: $s-12;
+}
+
+// --- Step 1: Reading Area ---
+.readingArea {
+    @media (max-width: 900px) {
+        flex-direction: column;
+    }
+}
+
+.articleBox {
+    background-color: var(--bg-primary);
+    padding-right: $s-32;
+    border-right: 1px solid var(--border-primary);
+
+    @media (max-width: 900px) {
+        border-right: 0;
+        padding-right: 0;
+        border-bottom: 1px solid var(--border-primary);
+        padding-bottom: $s-32;
+    }
+}
+
+.questionBox {
+    padding: $s-32;
+    background-color: var(--bg-secondary);
+    border-radius: $s-16;
+    position: sticky;
+    top: 0;
+}
+
+.option {
+    padding: $s-16;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: $s-12;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+        border-color: var(--brand-primary);
+        background-color: rgba($brand-primary, 0.02);
+    }
+}
+
+.optionSelected {
+    background-color: var(--brand-primary) !important;
+    border-color: var(--brand-primary);
+}
+
+// --- Step 2: Report ---
+.scoreCircle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 8px solid rgba($text-wrong, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bg-primary);
+}
+
+.reportSummary {
+    max-width: 600px;
+    padding: $s-24;
+    background-color: var(--bg-secondary);
+    border-radius: $s-20;
+}
+
+.answerSection {
+    background-color: var(--bg-primary);
+    padding: $s-20;
+    border-radius: $s-16;
+}
+
+.answerGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $s-12;
+}
+
+.answerItem {
+    padding: $s-12;
+    background-color: var(--bg-secondary);
+    border-radius: $s-12;
+}
+
+.taxonomyBox {
+    padding-top: $s-12;
+    border-top: 1px solid var(--border-primary);
+}
+
+.tag {
+    padding: $s-4 $s-10;
+    background-color: var(--bg-secondary);
+    border-radius: $s-12;
+    font-size: 11px;
+    color: var(--text-secondary);
+}
+
+.tagActive {
+    padding: $s-4 $s-10;
+    background-color: rgba($text-wrong, 0.1);
+    color: var(--text-wrong);
+    border-radius: $s-12;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+// --- Step 3: Coach ---
+.chatHeader {
+    padding: $s-16 $s-24;
+    border-bottom: 1px solid var(--border-primary);
+    background-color: var(--bg-primary);
+}
+
+.chatArea {
+    flex: 1;
+    overflow-y: auto;
+    padding: $s-24;
+    background-color: var(--bg-primary);
+}
+
+.msgRow {
+    margin-bottom: $s-20;
+}
+
+.botBubbleWrapper {
+    max-width: 85%;
+}
+
+.botBubble {
+    padding: $s-20;
+    background-color: var(--bg-secondary);
+    border-radius: 0 $s-20 $s-20 $s-20;
+}
+
+.userBubble {
+    padding: $s-14 $s-20;
+    background-color: var(--brand-primary);
+    border-radius: $s-20 $s-20 0 $s-20;
+    max-width: 75%;
+}
+
+.highlight {
+    padding: $s-12;
+    background-color: rgba($brand-primary, 0.05);
+    border-left: 3px solid var(--brand-primary);
+    font-style: italic;
+}
+
+.inputArea {
+    padding: $s-20 $s-24;
+    border-top: 1px solid var(--border-primary);
+    background-color: var(--bg-primary);
+}
+
+.input {
+    flex: 1;
+    padding: $s-14 $s-20;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: $s-24;
+    font-size: 14px;
+    outline: none;
+
+    &:focus {
+        border-color: var(--brand-primary);
+    }
+}
+
+.sendBtn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background-color: var(--brand-primary);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    &:disabled {
+        opacity: 0.5;
+    }
+}
+
+.spinner {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}

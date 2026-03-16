@@ -199,6 +199,14 @@ export const https = {
       const response = await apiClient.get<any[]>('/coach-sessions', { params: { userId } });
       return response.data;
     },
+    getCoachSession: async (reportId: string, questionNumber: number): Promise<any> => {
+      const response = await apiClient.get<any>(`/report/${reportId}/coach/${questionNumber}`);
+      return response.data;
+    },
+    deleteAllCoachSessions: async (): Promise<{ deleted: number }> => {
+      const response = await apiClient.delete<{ deleted: number }>('/coach-sessions/all');
+      return response.data;
+    },
   },
   user: {
     get: async (id: string): Promise<User> => {
