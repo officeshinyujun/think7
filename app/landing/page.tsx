@@ -116,7 +116,7 @@ export default function LandingPage() {
                     {mounted && (
                         <button 
                             onClick={toggleTheme} 
-                            style={{ background: 'transparent', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: '8px', marginRight: '8px' }}
+                            className={s.navThemeBtn}
                             aria-label="Toggle theme"
                         >
                             {theme === 'dark' ? <Moon size={20} color="var(--text-primary)" /> : <Sun size={20} color="var(--text-primary)" />}
@@ -301,6 +301,13 @@ export default function LandingPage() {
                     <p className={s.footerText}>© 2026 Think7. All rights reserved.</p>
                 </div>
             </footer>
+
+            {/* ── Mobile Floating Theme Toggle ── */}
+            {mounted && (
+                <button className={s.floatingThemeBtn} onClick={toggleTheme}>
+                    {theme === 'dark' ? <Moon size={22} color="var(--brand-primary)" /> : <Sun size={22} color="var(--brand-primary)" />}
+                </button>
+            )}
         </div>
     );
 }
