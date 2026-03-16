@@ -53,32 +53,50 @@ const COACH_DIALOGUE = [
     },
     {
         role: 'assistant',
-        analysis: "좋은 시도입니다. 많은 사람들이 AI 하면 일자리 문제를 먼저 떠올리죠.",
-        highlight_quote: "효율성이라는 미명 아래 더 많은 업무를 욱여넣고 있지는 않나요?",
-        content: "하지만 본문에서 필자는 '일자리' 자체보다 '우리가 AI가 준 시간을 어떻게 쓰는지'를 더 걱정하고 있어요. 이 문장을 참고했을 때, 필자가 말하는 '역설'은 무엇일까요?",
+        evaluation: "좋은 시도입니다. 하지만 본문에 더 핵심적인 부분이 있어요.",
+        rating: 60,
+        user_answer_quote: "AI가 사람의 일을 뺏는 게 문제",
+        ideal_answer_quote: "효율성 추구에 밀려 사고의 과정과 여백의 가치가 상실되는 것",
+        content: "내 답변과 모범 답안을 비교했을 때, 어떤 부분이 가장 큰 차이점인가요?",
         step: 2
     },
     {
         role: 'user',
-        content: "음... 효율적이 됐는데 오히려 더 바빠지고 생각이 없어지는 거요?",
+        content: "음... 저는 일자리 걱정을 했는데, 글은 생각하는 과정 자체가 사라지는 걸 더 걱정하네요.",
         step: 2
     },
     {
         role: 'assistant',
-        analysis: "정확합니다! 효율을 챙기려다 '생각의 근육'이 빠지는 걸 필자는 경계하고 있어요.",
-        content: "이제 논리 구조를 이해해봅시다. 필자는 [AI의 효율성] → [여백의 발생] → [잘못된 여백 사용]의 흐름으로 비판하고 있어요. 마지막으로, 당신이 이 글의 저자라면 '사고 근육'을 지키기 위해 무엇을 제안하시겠어요?",
+        evaluation: "맞아요. 필자는 결론보다 '과정' 자체의 중요성을 강조하고 있죠.",
+        rating: 90,
+        highlight_quote: "고민하고, 헤매고, 실패하는 그 과정 자체가 인간의 사고 근육을 강화합니다.",
+        analysis: "필자는 AI가 주는 정답보다, 그 정답에 도달하기 위한 인간의 고군분투를 더 가치 있게 보고 있어요.",
+        content: "자, 이제 논리 구조를 파악했으니 본격적인 사고 훈련을 시작해봅시다.",
         step: 3
     },
     {
         role: 'user',
-        content: "AI가 주는 답을 무조건 믿지 말고 스스로 질문하는 습관을 가져야겠어요.",
+        content: "네, 준비됐습니다!",
+        step: 3
+    },
+    {
+        role: 'assistant',
+        evaluation: "이제 사고 훈련 3문제를 풀겠습니다. 첫 번째 질문입니다.",
+        rating: 100,
+        content: "만약 저자라면 AI 비서를 사용하는 사람들에게 어떤 충고를 한 문장으로 남길까요?",
+        step: 4
+    },
+    {
+        role: 'user',
+        content: "답을 얻는 것보다 스스로 질문하는 법을 먼저 배우라고 할 것 같아요.",
         step: 4
     },
     {
         role: 'assistant',
-        analysis: "완벽한 마무리입니다! 질문하는 능력이 중요해진다는 결론에 도달하셨네요.",
-        content: "축하합니다! 직접 텍스트를 파헤치고 논리적 결론을 도출하셨습니다. 이제 본격적으로 훈련을 시작해볼까요?",
-        step: 4
+        evaluation: "축하합니다! 모든 코칭 과정이 완료되었습니다. 이제 이 글에 대해 궁금한 점을 자유롭게 물어보세요!",
+        rating: 100,
+        content: "어떤 점이 더 궁금하신가요?",
+        step: 5
     }
 ];
 
@@ -148,7 +166,7 @@ export default function TutorialPage() {
                         <HStack fullWidth justify="between" className={s.progressLabels}>
                             <Typo.XS color={step === 1 ? "brand" : "secondary"} fontWeight="bold">1. 지문 읽기</Typo.XS>
                             <Typo.XS color={step === 2 ? "brand" : "secondary"} fontWeight="bold">2. 진단 리포트</Typo.XS>
-                            <Typo.XS color={step === 3 ? "brand" : "secondary"} fontWeight="bold">3. AI 코칭</Typo.XS>
+                            <Typo.XS color={step === 3 ? "brand" : "secondary"} fontWeight="bold">3. {messages[messages.length-1]?.step > 3 ? '사고 훈련' : 'AI 코칭'}</Typo.XS>
                         </HStack>
                     </div>
 
@@ -249,69 +267,111 @@ export default function TutorialPage() {
 
                     {/* STEP 3: COACH */}
                     {step === 3 && (
-                        <VStack fullWidth className={s.stepContainer} gap={0}>
-                            <HStack fullWidth justify="start" align="center" className={s.chatHeader}>
-                                <VStack align="start" gap={2}>
-                                    <Typo.MD color="primary" fontWeight="bold">Think Coach</Typo.MD>
-                                    <Typo.XS color="secondary">가상 코칭 세션</Typo.XS>
+                        <div className={s.coachContainer}>
+                            <div className={s.articleBoxCoach}>
+                                <VStack fullWidth gap={16}>
+                                    <Typo.XL fontWeight="bold" color="primary">{DUMMY_ARTICLE.title}</Typo.XL>
+                                    <Typo.MD color="primary" style={{ whiteSpace: 'pre-wrap', lineHeight: 1.8 }}>
+                                        {DUMMY_ARTICLE.content}
+                                    </Typo.MD>
                                 </VStack>
-                            </HStack>
-
-                            <div className={s.chatArea}>
-                                {messages.map((msg, idx) => (
-                                    <HStack fullWidth justify={msg.role === 'user' ? 'end' : 'start'} key={idx} className={s.msgRow}>
-                                        {msg.role === 'assistant' ? (
-                                            <VStack align="start" gap={6} className={s.botBubbleWrapper}>
-                                                <Typo.XS color="secondary" fontWeight="bold">Think Coach · Step {msg.step}</Typo.XS>
-                                                <VStack className={s.botBubble} gap={12}>
-                                                    {msg.highlight_quote && (
-                                                        <div className={s.highlight}>
-                                                            <Typo.SM color="primary">"{msg.highlight_quote}"</Typo.SM>
-                                                        </div>
-                                                    )}
-                                                    {msg.analysis && (
-                                                        <Typo.SM color="primary">{msg.analysis}</Typo.SM>
-                                                    )}
-                                                    <Typo.SM color="brand" fontWeight="bold" style={{ lineHeight: 1.5 }}>
-                                                        {msg.content}
-                                                    </Typo.SM>
-                                                </VStack>
-                                            </VStack>
-                                        ) : (
-                                                <div className={s.userBubble}>
-                                                    <Typo.SM color="inverted">{msg.content}</Typo.SM>
-                                                </div>
-                                        )}
-                                    </HStack>
-                                ))}
-                                <div ref={chatEndRef} />
                             </div>
 
-                            {chatIndex >= COACH_DIALOGUE.length - 2 ? (
-                                <VStack fullWidth style={{ padding: '20px', borderTop: '1px solid var(--border-primary)' }}>
-                                    <Button style={{ width: '100%' }} onClick={() => router.push('/')}>
-                                        <Typo.MD color="inverted" fontWeight="bold">튜토리얼 완료! 시작하기</Typo.MD>
-                                    </Button>
-                                </VStack>
-                            ) : (
-                                <HStack fullWidth className={s.inputArea} gap={12}>
-                                    <input 
-                                        className={s.input} 
-                                        placeholder="메시지를 입력해 코칭을 이어가세요..." 
-                                        value={inputValue}
-                                        onChange={(e) => setInputValue(e.target.value)}
-                                        onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-                                    />
-                                    <button 
-                                        className={s.sendBtn} 
-                                        onClick={handleSendMessage}
-                                        disabled={isBotTyping || !inputValue.trim()}
-                                    >
-                                        <Send size={18} color="white" />
-                                    </button>
+                            <VStack fullWidth className={s.chatBoxContainer} gap={0}>
+                                <HStack fullWidth justify="start" align="center" className={s.chatHeader}>
+                                    <VStack align="start" gap={2}>
+                                        <Typo.MD color="primary" fontWeight="bold">Think Coach</Typo.MD>
+                                        <Typo.XS color="secondary">가상 코칭 세션</Typo.XS>
+                                    </VStack>
                                 </HStack>
-                            )}
-                        </VStack>
+
+                                <div className={s.chatArea}>
+                                    {messages.map((msg, idx) => (
+                                        <div key={idx} className={msg.role === 'user' ? s.userMessageRow : s.botMessageRow}>
+                                            {msg.role === 'assistant' ? (
+                                                <VStack align="start" gap={6} style={{ maxWidth: '85%' }}>
+                                                    <Typo.XS color="secondary" fontWeight="bold">Think Coach · Step {msg.step}</Typo.XS>
+                                                    <VStack align="start" gap={12} className={s.botBubble}>
+                                                        {msg.evaluation && (
+                                                            <div className={`${s.evaluationBox} ${msg.rating !== undefined ? (msg.rating >= 70 ? s.evaluationPass : s.evaluationHint) : ''}`}>
+                                                                <Typo.SM color={msg.rating !== undefined && msg.rating < 70 ? "brand" : "primary"} fontWeight="medium">
+                                                                    {msg.rating !== undefined ? (msg.rating >= 70 ? '✅ ' : '💡 ') : '💡 '}
+                                                                    {msg.evaluation}
+                                                                </Typo.SM>
+                                                            </div>
+                                                        )}
+
+                                                        {msg.user_answer_quote && msg.ideal_answer_quote && (
+                                                            <div className={s.comparisonContainer}>
+                                                                <div className={s.comparisonUser}>
+                                                                    <div className={s.comparisonLabel}>내 답변 중 부족한 부분</div>
+                                                                    <Typo.SM color="primary">"{msg.user_answer_quote}"</Typo.SM>
+                                                                </div>
+                                                                <div className={s.comparisonIdeal}>
+                                                                    <div className={s.comparisonLabel}>글에서 놓친 핵심</div>
+                                                                    <Typo.SM color="primary">"{msg.ideal_answer_quote}"</Typo.SM>
+                                                                </div>
+                                                            </div>
+                                                        )}
+
+                                                        {msg.highlight_quote && (
+                                                            <div className={s.highlightBox}>
+                                                                <Typo.SM color="primary">"{msg.highlight_quote}"</Typo.SM>
+                                                            </div>
+                                                        )}
+                                                        {msg.analysis && (
+                                                            <Typo.SM color="primary">{msg.analysis}</Typo.SM>
+                                                        )}
+                                                        <div className={s.questionBoxMsg}>
+                                                            <Typo.SM color="brand" fontWeight="bold" style={{ lineHeight: 1.5 }}>
+                                                                {msg.content}
+                                                            </Typo.SM>
+                                                        </div>
+                                                    </VStack>
+                                                </VStack>
+                                            ) : (
+                                                    <div className={s.userBubble}>
+                                                        <Typo.SM color="inverted">{msg.content}</Typo.SM>
+                                                    </div>
+                                            )}
+                                        </div>
+                                    ))}
+                                    {isBotTyping && (
+                                        <div className={s.botMessageRow}>
+                                            <div className={s.typingIndicator}>
+                                                <span /><span /><span />
+                                            </div>
+                                        </div>
+                                    )}
+                                    <div ref={chatEndRef} />
+                                </div>
+
+                                {chatIndex >= COACH_DIALOGUE.length - 2 ? (
+                                    <VStack fullWidth style={{ padding: '20px', borderTop: '1px solid var(--border-primary)', backgroundColor: 'var(--bg-primary)' }}>
+                                        <Button style={{ width: '100%' }} onClick={() => router.push('/')}>
+                                            <Typo.MD color="inverted" fontWeight="bold">튜토리얼 완료! 시작하기</Typo.MD>
+                                        </Button>
+                                    </VStack>
+                                ) : (
+                                    <HStack fullWidth className={s.inputArea} gap={12}>
+                                        <input 
+                                            className={s.input} 
+                                            placeholder="메시지를 입력해 코칭을 이어가세요..." 
+                                            value={inputValue}
+                                            onChange={(e) => setInputValue(e.target.value)}
+                                            onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
+                                        />
+                                        <button 
+                                            className={s.sendBtn} 
+                                            onClick={handleSendMessage}
+                                            disabled={isBotTyping || !inputValue.trim()}
+                                        >
+                                            <Send size={18} color="white" />
+                                        </button>
+                                    </HStack>
+                                )}
+                            </VStack>
+                        </div>
                     )}
                 </VStack>
             </VStack>

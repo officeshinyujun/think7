@@ -324,7 +324,7 @@ export default function ReviewCoach({ params }: { params: Promise<{ id: string }
                     </div>
 
                     {/* Input */}
-                    <HStack fullWidth align="center" className={s.inputArea}>
+                    <div className={s.inputArea}>
                         <input
                             className={s.inputField}
                             placeholder="생각을 자유롭게 입력해보세요..."
@@ -339,7 +339,7 @@ export default function ReviewCoach({ params }: { params: Promise<{ id: string }
                         <button className={s.sendButton} onClick={() => sendMessage(inputValue)} disabled={isLoading || !inputValue.trim()}>
                             <Send size={18} color="var(--bg-primary)" />
                         </button>
-                    </HStack>
+                    </div>
                         </div>
                     </div>
 

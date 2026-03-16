@@ -1,20 +1,24 @@
-.container{
-    width: 55px;
-    padding: $s-8 $s-12;
+.container {
+    min-width: 50px;
+    padding: $s-8 $s-4;
     border-radius: $s-12;
     transition: all 0.2s ease-in-out;
     cursor: pointer;
-    min-width: fit-content;
+
+    p {
+        white-space: nowrap;
+        text-align: center;
+        width: 100%;
+    }
 }
 
 .active {
     background-color: $brand-primary;
-    
+
     p {
         color: $background-primary !important;
-        white-space: nowrap;
     }
-    
+
     svg {
         stroke: $background-primary;
     }

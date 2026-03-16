@@ -280,6 +280,8 @@
 }
 
 .inputArea {
+    width: 100%;
+    max-width: 100%;
     padding: $s-16 $s-20 !important;
     padding-bottom: env(safe-area-inset-bottom, $s-20);
     background-color: $background-primary;
@@ -287,10 +289,12 @@
     display: flex;
     gap: $s-12;
     align-items: center;
+    box-sizing: border-box;
 }
 
 .inputField {
     flex: 1;
+    min-width: 0; // Prevent flex child from overflowing parent
     height: 52px;
     background-color: $background-secondary;
     border: none;

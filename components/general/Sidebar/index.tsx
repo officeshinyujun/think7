@@ -26,8 +26,8 @@ export default function Sidebar() {
     const menuItems = [
         { icon: <House size={20} />, text: "홈", link: "/" },
         { icon: <ClipboardCheck size={20} />, text: "리포트", link: "/report" },
-        { icon: <Book size={20} />, text: "라이브러리", link: "/library" },
-        { icon: <BrainCircuit size={20} />, text: "Review", link: "/review" },
+        { icon: <Book size={20} />, text: "콘텐츠", link: "/library" },
+        { icon: <BrainCircuit size={20} />, text: "리뷰", link: "/review" },
         { icon: <User size={20} />, text: "프로필", link: "/profile" },
     ];
 
@@ -38,12 +38,12 @@ export default function Sidebar() {
         <VStack className={s.container} justify="between" align="start">
             <VStack fullWidth align="start" justify="start" gap={16}>
                 <HStack fullWidth justify="between" align="center">
-                    <HStack className={s.logo} align="center" gap={10} onClick={() => router.push('/')} style={{cursor: 'pointer'}}>
+                    <HStack className={s.logo} align="center" gap={10} onClick={() => router.push('/')} style={{ cursor: 'pointer' }}>
                         <Image src="/think7_Logo.png" alt="logo" width={36} height={36} />
                         <Typo.LG color="primary" fontWeight="bold">Think7</Typo.LG>
                     </HStack>
                     {mounted && (
-                        <div 
+                        <div
                             onClick={(e) => { e.stopPropagation(); toggleTheme(); }}
                             style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
                         >
@@ -51,36 +51,36 @@ export default function Sidebar() {
                         </div>
                     )}
                 </HStack>
-                    {menuItems.map((item, index) => {
-                        const isActive = pathname === item.link;
-                        const iconColor = isActive ? "#3D7BFF" : "#8B847F";
-                        const textColor = isActive ? "brand" : "secondary";
-                        
-                        return (
-                            <HStack
-                                key={index} 
-                                className={`${s.menuItem} ${isActive ? s.active : ''}`}
-                                onClick={() => router.push(item.link)}
-                                align="center"
-                                gap={12}
-                                fullWidth
-                            >
-                                <div style={{color: iconColor, display: 'flex'}}>
-                                    {item.icon}
-                                </div>
-                                <Typo.MD color={textColor} fontWeight={isActive ? "bold" : "medium"}>
-                                    {item.text}
-                                </Typo.MD>
-                            </HStack>
-                        )
-                    })}
+                {menuItems.map((item, index) => {
+                    const isActive = pathname === item.link;
+                    const iconColor = isActive ? "#3D7BFF" : "#8B847F";
+                    const textColor = isActive ? "brand" : "secondary";
+
+                    return (
+                        <HStack
+                            key={index}
+                            className={`${s.menuItem} ${isActive ? s.active : ''}`}
+                            onClick={() => router.push(item.link)}
+                            align="center"
+                            gap={12}
+                            fullWidth
+                        >
+                            <div style={{ color: iconColor, display: 'flex' }}>
+                                {item.icon}
+                            </div>
+                            <Typo.MD color={textColor} fontWeight={isActive ? "bold" : "medium"}>
+                                {item.text}
+                            </Typo.MD>
+                        </HStack>
+                    )
+                })}
             </VStack>
 
-        <HStack className={s.userProfile} align="center" justify="between" onClick={() => router.push('/profile')}>
+            <HStack className={s.userProfile} align="center" justify="between" onClick={() => router.push('/profile')}>
                 <HStack align="center" gap={12}>
                     <div className={s.avatar}>
                         {user?.profile_image ? (
-                            <Image src={user.profile_image} alt="profile" width={40} height={40} style={{borderRadius: '50%', objectFit: 'cover'}} />
+                            <Image src={user.profile_image} alt="profile" width={40} height={40} style={{ borderRadius: '50%', objectFit: 'cover' }} />
                         ) : (
                             <User size={20} color="#8B847F" />
                         )}

@@ -1,5 +1,3 @@
-@import "@/styles/variables.scss";
-
 .container {
     background-color: var(--bg-primary);
     min-height: 100vh;
@@ -172,6 +170,46 @@
 }
 
 // --- Step 3: Coach ---
+.coachContainer {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    overflow: hidden;
+    height: calc(100vh - 200px); // Subtracting header/nav/progress area
+
+    @media (max-width: 1024px) {
+        flex-direction: column;
+        height: auto;
+    }
+}
+
+.articleBoxCoach {
+    flex: 1;
+    padding: $s-32;
+    background-color: var(--bg-primary);
+    border-right: 1px solid var(--border-primary);
+    overflow-y: auto;
+
+    @media (max-width: 1024px) {
+        border-right: 0;
+        border-bottom: 1px solid var(--border-primary);
+        max-height: 25vh;
+        flex: none;
+    }
+}
+
+.chatBoxContainer {
+    width: 450px;
+    background-color: var(--bg-primary);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+
+    @media (max-width: 1024px) {
+        width: 100%;
+        flex: 1;
+    }
+}
 .chatHeader {
     padding: $s-16 $s-24;
     border-bottom: 1px solid var(--border-primary);
@@ -194,23 +232,87 @@
 }
 
 .botBubble {
-    padding: $s-20;
     background-color: var(--bg-secondary);
-    border-radius: 0 $s-20 $s-20 $s-20;
+    padding: $s-20;
+    border-radius: 20px;
+    border-top-left-radius: 4px;
+    width: 100%;
 }
 
 .userBubble {
-    padding: $s-14 $s-20;
     background-color: var(--brand-primary);
-    border-radius: $s-20 $s-20 0 $s-20;
-    max-width: 75%;
+    padding: $s-12 $s-20;
+    border-radius: 20px;
+    border-top-right-radius: 4px;
+    max-width: 90%;
+    box-shadow: 0 4px 12px rgba(61, 123, 255, 0.15);
+
+    p {
+        color: white !important;
+        line-height: 1.5;
+    }
 }
 
-.highlight {
-    padding: $s-12;
-    background-color: rgba($brand-primary, 0.05);
+.highlightBox {
+    background-color: rgba(61, 123, 255, 0.1);
     border-left: 3px solid var(--brand-primary);
-    font-style: italic;
+    padding: $s-12;
+    border-radius: $s-8;
+}
+
+.evaluationBox {
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-primary);
+    padding: $s-12;
+    border-radius: $s-8;
+}
+
+.evaluationPass {
+    border-left: 3px solid #10B981;
+    background-color: rgba(16, 185, 129, 0.05);
+}
+
+.evaluationHint {
+    border-left: 3px solid var(--brand-primary);
+    background-color: rgba(61, 123, 255, 0.05);
+}
+
+.comparisonContainer {
+    display: flex;
+    flex-direction: column;
+    gap: $s-8;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: $s-8;
+    padding: $s-12;
+}
+
+.comparisonLabel {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+}
+
+.comparisonUser {
+    padding: $s-12;
+    background-color: rgba(#EF4444, 0.05);
+    border-left: 3px solid #EF4444;
+    border-radius: 4px;
+}
+
+.comparisonIdeal {
+    padding: $s-12;
+    background-color: rgba(#10B981, 0.05);
+    border-left: 3px solid #10B981;
+    border-radius: 4px;
+}
+
+.questionBoxMsg {
+    background-color: rgba(61, 123, 255, 0.05);
+    padding: $s-16;
+    border-radius: 12px;
+    margin-top: $s-8;
 }
 
 .inputArea {
@@ -254,6 +356,36 @@
 }
 
 @keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+.typingIndicator {
+    display: flex;
+    gap: 4px;
+    padding: $s-12 $s-20;
+    background-color: var(--bg-secondary);
+    border-radius: 20px;
+    width: fit-content;
+
+    span {
+        width: 6px;
+        height: 6px;
+        background-color: var(--text-secondary);
+        border-radius: 50%;
+        display: inline-block;
+        animation: bounce 1.4s infinite ease-in-out both;
+
+        &:nth-child(1) { animation-delay: -0.32s; }
+        &:nth-child(2) { animation-delay: -0.16s; }
+    }
+}
+
+@keyframes bounce {
+    0%, 80%, 100% { transform: scale(0); }
+    40% { transform: scale(1.0); }
 }

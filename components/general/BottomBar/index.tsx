@@ -27,7 +27,7 @@ export default function BottomBar() {
         },
         {
             icon: <BrainCircuit size={20} color="#8B847F" />,
-            text: "Review",
+            text: "리뷰",
             link: "/review"
         },
         {
