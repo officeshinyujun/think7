@@ -9,7 +9,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Sidebar from "@/components/general/Sidebar";
 import { https } from "@/services/https";
 import { useEffect, useState, use, useRef } from "react";
-import { Send, Loader2, ArrowLeft } from "lucide-react";
+import { Send, Loader2, ArrowLeft, Sparkles } from "lucide-react";
 
 interface ChatMessage {
     role: 'system' | 'assistant' | 'user';
@@ -45,6 +45,7 @@ export default function ReviewCoach({ params }: { params: Promise<{ id: string }
     const [isLoading, setIsLoading] = useState(false);
     const [sessionId, setSessionId] = useState<string | undefined>(undefined);
     const [currentStep, setCurrentStep] = useState(1);
+    const [isLimitReached, setIsLimitReached] = useState(false);
     const chatEndRef = useRef<HTMLDivElement>(null);
     const initializationStarted = useRef(false);
 
@@ -160,7 +161,10 @@ export default function ReviewCoach({ params }: { params: Promise<{ id: string }
                 ]);
                 if (res.step) setCurrentStep(res.step);
             }
-        } catch (error) {
+        } catch (error: any) {
+            if (error.response?.data?.message === 'FREE_TIER_DAILY_LIMIT') {
+                setIsLimitReached(true);
+            }
             console.error(error);
         } finally {
             setIsLoading(false);
@@ -248,98 +252,121 @@ export default function ReviewCoach({ params }: { params: Promise<{ id: string }
 
                         {/* Chat Column */}
                         <div className={s.chatBoxContainer}>
-                            <div className={s.chatContainer}>
-                        {messages.length === 0 && isLoading && (
-                            <VStack fullWidth justify="center" align="center" style={{ padding: '40px' }}>
-                                <Loader2 className={s.spinner} size={28} color="var(--brand-primary)" />
-                                <Typo.SM color="secondary" style={{ marginTop: '12px' }}>코칭을 시작하고 있습니다...</Typo.SM>
-                            </VStack>
-                        )}
-
-                        {messages.map((msg, idx) => (
-                            <HStack fullWidth justify={msg.role === 'user' ? 'end' : 'start'} key={idx}
-                                className={msg.role === 'user' ? s.userMessageRow : s.botMessageRow}>
-                                {msg.role === 'user' ? (
-                                    <div className={s.userBubble}>
-                                        <Typo.SM color="inverted">{msg.content}</Typo.SM>
+                        <div className={s.chatContainer}>
+                            {isLimitReached ? (
+                                <div className={s.limitReachedContainer}>
+                                    <div className={s.limitCard}>
+                                        <Sparkles size={40} color="white" style={{ marginBottom: '16px' }} />
+                                        <Typo.LG fontWeight="bold">
+                                            오늘의 코칭 한도 도달
+                                        </Typo.LG>
+                                        <Typo.SM style={{ marginTop: '12px', lineHeight: 1.6 }}>
+                                            프리 티어는 하루에 1개의 코칭 세션만<br />
+                                            이용 가능합니다. 더 깊이 있는 분석을 위해<br />
+                                            프리미엄으로 업그레이드해보세요!
+                                        </Typo.SM>
+                                        <button className={s.upgradeButton} onClick={() => router.push('/profile/plan')}>
+                                            플랜 업그레이드하기
+                                        </button>
                                     </div>
-                                ) : (
-                                    <VStack align="start" gap={6} className={s.botBubbleContainer}>
-                                        <Typo.XS color="secondary" fontWeight="bold" style={{ marginLeft: '4px' }}>
-                                            Think Coach {msg.step ? `· Step ${msg.step}` : ''}
-                                        </Typo.XS>
-                                        <VStack fullWidth gap={12} className={s.botBubble}>
-                                            {msg.evaluation && (
-                                                idx === 0 ? (
-                                                    <Typo.SM color="primary" fontWeight="regular">{msg.evaluation}</Typo.SM>
-                                                ) : (
-                                                    <div className={`${s.evaluationBox} ${msg.rating !== undefined ? (msg.rating >= 70 ? s.evaluationPass : s.evaluationHint) : ''}`}>
-                                                        <Typo.SM color={msg.rating !== undefined && msg.rating < 70 ? "brand" : "primary"} fontWeight="medium">
-                                                            {msg.rating !== undefined ? (msg.rating >= 70 ? '✅ ' : '💡 ') : '💡 '}
-                                                            {msg.evaluation}
-                                                        </Typo.SM>
-                                                    </div>
-                                                )
-                                            )}
-
-                                            {msg.user_answer_quote && msg.ideal_answer_quote && (
-                                                <div className={s.comparisonContainer}>
-                                                    <div className={s.comparisonUser}>
-                                                        <div className={s.comparisonLabel}>내 답변 중 부족한 부분</div>
-                                                        <Typo.SM color="primary" fontWeight="regular">"{msg.user_answer_quote}"</Typo.SM>
-                                                    </div>
-                                                    <div className={s.comparisonIdeal}>
-                                                        <div className={s.comparisonLabel}>글에서 놓친 핵심</div>
-                                                        <Typo.SM color="primary" fontWeight="regular">"{msg.ideal_answer_quote}"</Typo.SM>
-                                                    </div>
-                                                </div>
-                                            )}
-
-                                            {msg.highlight_quote && (
-                                                <div className={s.highlightBox}>
-                                                    <Typo.SM color="primary" fontWeight="medium">"{msg.highlight_quote}"</Typo.SM>
-                                                </div>
-                                            )}
-                                            {msg.analysis && (
-                                                <Typo.SM color="primary" fontWeight="regular">{msg.analysis}</Typo.SM>
-                                            )}
-                                            {msg.content && (
-                                                <div className={s.questionBox}>
-                                                    <Typo.SM color="brand" fontWeight="bold">{msg.content}</Typo.SM>
-                                                </div>
-                                            )}
-                                        </VStack>
+                                </div>
+                            ) : (
+                                <>
+                                {messages.length === 0 && isLoading && (
+                                    <VStack fullWidth justify="center" align="center" style={{ padding: '40px' }}>
+                                        <Loader2 className={s.spinner} size={28} color="var(--brand-primary)" />
+                                        <Typo.SM color="secondary" style={{ marginTop: '12px' }}>코칭을 시작하고 있습니다...</Typo.SM>
                                     </VStack>
                                 )}
-                            </HStack>
-                        ))}
-                        {messages.length > 0 && isLoading && (
-                            <HStack fullWidth justify="start" className={s.botMessageRow}>
-                                <div className={s.typingIndicator}>
-                                    <span /><span /><span />
-                                </div>
-                            </HStack>
+
+                                {messages.map((msg, idx) => (
+                                    <HStack fullWidth justify={msg.role === 'user' ? 'end' : 'start'} key={idx}
+                                        className={msg.role === 'user' ? s.userMessageRow : s.botMessageRow}>
+                                        {msg.role === 'user' ? (
+                                            <div className={s.userBubble}>
+                                                <Typo.SM color="inverted">{msg.content}</Typo.SM>
+                                            </div>
+                                        ) : (
+                                            <VStack align="start" gap={6} className={s.botBubbleContainer}>
+                                                <Typo.XS color="secondary" fontWeight="bold" style={{ marginLeft: '4px' }}>
+                                                    Think Coach {msg.step ? `· Step ${msg.step}` : ''}
+                                                </Typo.XS>
+                                                <VStack fullWidth gap={12} className={s.botBubble}>
+                                                    {msg.evaluation && (
+                                                        idx === 0 ? (
+                                                            <Typo.SM color="primary" fontWeight="regular">{msg.evaluation}</Typo.SM>
+                                                        ) : (
+                                                            <div className={`${s.evaluationBox} ${msg.rating !== undefined ? (msg.rating >= 70 ? s.evaluationPass : s.evaluationHint) : ''}`}>
+                                                                <Typo.SM color={msg.rating !== undefined && msg.rating < 70 ? "brand" : "primary"} fontWeight="medium">
+                                                                    {msg.rating !== undefined ? (msg.rating >= 70 ? '✅ ' : '💡 ') : '💡 '}
+                                                                    {msg.evaluation}
+                                                                </Typo.SM>
+                                                            </div>
+                                                        )
+                                                    )}
+
+                                                    {msg.user_answer_quote && msg.ideal_answer_quote && (
+                                                        <div className={s.comparisonContainer}>
+                                                            <div className={s.comparisonUser}>
+                                                                <div className={s.comparisonLabel}>내 답변 중 부족한 부분</div>
+                                                                <Typo.SM color="primary" fontWeight="regular">"{msg.user_answer_quote}"</Typo.SM>
+                                                            </div>
+                                                            <div className={s.comparisonIdeal}>
+                                                                <div className={s.comparisonLabel}>글에서 놓친 핵심</div>
+                                                                <Typo.SM color="primary" fontWeight="regular">"{msg.ideal_answer_quote}"</Typo.SM>
+                                                            </div>
+                                                        </div>
+                                                    )}
+
+                                                    {msg.highlight_quote && (
+                                                        <div className={s.highlightBox}>
+                                                            <Typo.SM color="primary" fontWeight="medium">"{msg.highlight_quote}"</Typo.SM>
+                                                        </div>
+                                                    )}
+                                                    {msg.analysis && (
+                                                        <Typo.SM color="primary" fontWeight="regular">{msg.analysis}</Typo.SM>
+                                                    )}
+                                                    {msg.content && (
+                                                        <div className={s.questionBox}>
+                                                            <Typo.SM color="brand" fontWeight="bold">{msg.content}</Typo.SM>
+                                                        </div>
+                                                    )}
+                                                </VStack>
+                                            </VStack>
+                                        )}
+                                    </HStack>
+                                ))}
+                                {messages.length > 0 && isLoading && (
+                                    <HStack fullWidth justify="start" className={s.botMessageRow}>
+                                        <div className={s.typingIndicator}>
+                                            <span /><span /><span />
+                                        </div>
+                                    </HStack>
+                                )}
+                                <div ref={chatEndRef} />
+                            </>
                         )}
-                        <div ref={chatEndRef} />
                     </div>
 
                     {/* Input */}
-                    <div className={s.inputArea}>
-                        <input
-                            className={s.inputField}
-                            placeholder="생각을 자유롭게 입력해보세요..."
-                            value={inputValue}
-                            onChange={(e) => setInputValue(e.target.value)}
-                            onKeyDown={(e) => {
-                                if (e.nativeEvent.isComposing) return;
-                                if (e.key === 'Enter') sendMessage(inputValue);
-                            }}
-                            disabled={isLoading}
-                        />
-                        <button className={s.sendButton} onClick={() => sendMessage(inputValue)} disabled={isLoading || !inputValue.trim()}>
-                            <Send size={18} color="var(--bg-primary)" />
-                        </button>
-                    </div>
+                    {!isLimitReached && (
+                        <div className={s.inputArea}>
+                            <input
+                                className={s.inputField}
+                                placeholder="생각을 자유롭게 입력해보세요..."
+                                value={inputValue}
+                                onChange={(e) => setInputValue(e.target.value)}
+                                onKeyDown={(e) => {
+                                    if (e.nativeEvent.isComposing) return;
+                                    if (e.key === 'Enter') sendMessage(inputValue);
+                                }}
+                                disabled={isLoading}
+                            />
+                            <button className={s.sendButton} onClick={() => sendMessage(inputValue)} disabled={isLoading || !inputValue.trim()}>
+                                <Send size={18} color="var(--bg-primary)" />
+                            </button>
+                        </div>
+                    )}
                         </div>
                     </div>
 

@@ -51,10 +51,10 @@ export default function Home() {
     const dates = [...new Set(reports.map((r: any) => r.day))].sort().reverse();
     const today = new Date().toISOString().split('T')[0];
     const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
-    
+
     // Check if the latest report is today or yesterday
     if (dates[0] !== today && dates[0] !== yesterday) return 0;
-    
+
     let streak = 1;
     for (let i = 0; i < dates.length - 1; i++) {
       const current = new Date(dates[i]);
@@ -72,9 +72,9 @@ export default function Home() {
     const dayOfWeek = today.getDay(); // 0=일, 1=월, ...
     const sunday = new Date(today);
     sunday.setDate(today.getDate() - dayOfWeek);
-    
+
     const reportDates = new Set(reports.map((r: any) => r.day));
-    
+
     return dayLabels.map((label, i) => {
       const date = new Date(sunday);
       date.setDate(sunday.getDate() + i);
@@ -104,44 +104,45 @@ export default function Home() {
 
   // Latest Report
   const latestReport = reportHistory.length > 0 ? {
-     id: reportHistory[reportHistory.length - 1].id,
-     date: reportHistory[reportHistory.length - 1].day,
-     topic: content?.title || "최근 리포트",
-     score: reportHistory[reportHistory.length - 1].summary.score,
-     feedback: reportHistory[reportHistory.length - 1].summary.comment
+    id: reportHistory[reportHistory.length - 1].id,
+    date: reportHistory[reportHistory.length - 1].day,
+    topic: content?.title || "최근 리포트",
+    score: reportHistory[reportHistory.length - 1].summary.score,
+    feedback: reportHistory[reportHistory.length - 1].summary.comment
   } : null;
 
   return (
     <HStack fullWidth align="start" justify="start" className={s.container}>
       <Sidebar />
-      
+
       <div className={s.pageContent}>
-          <div className={s.mobileHeader}>
-            <Header />
-          </div>
+        <div className={s.mobileHeader}>
+          <Header />
+        </div>
 
-          <VStack className={s.gridContainer} gap={24}>
-            <IssueSection
-                editor={content?.editor || "불러오는 중..."}
-                title={content?.title || "오늘의 콘텐츠를 불러오고 있습니다."}
-                completed={todayCompleted}
-            />
-            <GrowthChart 
-                data={growthData}
-                growthRate={0}
-            />
-            <StricSection
-                strictDay={streakDays}
-                thisWeek={thisWeek}
-            />
-            <ReportPreview report={latestReport} />
-          </VStack>
+        <VStack className={s.gridContainer} gap={24}>
+          <IssueSection
+            editor={content?.editor || "Think7"}
+            title={content?.title || "아직 등록된 콘텐츠가 없습니다."}
+            completed={todayCompleted}
+            disabled={!content}
+          />
+          <GrowthChart
+            data={growthData}
+            growthRate={0}
+          />
+          <StricSection
+            strictDay={streakDays}
+            thisWeek={thisWeek}
+          />
+          <ReportPreview report={latestReport} />
+        </VStack>
 
-          <div className={s.mobileBottomBar}>
-            <BottomBar /> 
-          </div>
+        <div className={s.mobileBottomBar}>
+          <BottomBar />
+        </div>
       </div>
-    </HStack>    
+    </HStack>
   );
 
 }

@@ -37,6 +37,7 @@ export default function Report() {
 
                 <VStack fullWidth align="start" justify="start" gap={16} className={s.gridContainer}>
                     <Typo.XL color="primary" fontWeight="bold" style={{ height: 36, display: 'flex', alignItems: 'center' }}>리포트</Typo.XL>
+                    <Typo.SM color="secondary" style={{ marginTop: '-8px' }}>학습을 완료한 리포트들을 확인해 보세요.</Typo.SM>
 
                     <div className={s.reportListWrapper}>
                         {reports.map((item, index) => (

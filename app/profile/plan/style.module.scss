@@ -8,7 +8,7 @@
         background: $background-secondary;
     }
 
-     @media (min-width: 768px) {
+    @media (min-width: 768px) {
         padding: 0;
         padding-bottom: 0;
         display: flex;
@@ -20,7 +20,7 @@
     width: 100%;
     height: 100vh;
     overflow-y: auto;
-    
+
     @media (min-width: 768px) {
         padding: 40px;
         flex: 1;
@@ -32,7 +32,8 @@
 
 .contentWrapper {
     width: 100%;
-     @media (min-width: 768px) {
+
+    @media (min-width: 768px) {
         max-width: 800px;
     }
 }
@@ -57,7 +58,7 @@
 .featureItem {
     padding: $s-16 0;
     border-bottom: 1px solid $border-primary;
-    
+
     &:last-child {
         border-bottom: none;
     }
@@ -71,6 +72,10 @@
     color: white;
     margin-bottom: $s-24;
     // Removed shadow
+
+    * {
+        color: white;
+    }
 }
 
 .priceTag {
@@ -82,12 +87,12 @@
 .ctaButton {
     width: 100%;
     padding: $s-16;
-    background-color: $background-primary !important;
+    background-color: #fdfdfe !important;
     border-radius: $s-12;
     margin-top: $s-16;
     cursor: pointer;
     transition: transform 0.1s;
-    
+
     &:active {
         transform: scale(0.98);
     }
@@ -107,7 +112,7 @@
     align-items: center;
     padding: $s-12 0;
     border-bottom: 1px solid $border-primary;
-    
+
     &:last-child {
         border-bottom: none;
     }
@@ -125,7 +130,7 @@
 .exampleCards {
     display: flex;
     gap: 12px;
-    
+
     @media (max-width: 767px) {
         flex-direction: column;
     }
@@ -144,6 +149,125 @@
     background: linear-gradient(135deg, $brand-primary 0%, #2A5ECC 100%);
     padding: $s-20;
     border-radius: $s-16;
+    color: white !important;
+
+    * {
+        color: white !important;
+    }
+}
+
+.showcaseCard {
+    background-color: $background-primary;
+    padding: $s-24;
+    border-radius: $s-24;
+    margin-bottom: $s-24;
+    border: 1px solid rgba(61, 123, 255, 0.05);
+}
+
+.premiumBadge {
+    padding: $s-4 $s-12;
+    background-color: rgba(61, 123, 255, 0.1);
+    color: $brand-primary;
+    font-size: 11px;
+    font-weight: 800;
+    border-radius: 100px;
+    white-space: nowrap;
+}
+
+.coachingMockup, .diagnosisMockup {
+    background-color: $background-secondary;
+    padding: $s-20;
+    border-radius: $s-20;
+    display: flex;
+}
+
+.mockBubbleLeft {
+    align-self: flex-start;
+    padding: $s-8 $s-12;
+    background-color: $background-primary;
+    border-radius: 12px;
+    border-bottom-left-radius: 4px;
+    max-width: 85%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.mockBubbleRight {
+    align-self: flex-end;
+    padding: $s-8 $s-12;
+    background-color: $brand-primary;
+    border-radius: 12px;
+    border-bottom-right-radius: 4px;
+    max-width: 85%;
+    box-shadow: 0 4px 12px rgba(61, 123, 255, 0.2);
+}
+
+.typeBadge {
+    width: 100px;
+    height: 100px;
+    background-color: $background-primary;
+    border-radius: $s-16;
+    border: 1px solid rgba(61, 123, 255, 0.1);
+}
+
+.progressBar {
+    width: 100%;
+    height: 6px;
+    background-color: $background-secondary;
+    border-radius: 100px;
+    overflow: hidden;
+}
+
+.progress {
+    height: 100%;
+    background-color: $brand-primary;
+    border-radius: 100px;
+}
+
+.feedbackMockup {
+    background-color: $background-secondary;
+    padding: $s-20;
+    border-radius: $s-20;
+}
+
+.tagContainer {
+    display: flex;
+    gap: $s-8;
+    margin-top: $s-12;
+}
+
+.mockTag {
+    padding: $s-4 $s-8;
+    background-color: rgba(61, 123, 255, 0.08);
+    color: $brand-primary;
+    font-size: 11px;
+    font-weight: bold;
+    border-radius: 6px;
+}
+
+.contentMockup {
+    background-color: $background-secondary;
+    border-radius: $s-20;
+    overflow: hidden;
+}
+
+.contentRow {
+    padding: $s-16 $s-20;
+    border-bottom: 1px solid rgba(61, 123, 255, 0.05);
+
+    &:last-child {
+        border-bottom: none;
+    }
+}
+
+.contentIcon {
+    width: 32px;
+    height: 32px;
+    background-color: $background-primary;
+    border-radius: $s-8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
 }
 
 .ctaButtonBottom {

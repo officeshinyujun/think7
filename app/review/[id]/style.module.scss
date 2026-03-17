@@ -369,7 +369,6 @@
 }
 
 @keyframes bounce {
-
     0%,
     80%,
     100% {
@@ -378,5 +377,55 @@
 
     40% {
         transform: scale(1);
+    }
+}
+
+.limitReachedContainer {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: $s-24;
+    background-color: $background-primary;
+}
+
+.limitCard {
+    width: 100%;
+    max-width: 400px;
+    padding: $s-32 $s-24;
+    background: linear-gradient(135deg, $brand-primary 0%, #2A5ECC 100%);
+    border-radius: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    color: white !important;
+
+    * {
+        color: white !important;
+    }
+}
+
+.upgradeButton {
+    width: 100%;
+    margin-top: $s-24;
+    padding: $s-16 $s-24;
+    background-color: white !important;
+    color: $brand-primary !important;
+    border: none;
+    border-radius: 16px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    &:active {
+        transform: translateY(0);
     }
 }

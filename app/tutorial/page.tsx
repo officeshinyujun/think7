@@ -127,7 +127,7 @@ export default function TutorialPage() {
     const handleSendMessage = () => {
         if (!inputValue.trim()) return;
         
-        // Push user message (index 1, 3, 5 are users in our dummy dialogue)
+        // Push user message
         const nextUserMsg = COACH_DIALOGUE[chatIndex + 1];
         if (!nextUserMsg) return;
 
@@ -147,234 +147,252 @@ export default function TutorialPage() {
     };
 
     const progressPercent = (step / 3) * 100;
+    const STEP_LABELS = ['지문 읽기', '진단 리포트', 'AI 코칭'];
 
     return (
-        <HStack fullWidth align="start" className={s.container}>
-            <Sidebar />
-
-            <VStack fullWidth align="center" className={s.desktopContent}>
-                <VStack fullWidth className={s.contentWrapper}>
-                    <div className="mobileOnly">
+        <div className={s.container}>
+            <div className={s.desktopContent}>
+                <div className={s.contentWrapper}>
+                    <div className="mobileOnly" style={{ padding: '12px 20px', borderBottom: '1px solid var(--border-primary)' }}>
                         <Header />
                     </div>
 
-                    {/* Tutorial Progress Bar */}
-                    <div className={s.tutorialProgress}>
-                        <div className={s.progressTrack}>
-                            <div className={s.progressBar} style={{ width: `${progressPercent}%` }} />
-                        </div>
-                        <HStack fullWidth justify="between" className={s.progressLabels}>
-                            <Typo.XS color={step === 1 ? "brand" : "secondary"} fontWeight="bold">1. 지문 읽기</Typo.XS>
-                            <Typo.XS color={step === 2 ? "brand" : "secondary"} fontWeight="bold">2. 진단 리포트</Typo.XS>
-                            <Typo.XS color={step === 3 ? "brand" : "secondary"} fontWeight="bold">3. {messages[messages.length-1]?.step > 3 ? '사고 훈련' : 'AI 코칭'}</Typo.XS>
-                        </HStack>
-                    </div>
-
-                    {/* STEP 1: READING */}
-                    {step === 1 && (
-                        <VStack fullWidth gap={24} className={s.stepContainer}>
-                            <HStack align="center" gap={8} className={s.tipBox}>
-                                <Sparkles size={16} color="var(--brand-primary)" />
-                                <Typo.SM color="brand" fontWeight="bold">튜토리얼: 가벼운 마음으로 지문을 읽고 문제를 풀어보세요.</Typo.SM>
+                    {/* Header with Progress */}
+                    <HStack fullWidth justify="start" align="center" className={s.pageHeader}>
+                        <ArrowLeft
+                            size={20}
+                            color="var(--text-primary)"
+                            onClick={() => router.back()}
+                            style={{ cursor: 'pointer', marginRight: '12px', flexShrink: 0 }}
+                        />
+                        <VStack align="start" gap={2} style={{ overflow: 'hidden', flex: 1 }}>
+                            <Typo.MD color="primary" fontWeight="bold">Think Tutorial</Typo.MD>
+                            <HStack align="center" gap={8} className={s.stepProgressContainer}>
+                                {STEP_LABELS.map((label, i) => (
+                                    <HStack key={i} align="center" gap={4} style={{ flexShrink: 0 }}>
+                                        <span className={`${s.stepDot} ${step === i + 1 ? s.stepDotActive : ''}`} />
+                                        <Typo.XS
+                                            color={step === i + 1 ? "brand" : "secondary"}
+                                            fontWeight={step === i + 1 ? "bold" : "regular"}
+                                        >
+                                            {label}
+                                        </Typo.XS>
+                                        {i < 2 && <span className={s.stepLine} />}
+                                    </HStack>
+                                ))}
                             </HStack>
+                        </VStack>
+                    </HStack>
 
-                            <HStack fullWidth gap={32} className={s.readingArea} align="start">
-                                <VStack fullWidth className={s.articleBox} gap={16}>
-                                    <Typo.XL fontWeight="bold" color="primary">{DUMMY_ARTICLE.title}</Typo.XL>
-                                    <Typo.MD color="primary" style={{ whiteSpace: 'pre-wrap', lineHeight: 1.8 }}>
-                                        {DUMMY_ARTICLE.content}
-                                    </Typo.MD>
+                    <div className={s.mainArea}>
+                        {/* STEP 1: READING */}
+                        {step === 1 && (
+                            <div className={s.readingArea}>
+                                <div className={s.articleBox}>
+                                    <VStack fullWidth gap={16}>
+                                        <Typo.XL fontWeight="bold" color="primary">{DUMMY_ARTICLE.title}</Typo.XL>
+                                        <Typo.MD color="primary" style={{ whiteSpace: 'pre-wrap', lineHeight: 1.8 }}>
+                                            {DUMMY_ARTICLE.content}
+                                        </Typo.MD>
+                                    </VStack>
+                                </div>
+                                <div className={s.questionBoxColumn}>
+                                    <VStack fullWidth gap={24} className={s.questionCard}>
+                                        <VStack gap={8}>
+                                            <Typo.SM color="brand" fontWeight="bold">Question {DUMMY_QUESTION.number}</Typo.SM>
+                                            <Typo.MD color="primary" fontWeight="bold">{DUMMY_QUESTION.text}</Typo.MD>
+                                        </VStack>
+
+                                        <VStack fullWidth gap={12}>
+                                            {DUMMY_QUESTION.options.map((opt, idx) => (
+                                                <div 
+                                                    key={idx} 
+                                                    className={`${s.option} ${selectedOption === idx ? s.optionSelected : ''}`}
+                                                    onClick={() => setSelectedOption(idx)}
+                                                >
+                                                    <Typo.SM color={selectedOption === idx ? "inverted" : "primary"}>{opt}</Typo.SM>
+                                                </div>
+                                            ))}
+                                        </VStack>
+
+                                        <Button 
+                                            className={s.submitButton}
+                                            style={{ width: '100%', height: '52px', borderRadius: '26px', backgroundColor: 'var(--brand-primary)' }}
+                                            disabled={selectedOption === null || isSubmitting}
+                                            onClick={handleAnswerSubmit}
+                                        >
+                                            {isSubmitting ? (
+                                                <Loader2 size={20} className={s.spinner} />
+                                            ) : (
+                                                <Typo.MD color="inverted" fontWeight="bold">답안 제출하기</Typo.MD>
+                                            )}
+                                        </Button>
+                                    </VStack>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* STEP 2: REPORT */}
+                        {step === 2 && (
+                            <VStack fullWidth fullHeight align="center" justify="center" className={s.reportArea} gap={32}>
+                                <VStack align="center" gap={12}>
+                                    <div className={s.scoreCircle}>
+                                        <Typo.XXL color="wrong" style={{ fontSize: '48px' }}>00</Typo.XXL>
+                                        <Typo.XS color="secondary">/ 100</Typo.XS>
+                                    </div>
+                                    <Typo.LG fontWeight="bold" color="primary">아쉽네요! 하지만 실망하지 마세요.</Typo.LG>
+                                    <Typo.SM color="secondary">틀린 부분에서 진짜 공부가 시작됩니다.</Typo.SM>
                                 </VStack>
 
-                                <VStack fullWidth className={s.questionBox} gap={20}>
-                                    <VStack gap={8}>
-                                        <Typo.SM color="brand" fontWeight="bold">Question {DUMMY_QUESTION.number}</Typo.SM>
-                                        <Typo.MD color="primary" fontWeight="bold">{DUMMY_QUESTION.text}</Typo.MD>
-                                    </VStack>
-
-                                    <VStack fullWidth gap={12}>
-                                        {DUMMY_QUESTION.options.map((opt, idx) => (
-                                            <div 
-                                                key={idx} 
-                                                className={`${s.option} ${selectedOption === idx ? s.optionSelected : ''}`}
-                                                onClick={() => setSelectedOption(idx)}
-                                            >
-                                                <Typo.SM color={selectedOption === idx ? "inverted" : "primary"}>{opt}</Typo.SM>
-                                            </div>
-                                        ))}
+                                <VStack fullWidth className={s.reportSummary} gap={16}>
+                                    <VStack fullWidth gap={12} className={s.answerSection}>
+                                        <Typo.SM fontWeight="bold" color="primary">Q1 분석 결과</Typo.SM>
+                                        <div className={s.answerGrid}>
+                                            <VStack className={s.answerItem} gap={4}>
+                                                <Typo.XS color="secondary">내가 고른 답</Typo.XS>
+                                                <Typo.SM color="wrong" style={{ textDecoration: 'line-through' }}>{DUMMY_QUESTION.userWrongAnswer}</Typo.SM>
+                                            </VStack>
+                                            <VStack className={s.answerItem} gap={4}>
+                                                <Typo.XS color="secondary">정답</Typo.XS>
+                                                <Typo.SM color="brand" fontWeight="bold">{DUMMY_QUESTION.idealAnswer}</Typo.SM>
+                                            </VStack>
+                                        </div>
+                                        <VStack gap={4} className={s.taxonomyBox}>
+                                            <Typo.XS color="secondary" fontWeight="bold">오류 유형</Typo.XS>
+                                            <HStack gap={8}>
+                                                <div className={s.tag}>진실 오도</div>
+                                                <div className={s.tagActive}>추론 왜곡</div>
+                                            </HStack>
+                                        </VStack>
                                     </VStack>
 
                                     <Button 
-                                        style={{ width: '100%' }}
-                                        disabled={selectedOption === null || isSubmitting}
-                                        onClick={handleAnswerSubmit}
+                                        className={s.submitButton}
+                                        style={{ width: '100%', height: '56px', borderRadius: '28px', backgroundColor: 'var(--brand-primary)' }} 
+                                        onClick={() => setStep(3)}
                                     >
-                                        {isSubmitting ? (
-                                            <Loader2 size={20} className={s.spinner} />
-                                        ) : (
-                                            <Typo.MD color="inverted" fontWeight="bold">답안 제출하기</Typo.MD>
-                                        )}
+                                        <HStack gap={8} align="center">
+                                            <BrainCircuit size={18} color="white" />
+                                            <Typo.MD color="inverted" fontWeight="bold">AI 코치와 왜 틀렸는지 분석하기</Typo.MD>
+                                            <ChevronRight size={18} color="white" />
+                                        </HStack>
                                     </Button>
                                 </VStack>
-                            </HStack>
-                        </VStack>
-                    )}
+                            </VStack>
+                        )}
 
-                    {/* STEP 2: REPORT */}
-                    {step === 2 && (
-                        <VStack fullWidth gap={20} className={s.stepContainer} align="center">
-                            <VStack align="center" gap={8} style={{ marginBottom: '20px' }}>
-                                <div className={s.scoreCircle}>
-                                    <Typo.XXL color="wrong">00</Typo.XXL>
-                                    <Typo.XS color="secondary">/ 100</Typo.XS>
+                        {/* STEP 3: COACH */}
+                        {step === 3 && (
+                            <div className={s.readingArea}>
+                                <div className={s.articleBox}>
+                                    <VStack fullWidth gap={16}>
+                                        <Typo.XL fontWeight="bold" color="primary">{DUMMY_ARTICLE.title}</Typo.XL>
+                                        <Typo.MD color="primary" style={{ whiteSpace: 'pre-wrap', lineHeight: 1.8 }}>
+                                            {DUMMY_ARTICLE.content}
+                                        </Typo.MD>
+                                    </VStack>
                                 </div>
-                                <Typo.LG fontWeight="bold" color="primary">아쉽네요! 하지만 실망하지 마세요.</Typo.LG>
-                                <Typo.SM color="secondary">틀린 부분에서 진짜 공부가 시작됩니다.</Typo.SM>
-                            </VStack>
 
-                            <VStack fullWidth className={s.reportSummary} gap={16}>
-                                <VStack fullWidth gap={12} className={s.answerSection}>
-                                    <Typo.SM fontWeight="bold" color="primary">Q1 분석 결과</Typo.SM>
-                                    <div className={s.answerGrid}>
-                                        <VStack className={s.answerItem} gap={4}>
-                                            <Typo.XS color="secondary">내가 고른 답</Typo.XS>
-                                            <Typo.SM color="wrong" style={{ textDecoration: 'line-through' }}>{DUMMY_QUESTION.userWrongAnswer}</Typo.SM>
-                                        </VStack>
-                                        <VStack className={s.answerItem} gap={4}>
-                                            <Typo.XS color="secondary">정답</Typo.XS>
-                                            <Typo.SM color="brand" fontWeight="bold">{DUMMY_QUESTION.idealAnswer}</Typo.SM>
-                                        </VStack>
-                                    </div>
-                                    <VStack gap={4} className={s.taxonomyBox}>
-                                        <Typo.XS color="secondary" fontWeight="bold">오류 유형</Typo.XS>
-                                        <HStack gap={8}>
-                                            <div className={s.tag}>진실 오도</div>
-                                            <div className={s.tagActive}>추론 왜곡</div>
-                                        </HStack>
-                                    </VStack>
-                                </VStack>
-
-                                <Button style={{ width: '100%' }} onClick={() => setStep(3)}>
-                                    <HStack gap={8} align="center">
-                                        <BrainCircuit size={18} color="white" />
-                                        <Typo.MD color="inverted" fontWeight="bold">AI 코치와 왜 틀렸는지 분석하기</Typo.MD>
-                                        <ChevronRight size={18} color="white" />
-                                    </HStack>
-                                </Button>
-                            </VStack>
-                        </VStack>
-                    )}
-
-                    {/* STEP 3: COACH */}
-                    {step === 3 && (
-                        <div className={s.coachContainer}>
-                            <div className={s.articleBoxCoach}>
-                                <VStack fullWidth gap={16}>
-                                    <Typo.XL fontWeight="bold" color="primary">{DUMMY_ARTICLE.title}</Typo.XL>
-                                    <Typo.MD color="primary" style={{ whiteSpace: 'pre-wrap', lineHeight: 1.8 }}>
-                                        {DUMMY_ARTICLE.content}
-                                    </Typo.MD>
-                                </VStack>
-                            </div>
-
-                            <VStack fullWidth className={s.chatBoxContainer} gap={0}>
-                                <HStack fullWidth justify="start" align="center" className={s.chatHeader}>
-                                    <VStack align="start" gap={2}>
-                                        <Typo.MD color="primary" fontWeight="bold">Think Coach</Typo.MD>
-                                        <Typo.XS color="secondary">가상 코칭 세션</Typo.XS>
-                                    </VStack>
-                                </HStack>
-
-                                <div className={s.chatArea}>
-                                    {messages.map((msg, idx) => (
-                                        <div key={idx} className={msg.role === 'user' ? s.userMessageRow : s.botMessageRow}>
-                                            {msg.role === 'assistant' ? (
-                                                <VStack align="start" gap={6} style={{ maxWidth: '85%' }}>
-                                                    <Typo.XS color="secondary" fontWeight="bold">Think Coach · Step {msg.step}</Typo.XS>
-                                                    <VStack align="start" gap={12} className={s.botBubble}>
-                                                        {msg.evaluation && (
-                                                            <div className={`${s.evaluationBox} ${msg.rating !== undefined ? (msg.rating >= 70 ? s.evaluationPass : s.evaluationHint) : ''}`}>
-                                                                <Typo.SM color={msg.rating !== undefined && msg.rating < 70 ? "brand" : "primary"} fontWeight="medium">
-                                                                    {msg.rating !== undefined ? (msg.rating >= 70 ? '✅ ' : '💡 ') : '💡 '}
-                                                                    {msg.evaluation}
-                                                                </Typo.SM>
-                                                            </div>
-                                                        )}
-
-                                                        {msg.user_answer_quote && msg.ideal_answer_quote && (
-                                                            <div className={s.comparisonContainer}>
-                                                                <div className={s.comparisonUser}>
-                                                                    <div className={s.comparisonLabel}>내 답변 중 부족한 부분</div>
-                                                                    <Typo.SM color="primary">"{msg.user_answer_quote}"</Typo.SM>
-                                                                </div>
-                                                                <div className={s.comparisonIdeal}>
-                                                                    <div className={s.comparisonLabel}>글에서 놓친 핵심</div>
-                                                                    <Typo.SM color="primary">"{msg.ideal_answer_quote}"</Typo.SM>
-                                                                </div>
-                                                            </div>
-                                                        )}
-
-                                                        {msg.highlight_quote && (
-                                                            <div className={s.highlightBox}>
-                                                                <Typo.SM color="primary">"{msg.highlight_quote}"</Typo.SM>
-                                                            </div>
-                                                        )}
-                                                        {msg.analysis && (
-                                                            <Typo.SM color="primary">{msg.analysis}</Typo.SM>
-                                                        )}
-                                                        <div className={s.questionBoxMsg}>
-                                                            <Typo.SM color="brand" fontWeight="bold" style={{ lineHeight: 1.5 }}>
-                                                                {msg.content}
-                                                            </Typo.SM>
-                                                        </div>
-                                                    </VStack>
-                                                </VStack>
-                                            ) : (
+                                <div className={s.chatBoxContainer}>
+                                    <div className={s.chatContainer}>
+                                        {messages.map((msg, idx) => (
+                                            <HStack fullWidth justify={msg.role === 'user' ? 'end' : 'start'} key={idx}
+                                                className={msg.role === 'user' ? s.userMessageRow : s.botMessageRow}>
+                                                {msg.role === 'user' ? (
                                                     <div className={s.userBubble}>
                                                         <Typo.SM color="inverted">{msg.content}</Typo.SM>
                                                     </div>
-                                            )}
-                                        </div>
-                                    ))}
-                                    {isBotTyping && (
-                                        <div className={s.botMessageRow}>
-                                            <div className={s.typingIndicator}>
-                                                <span /><span /><span />
-                                            </div>
-                                        </div>
-                                    )}
-                                    <div ref={chatEndRef} />
-                                </div>
+                                                ) : (
+                                                    <VStack align="start" gap={6} className={s.botBubbleContainer}>
+                                                        <Typo.XS color="secondary" fontWeight="bold" style={{ marginLeft: '4px' }}>
+                                                            Think Coach {msg.step ? `· Step ${msg.step}` : ''}
+                                                        </Typo.XS>
+                                                        <VStack fullWidth gap={12} className={s.botBubble}>
+                                                            {msg.evaluation && (
+                                                                <div className={`${s.evaluationBox} ${msg.rating !== undefined ? (msg.rating >= 70 ? s.evaluationPass : s.evaluationHint) : ''}`}>
+                                                                    <Typo.SM color={msg.rating !== undefined && msg.rating < 70 ? "brand" : "primary"} fontWeight="medium">
+                                                                        {msg.rating !== undefined ? (msg.rating >= 70 ? '✅ ' : '💡 ') : '💡 '}
+                                                                        {msg.evaluation}
+                                                                    </Typo.SM>
+                                                                </div>
+                                                            )}
 
-                                {chatIndex >= COACH_DIALOGUE.length - 2 ? (
-                                    <VStack fullWidth style={{ padding: '20px', borderTop: '1px solid var(--border-primary)', backgroundColor: 'var(--bg-primary)' }}>
-                                        <Button style={{ width: '100%' }} onClick={() => router.push('/')}>
-                                            <Typo.MD color="inverted" fontWeight="bold">튜토리얼 완료! 시작하기</Typo.MD>
-                                        </Button>
-                                    </VStack>
-                                ) : (
-                                    <HStack fullWidth className={s.inputArea} gap={12}>
-                                        <input 
-                                            className={s.input} 
-                                            placeholder="메시지를 입력해 코칭을 이어가세요..." 
-                                            value={inputValue}
-                                            onChange={(e) => setInputValue(e.target.value)}
-                                            onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-                                        />
-                                        <button 
-                                            className={s.sendBtn} 
-                                            onClick={handleSendMessage}
-                                            disabled={isBotTyping || !inputValue.trim()}
-                                        >
-                                            <Send size={18} color="white" />
-                                        </button>
-                                    </HStack>
-                                )}
-                            </VStack>
-                        </div>
-                    )}
-                </VStack>
-            </VStack>
-        </HStack>
+                                                            {msg.user_answer_quote && msg.ideal_answer_quote && (
+                                                                <div className={s.comparisonContainer}>
+                                                                    <div className={s.comparisonUser}>
+                                                                        <div className={s.comparisonLabel}>내 답변 중 부족한 부분</div>
+                                                                        <Typo.SM color="primary" fontWeight="regular">"{msg.user_answer_quote}"</Typo.SM>
+                                                                    </div>
+                                                                    <div className={s.comparisonIdeal}>
+                                                                        <div className={s.comparisonLabel}>글에서 놓친 핵심</div>
+                                                                        <Typo.SM color="primary" fontWeight="regular">"{msg.ideal_answer_quote}"</Typo.SM>
+                                                                    </div>
+                                                                </div>
+                                                            )}
+
+                                                            {msg.highlight_quote && (
+                                                                <div className={s.highlightBox}>
+                                                                    <Typo.SM color="primary" fontWeight="medium">"{msg.highlight_quote}"</Typo.SM>
+                                                                </div>
+                                                            )}
+                                                            {msg.analysis && (
+                                                                <Typo.SM color="primary" fontWeight="regular">{msg.analysis}</Typo.SM>
+                                                            )}
+                                                            {msg.content && (
+                                                                <div className={s.questionBoxMsg}>
+                                                                    <Typo.SM color="brand" fontWeight="bold">{msg.content}</Typo.SM>
+                                                                </div>
+                                                            )}
+                                                        </VStack>
+                                                    </VStack>
+                                                )}
+                                            </HStack>
+                                        ))}
+                                        {isBotTyping && (
+                                            <HStack fullWidth justify="start" className={s.botMessageRow}>
+                                                <div className={s.typingIndicator}>
+                                                    <span /><span /><span />
+                                                </div>
+                                            </HStack>
+                                        )}
+                                        <div ref={chatEndRef} />
+                                    </div>
+
+                                    {/* Input Area */}
+                                    <div className={s.inputArea}>
+                                        {chatIndex >= COACH_DIALOGUE.length - 2 ? (
+                                            <Button 
+                                                className={s.submitButton}
+                                                style={{ width: '100%', height: '52px', borderRadius: '26px', backgroundColor: 'var(--brand-primary)' }} 
+                                                onClick={() => router.push('/')}
+                                            >
+                                                <Typo.MD color="inverted" fontWeight="bold">튜토리얼 완료! 시작하기</Typo.MD>
+                                            </Button>
+                                        ) : (
+                                            <>
+                                                <input
+                                                    className={s.inputField}
+                                                    placeholder="생각을 자유롭게 입력해보세요..."
+                                                    value={inputValue}
+                                                    onChange={(e) => setInputValue(e.target.value)}
+                                                    onKeyDown={(e) => {
+                                                        if (e.nativeEvent.isComposing) return;
+                                                        if (e.key === 'Enter') handleSendMessage();
+                                                    }}
+                                                    disabled={isBotTyping}
+                                                />
+                                                <button className={s.sendButton} onClick={handleSendMessage} disabled={isBotTyping || !inputValue.trim()}>
+                                                    <Send size={18} color="var(--bg-primary)" />
+                                                </button>
+                                            </>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+        </div>
     );
 }

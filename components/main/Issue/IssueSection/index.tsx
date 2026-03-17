@@ -8,9 +8,10 @@ interface Props {
     editor : string;
     title : string;
     completed?: boolean;
+    disabled?: boolean;
 }
 
-export default function IssueSection({editor, title, completed}: Props) {
+export default function IssueSection({editor, title, completed, disabled}: Props) {
     const router = useRouter();
     return (
         <VStack fullWidth align="start" justify="center" className={s.container}gap={8} >
@@ -34,13 +35,13 @@ export default function IssueSection({editor, title, completed}: Props) {
             </VStack>
             <Button
                 className={s.button}
-                onClick={() => !completed && router.push("/article")}
-                style={completed ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
+                onClick={() => !completed && !disabled && router.push("/article")}
+                style={(completed || disabled) ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
             >
                 <Typo.MD
                     color="inverted"
                     fontWeight="medium"
-                >{completed ? '완료' : '하러가기'}</Typo.MD>
+                >{completed ? '완료' : disabled ? '콘텐츠 없음' : '하러가기'}</Typo.MD>
             </Button>
         </VStack>
     )

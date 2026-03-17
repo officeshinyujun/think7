@@ -14,7 +14,7 @@ function TypoMain(props: any) {
     )
 }
 
-type ColorType = 'primary' | 'secondary' | 'inverted' | 'brand' | 'correct' | 'wrong' | 'background-secondary' | 'background-third' | 'border';
+type ColorType = 'primary' | 'secondary' | 'inverted' | 'brand' | 'correct' | 'wrong' | 'background-secondary' | 'background-third' | 'border' | (string & {});
 type FontWeightType = 'light' | 'regular' | 'medium' | 'semi-bold' | 'bold';
 
 interface TypoProps {
@@ -27,15 +27,26 @@ interface TypoProps {
 }
 
 const getTypoClass = (color?: ColorType, fontWeight?: FontWeightType) => {
+    // Only return class if the color matches a predefined style key
+    const isPredefinedColor = color && !!s[color as keyof typeof s];
     return cs(
-        color && s[color],
+        isPredefinedColor ? s[color as keyof typeof s] : undefined,
         fontWeight && s[fontWeight]
     );
 }
 
+const getTypoStyle = (color?: ColorType, style?: React.CSSProperties) => {
+    // If color is provided but not in predefined styles, apply it as inline style
+    const isPredefinedColor = color && !!s[color as keyof typeof s];
+    if (color && !isPredefinedColor) {
+        return { ...style, color };
+    }
+    return style;
+}
+
 function XXS({ children, className, style, color, fontWeight, onClick }: TypoProps) {
     return (
-        <p className={cs(className, getTypoClass(color, fontWeight))} style={{ fontSize: 10, ...style }} onClick={onClick}>
+        <p className={cs(className, getTypoClass(color, fontWeight))} style={{ fontSize: 10, ...getTypoStyle(color, style) }} onClick={onClick}>
             {children}
         </p>
     )
@@ -43,7 +54,7 @@ function XXS({ children, className, style, color, fontWeight, onClick }: TypoPro
 
 function XS({ children, className, style, color, fontWeight, onClick }: TypoProps) {
     return (
-        <p className={cs(className, getTypoClass(color, fontWeight))} style={{ fontSize: 12, ...style }} onClick={onClick}>
+        <p className={cs(className, getTypoClass(color, fontWeight))} style={{ fontSize: 12, ...getTypoStyle(color, style) }} onClick={onClick}>
             {children}
         </p>
     )
@@ -51,7 +62,7 @@ function XS({ children, className, style, color, fontWeight, onClick }: TypoProp
 
 function SM({ children, className, style, color, fontWeight, onClick }: TypoProps) {
     return (
-        <p className={cs(className, getTypoClass(color, fontWeight))} style={{ fontSize: 14, ...style }} onClick={onClick}>
+        <p className={cs(className, getTypoClass(color, fontWeight))} style={{ fontSize: 14, ...getTypoStyle(color, style) }} onClick={onClick}>
             {children}
         </p>
     )
@@ -59,7 +70,7 @@ function SM({ children, className, style, color, fontWeight, onClick }: TypoProp
 
 function MD({ children, className, style, color, fontWeight, onClick }: TypoProps) {
     return (
-        <p className={cs(className, getTypoClass(color, fontWeight))} style={{ fontSize: 16, ...style }} onClick={onClick}>
+        <p className={cs(className, getTypoClass(color, fontWeight))} style={{ fontSize: 16, ...getTypoStyle(color, style) }} onClick={onClick}>
             {children}
         </p>
     )
@@ -67,7 +78,7 @@ function MD({ children, className, style, color, fontWeight, onClick }: TypoProp
 
 function LG({ children, className, style, color, fontWeight, onClick }: TypoProps) {
     return (
-        <p className={cs(className, getTypoClass(color, fontWeight))} style={{ fontSize: 20, ...style }} onClick={onClick}>
+        <p className={cs(className, getTypoClass(color, fontWeight))} style={{ fontSize: 20, ...getTypoStyle(color, style) }} onClick={onClick}>
             {children}
         </p>
     )
@@ -75,7 +86,7 @@ function LG({ children, className, style, color, fontWeight, onClick }: TypoProp
 
 function XL({ children, className, style, color, fontWeight, onClick }: TypoProps) {
     return (
-        <p className={cs(className, getTypoClass(color, fontWeight))} style={{ fontSize: 24, ...style }} onClick={onClick}>
+        <p className={cs(className, getTypoClass(color, fontWeight))} style={{ fontSize: 24, ...getTypoStyle(color, style) }} onClick={onClick}>
             {children}
         </p>
     )
@@ -83,7 +94,7 @@ function XL({ children, className, style, color, fontWeight, onClick }: TypoProp
 
 function XXL({ children, className, style, color, fontWeight, onClick }: TypoProps) {
     return (
-        <p className={cs(className, getTypoClass(color, fontWeight))} style={{ fontSize: 36, ...style }} onClick={onClick}>
+        <p className={cs(className, getTypoClass(color, fontWeight))} style={{ fontSize: 36, ...getTypoStyle(color, style) }} onClick={onClick}>
             {children}
         </p>
     )

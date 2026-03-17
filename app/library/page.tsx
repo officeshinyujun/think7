@@ -113,6 +113,7 @@ export default function Library() {
                             </div>
                         )}
                     </HStack>
+                    <Typo.SM color="secondary" style={{ marginTop: '-8px' }}>다양한 주제의 콘텐츠로 사고력을 넓혀보세요.</Typo.SM>
 
                     {/* Filter Bar */}
                     <div className={s.filterBar}>
