@@ -13,6 +13,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Lock, Clock, ChevronRight, Sparkles, Crown, Plus, CalendarDays } from "lucide-react";
 import CreateContentModal from "@/components/library/CreateContentModal";
+import UpgradeLimitModal from "@/components/library/UpgradeLimitModal";
 import Header from "@/components/general/Header";
 
 const TOPICS = ['전체'];
@@ -29,8 +30,10 @@ export default function Library() {
     const [contents, setContents] = useState<Content[]>([]);
     const [selectedTopic, setSelectedTopic] = useState('전체');
     const [loading, setLoading] = useState(true);
-    const [todayUsed, setTodayUsed] = useState(0);
+    const [todayUsed, setTodayUsed] = useState(0); // This is for reading
+    const [todayGenerated, setTodayGenerated] = useState(0); // This is for generation
     const [showCreateModal, setShowCreateModal] = useState(false);
+    const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
     const isPremium = user?.subscription_plan === 'PREMIUM';
 
@@ -40,6 +43,28 @@ export default function Library() {
                 const topic = selectedTopic === '전체' ? undefined : selectedTopic;
                 const data = await https.content.getLibrary(topic);
                 setContents(data);
+                
+                // Calculate today's generated count (Seoul Time)
+                const now = new Date();
+                const todayStr = new Intl.DateTimeFormat('en-CA', {
+                    timeZone: 'Asia/Seoul',
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit'
+                }).format(now);
+
+                const generatedToday = data.filter(c => {
+                    const createdDateStr = new Intl.DateTimeFormat('en-CA', {
+                        timeZone: 'Asia/Seoul',
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit'
+                    }).format(new Date(c.created_at));
+                    
+                    return c.user_id === user?.id && createdDateStr === todayStr;
+                }).length;
+                
+                setTodayGenerated(generatedToday);
             } catch (err) {
                 console.error('Failed to fetch library:', err);
             } finally {
@@ -47,7 +72,7 @@ export default function Library() {
             }
         };
         fetchContents();
-    }, [selectedTopic]);
+    }, [selectedTopic, user?.id]);
 
     const freeContents = contents.filter(c => !c.is_premium);
     const premiumContents = contents.filter(c => c.is_premium);
@@ -89,9 +114,15 @@ export default function Library() {
                     {/* Header */}
                     <HStack fullWidth align="center" justify="between">
                         <Typo.XL color="primary" fontWeight="bold">콘텐츠 라이브러리</Typo.XL>
-                        {isPremium ? (
+                        <HStack gap={12} align="center">
                             <button
-                                onClick={() => setShowCreateModal(true)}
+                                onClick={() => {
+                                    if (!isPremium && todayGenerated >= FREE_DAILY_LIMIT) {
+                                        setShowUpgradeModal(true);
+                                    } else {
+                                        setShowCreateModal(true);
+                                    }
+                                }}
                                 style={{
                                     padding: '8px',
                                     borderRadius: '50%',
@@ -105,13 +136,7 @@ export default function Library() {
                             >
                                 <Plus size={20} color="white" />
                             </button>
-                        ) : (
-                            <div className={s.dailyLimit}>
-                                <Typo.XS color="secondary" fontWeight="bold">
-                                    오늘 {todayUsed} / {FREE_DAILY_LIMIT}
-                                </Typo.XS>
-                            </div>
-                        )}
+                        </HStack>
                     </HStack>
                     <Typo.SM color="secondary" style={{ marginTop: '-8px' }}>다양한 주제의 콘텐츠로 사고력을 넓혀보세요.</Typo.SM>
 
@@ -282,6 +307,12 @@ export default function Library() {
                                 setLoading(false);
                             });
                     }}
+                />
+            )}
+
+            {showUpgradeModal && (
+                <UpgradeLimitModal
+                    onClose={() => setShowUpgradeModal(false)}
                 />
             )}
         </HStack>

@@ -6,7 +6,7 @@ import { useTheme } from '@/contexts/ThemeContext';
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { Sun, Moon } from 'lucide-react';
+import { Sun, Moon, ArrowRight, Brain, BookOpen, BarChart3, Dna, ChevronRight } from 'lucide-react';
 import s from './style.module.scss';
 
 const fadeUp = {
@@ -41,28 +41,24 @@ const STATS = [
 
 const FEATURES = [
     {
-        emoji: '🤖',
+        icon: <Brain size={22} />,
         title: 'AI 심층 분석',
         desc: '핵심 파악, 논리 추론, 비판적 사고, 편향 탐지 — 4가지 영역을 AI가 정밀 분석합니다.',
-        accent: '#3D7BFF',
     },
     {
-        emoji: '📰',
+        icon: <BookOpen size={22} />,
         title: '매일 새로운 콘텐츠',
         desc: '시사, 과학, 경제 등 다양한 분야에서 엄선된 아티클과 사고를 자극하는 질문이 제공됩니다.',
-        accent: '#7B61FF',
     },
     {
-        emoji: '📊',
+        icon: <BarChart3 size={22} />,
         title: '성장 리포트',
         desc: '누적 데이터로 사고 패턴과 성장 추이를 시각화하여 나만의 성장 여정을 확인하세요.',
-        accent: '#89DA7F',
     },
     {
-        emoji: '🧬',
+        icon: <Dna size={22} />,
         title: '사고 유형 진단',
         desc: '답변 패턴을 분석해 사고 유형 진단 및 강점과 보완점을 제시합니다.',
-        accent: '#FF7B7B',
     },
 ];
 
@@ -76,17 +72,11 @@ export default function LandingPage() {
     const { user, isLoading } = useAuth();
     const { theme, toggleTheme } = useTheme();
     const router = useRouter();
-    const heroRef = useRef(null);
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
         setMounted(true);
     }, []);
-
-    const { scrollY } = useScroll();
-
-    const heroY = useTransform(scrollY, [0, 500], [0, 150]);
-    const heroOpacity = useTransform(scrollY, [0, 400], [1, 0]);
 
     useEffect(() => {
         if (!isLoading && user) {
@@ -99,11 +89,11 @@ export default function LandingPage() {
 
     return (
         <div className={s.page}>
-            {/* ── Floating Orbs (background) ── */}
-            <div className={s.orbContainer}>
-                <div className={`${s.orb} ${s.orb1}`} />
-                <div className={`${s.orb} ${s.orb2}`} />
-                <div className={`${s.orb} ${s.orb3}`} />
+            {/* ── Background Glow Effects ── */}
+            <div className={s.glowContainer}>
+                <div className={s.glowOrb1} />
+                <div className={s.glowOrb2} />
+                <div className={s.glowOrb3} />
             </div>
 
             {/* ── Navigation ── */}
@@ -113,93 +103,73 @@ export default function LandingPage() {
                     <span className={s.logoText}>Think7</span>
                 </div>
                 <div className={s.navActions}>
-                    {mounted && (
-                        <button 
-                            onClick={toggleTheme} 
-                            className={s.navThemeBtn}
-                            aria-label="Toggle theme"
-                        >
-                            {theme === 'dark' ? <Moon size={20} color="var(--text-primary)" /> : <Sun size={20} color="var(--text-primary)" />}
-                        </button>
-                    )}
                     <button className={s.navLoginBtn} onClick={() => router.push('/auth/login')}>
                         로그인
                     </button>
-                    <button className={s.navSignupBtn} onClick={() => router.push('/auth/signup')}>
-                        시작하기
+                    <button className={s.navCtaBtn} onClick={() => router.push('/auth/signup')}>
+                        시작하기 <ChevronRight size={16} />
                     </button>
                 </div>
             </nav>
 
             {/* ── Hero Section ── */}
-            <section className={s.hero} ref={heroRef}>
-                <motion.div
-                    style={{ y: heroY, opacity: heroOpacity }}
-                    className={s.heroInner}
-                >
+            <section className={s.hero}>
+                <div className={s.heroContent}>
                     <motion.div
-                        className={s.heroBadge}
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.5, type: 'spring' }}
-                    >
-                        🧠 AI 기반 사고력 훈련
-                    </motion.div>
-
-                    <motion.h1
-                        className={s.heroTitle}
+                        className={s.heroTextBlock}
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.7, delay: 0.1 }}
+                        transition={{ duration: 0.8 }}
                     >
-                        하루 7분,<br />
-                        <span className={s.heroGradient}>사고력을 깨우는 시간</span>
-                    </motion.h1>
-
-                    <motion.p
-                        className={s.heroSubtitle}
-                        initial={{ opacity: 0, y: 24 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 0.25 }}
-                    >
-                        매일 엄선된 콘텐츠를 읽고, 질문에 답하면<br />
-                        AI가 당신의 사고 과정을 분석하고 성장을 함께 합니다.
-                    </motion.p>
+                        <h1 className={s.heroTitle}>
+                            Meet Think7.<br />
+                            <span className={s.heroTitleAccent}>
+                                AI 기반 비판적 사고력<br />
+                                훈련 플랫폼.
+                            </span>
+                        </h1>
+                    </motion.div>
 
                     <motion.div
-                        className={s.heroCTA}
-                        initial={{ opacity: 0, y: 24 }}
+                        className={s.heroBottom}
+                        initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 0.4 }}
+                        transition={{ duration: 0.7, delay: 0.3 }}
                     >
-                        <button className={s.ctaPrimary} onClick={() => router.push('/auth/signup')}>
-                            무료로 시작하기
-                        </button>
-                        <button className={s.ctaSecondary} onClick={() => router.push('/tutorial')}>
-                            직접 체험해보기
-                        </button>
-                        <button className={s.ctaGhost} onClick={() => router.push('/auth/login')}>
-                            이미 계정이 있어요 →
-                        </button>
+                        <p className={s.heroSubtitle}>
+                            매일 엄선된 콘텐츠를 읽고, 질문에 답하면<br />
+                            AI가 당신의 사고 과정을 분석하고 성장을 돕습니다.
+                        </p>
+                        <div className={s.heroCTA}>
+                            <button className={s.ctaPrimary} onClick={() => router.push('/auth/signup')}>
+                                시작하기 <ChevronRight size={18} />
+                            </button>
+                            <button className={s.ctaSecondary} onClick={() => router.push('/tutorial')}>
+                                직접 체험해보기
+                            </button>
+                        </div>
                     </motion.div>
-                </motion.div>
-            </section>
+                </div>
 
-            {/* ── Stats Bar ── */}
-            <motion.section
-                className={s.statsBar}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, amount: 0.5 }}
-                variants={staggerFast}
-            >
-                {STATS.map((stat, i) => (
-                    <motion.div key={i} className={s.statItem} variants={fadeUp} transition={{ duration: 0.5 }}>
-                        <span className={s.statNumber}>{stat.number}</span>
-                        <span className={s.statLabel}>{stat.label}</span>
-                    </motion.div>
-                ))}
-            </motion.section>
+                {/* Hero right side floating shapes */}
+                <div className={s.heroVisual}>
+                    <motion.div
+                        className={s.floatingShape1}
+                        animate={{ rotate: [0, 15, -5, 0], y: [0, -20, 10, 0] }}
+                        transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
+                    />
+                    <motion.div
+                        className={s.floatingShape2}
+                        animate={{ rotate: [0, -10, 20, 0], y: [0, 15, -10, 0] }}
+                        transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+                    />
+                    <motion.div
+                        className={s.floatingShape3}
+                        animate={{ rotate: [0, 25, -15, 0], y: [0, -15, 20, 0] }}
+                        transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
+                    />
+                </div>
+            </section>
 
             {/* ── Features Section ── */}
             <motion.section
@@ -209,12 +179,10 @@ export default function LandingPage() {
                 viewport={{ once: true, amount: 0.1 }}
                 variants={stagger}
             >
-                <motion.p className={s.sectionLabel} variants={fadeUp} transition={{ duration: 0.5 }}>
-                    FEATURES
-                </motion.p>
-                <motion.h2 className={s.sectionTitle} variants={fadeUp} transition={{ duration: 0.5 }}>
-                    왜 <span className={s.heroGradient}>Think7</span>인가요?
-                </motion.h2>
+                <motion.div className={s.sectionHeader} variants={fadeUp} transition={{ duration: 0.6 }}>
+                    <h2 className={s.sectionTitle}>Think7 Systems</h2>
+                    <p className={s.sectionSubtitle}>비판적 사고력 향상을 위한 지능형 솔루션</p>
+                </motion.div>
 
                 <div className={s.featureGrid}>
                     {FEATURES.map((f, i) => (
@@ -224,18 +192,17 @@ export default function LandingPage() {
                             variants={scaleUp}
                             transition={{ duration: 0.5 }}
                         >
-                            <div className={s.featureIcon} style={{ background: `${f.accent}15` }}>
-                                {f.emoji}
+                            <div className={s.featureIconWrap}>
+                                {f.icon}
                             </div>
                             <h3 className={s.featureTitle}>{f.title}</h3>
                             <p className={s.featureDesc}>{f.desc}</p>
-                            <div className={s.featureGlow} style={{ background: f.accent }} />
                         </motion.div>
                     ))}
                 </div>
             </motion.section>
 
-            {/* ── How It Works Section ── */}
+            {/* ── How It Works (Case Study Style) ── */}
             <motion.section
                 className={s.howItWorks}
                 initial="hidden"
@@ -243,25 +210,138 @@ export default function LandingPage() {
                 viewport={{ once: true, amount: 0.15 }}
                 variants={stagger}
             >
-                <motion.p className={s.sectionLabel} variants={fadeUp} transition={{ duration: 0.5 }}>
-                    HOW IT WORKS
-                </motion.p>
-                <motion.h2 className={s.sectionTitle} variants={fadeUp} transition={{ duration: 0.5 }}>
-                    3단계로 시작하세요
-                </motion.h2>
+                <motion.div className={s.sectionHeader} variants={fadeUp} transition={{ duration: 0.6 }}>
+                    <h2 className={s.sectionTitle}>이렇게 진행됩니다</h2>
+                    <p className={s.sectionSubtitle}>3단계로 완성되는 사고력 훈련</p>
+                </motion.div>
 
-                <div className={s.stepsContainer}>
+                <div className={s.stepsRow}>
                     {STEPS.map((step, i) => (
                         <motion.div key={i} className={s.stepCard} variants={fadeUp} transition={{ duration: 0.5 }}>
                             <div className={s.stepNumber}>{step.num}</div>
-                            <div className={s.stepContent}>
-                                <h3 className={s.stepTitle}>{step.title}</h3>
-                                <p className={s.stepDesc}>{step.desc}</p>
-                            </div>
-                            {i < STEPS.length - 1 && <div className={s.stepConnector} />}
+                            <h3 className={s.stepTitle}>{step.title}</h3>
+                            <p className={s.stepDesc}>{step.desc}</p>
                         </motion.div>
                     ))}
                 </div>
+            </motion.section>
+
+            {/* ── Data & AI Sections ── */}
+            <motion.section
+                className={s.showcase}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.15 }}
+                variants={stagger}
+            >
+                {/* Data Driven */}
+                <motion.div className={s.showcaseRow} variants={fadeUp} transition={{ duration: 0.7 }}>
+                    <div className={s.showcaseText}>
+                        <div className={s.showcaseIcon}>
+                            <BarChart3 size={32} />
+                        </div>
+                        <h2 className={s.showcaseTitle}>Data Driven</h2>
+                        <p className={s.showcaseDesc}>
+                            매일 축적되는 학습 데이터를 기반으로 사고 패턴, 강약점, 성장 추이를 정밀하게 추적합니다.
+                            당신의 비판적 사고력 향상을 수치로 확인하세요.
+                        </p>
+                    </div>
+                    <div className={s.showcaseVisual}>
+                        {/* Mock Growth Chart Card */}
+                        <motion.div
+                            className={s.mockCard}
+                            animate={{ y: [0, -8, 0] }}
+                            transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
+                        >
+                            <div className={s.mockCardHeader}>
+                                <span className={s.mockCardLabel}>사고력 성장 추이</span>
+                                <span className={s.mockCardBadge}>+12%</span>
+                            </div>
+                            <div className={s.mockChart}>
+                                <div className={s.mockChartBar} style={{ height: '40%' }} />
+                                <div className={s.mockChartBar} style={{ height: '55%' }} />
+                                <div className={s.mockChartBar} style={{ height: '45%' }} />
+                                <div className={s.mockChartBar} style={{ height: '65%' }} />
+                                <div className={s.mockChartBar} style={{ height: '60%' }} />
+                                <div className={s.mockChartBar} style={{ height: '75%' }} />
+                                <div className={`${s.mockChartBar} ${s.mockChartBarActive}`} style={{ height: '85%' }} />
+                            </div>
+                            <div className={s.mockChartLabels}>
+                                <span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span><span>일</span>
+                            </div>
+                        </motion.div>
+                        {/* Mock Score Card */}
+                        <motion.div
+                            className={`${s.mockCard} ${s.mockCardSmall}`}
+                            animate={{ y: [0, 6, 0] }}
+                            transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+                        >
+                            <span className={s.mockScoreLabel}>종합 점수</span>
+                            <span className={s.mockScoreValue}>87</span>
+                            <div className={s.mockProgressBar}>
+                                <div className={s.mockProgressFill} style={{ width: '87%' }} />
+                            </div>
+                        </motion.div>
+                    </div>
+                </motion.div>
+
+                {/* AI Powered */}
+                <motion.div className={`${s.showcaseRow} ${s.showcaseRowReverse}`} variants={fadeUp} transition={{ duration: 0.7 }}>
+                    <div className={s.showcaseText}>
+                        <div className={s.showcaseIcon}>
+                            <Brain size={32} />
+                        </div>
+                        <h2 className={s.showcaseTitle}>AI Powered</h2>
+                        <p className={s.showcaseDesc}>
+                            GPT-4o 기반 Chain-of-Thought 분석으로 답변의 논리적 결함을 정밀 진단합니다.
+                            단순 채점이 아닌, 사고 과정 자체를 코칭합니다.
+                        </p>
+                    </div>
+                    <div className={s.showcaseVisual}>
+                        {/* Mock AI Feedback Card */}
+                        <motion.div
+                            className={s.mockCard}
+                            animate={{ y: [0, -6, 0] }}
+                            transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+                        >
+                            <div className={s.mockCardHeader}>
+                                <span className={s.mockCardLabel}>AI 분석 피드백</span>
+                            </div>
+                            <div className={s.mockFeedback}>
+                                <div className={s.mockFeedbackRow}>
+                                    <span className={s.mockDot} style={{ background: '#89DA7F' }} />
+                                    <span className={s.mockFeedbackText}>핵심 주장 파악</span>
+                                    <span className={s.mockFeedbackScore}>92</span>
+                                </div>
+                                <div className={s.mockFeedbackRow}>
+                                    <span className={s.mockDot} style={{ background: '#3D7BFF' }} />
+                                    <span className={s.mockFeedbackText}>논리적 추론</span>
+                                    <span className={s.mockFeedbackScore}>78</span>
+                                </div>
+                                <div className={s.mockFeedbackRow}>
+                                    <span className={s.mockDot} style={{ background: '#FF7B7B' }} />
+                                    <span className={s.mockFeedbackText}>비판적 사고</span>
+                                    <span className={s.mockFeedbackScore}>65</span>
+                                </div>
+                                <div className={s.mockFeedbackRow}>
+                                    <span className={s.mockDot} style={{ background: '#7B61FF' }} />
+                                    <span className={s.mockFeedbackText}>편향 탐지</span>
+                                    <span className={s.mockFeedbackScore}>84</span>
+                                </div>
+                            </div>
+                        </motion.div>
+                        {/* Mock Taxonomy Card */}
+                        <motion.div
+                            className={`${s.mockCard} ${s.mockCardSmall}`}
+                            animate={{ y: [0, 8, 0] }}
+                            transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
+                        >
+                            <span className={s.mockScoreLabel}>사고 유형</span>
+                            <span className={s.mockTypeValue}>전략형 🧠</span>
+                            <p className={s.mockTypeDesc}>논리적 구조를 파악하는 능력이 뛰어남</p>
+                        </motion.div>
+                    </div>
+                </motion.div>
             </motion.section>
 
             {/* ── Bottom CTA ── */}
@@ -272,40 +352,38 @@ export default function LandingPage() {
                 viewport={{ once: true, amount: 0.3 }}
                 variants={stagger}
             >
-                <motion.div className={s.ctaCard} variants={scaleUp} transition={{ duration: 0.6 }}>
-                    <motion.h2 className={s.ctaTitle} variants={fadeUp} transition={{ duration: 0.5 }}>
-                        오늘부터<br />
-                        <span className={s.heroGradient}>사고력을 키워보세요</span>
-                    </motion.h2>
-                    <motion.p className={s.ctaDesc} variants={fadeUp} transition={{ duration: 0.5 }}>
-                        하루 7분이면 충분합니다. 지금 무료로 시작해보세요.
-                    </motion.p>
-                    <motion.button
-                        className={s.ctaStartBtn}
-                        variants={fadeUp}
-                        transition={{ duration: 0.5 }}
-                        onClick={() => router.push('/auth/signup')}
-                    >
-                        무료로 시작하기
-                    </motion.button>
-                </motion.div>
+                <motion.h2 className={s.ctaTitle} variants={fadeUp} transition={{ duration: 0.6 }}>
+                    오늘부터<br />
+                    <span className={s.heroTitleAccent}>사고력을 키워보세요</span>
+                </motion.h2>
+                <motion.p className={s.ctaDesc} variants={fadeUp} transition={{ duration: 0.5 }}>
+                    하루 7분이면 충분합니다. 지금 무료로 시작해보세요.
+                </motion.p>
+                <motion.button
+                    className={s.ctaPrimary}
+                    variants={fadeUp}
+                    transition={{ duration: 0.5 }}
+                    onClick={() => router.push('/auth/signup')}
+                >
+                    무료로 시작하기 <ChevronRight size={18} />
+                </motion.button>
             </motion.section>
 
             {/* ── Footer ── */}
             <footer className={s.footer}>
                 <div className={s.footerInner}>
                     <div className={s.footerBrand}>
-                        <Image src="/think7_Logo.png" alt="Think7" width={24} height={24} />
-                        <span className={s.logoText} style={{ fontSize: 15 }}>Think7</span>
+                        <Image src="/think7_Logo.png" alt="Think7" width={20} height={20} />
+                        <span className={s.footerLogoText}>Think7</span>
                     </div>
-                    <p className={s.footerText}>© 2026 Think7. All rights reserved.</p>
+                    <p className={s.footerCopy}>© 2026 Think7. All rights reserved.</p>
                 </div>
             </footer>
 
             {/* ── Mobile Floating Theme Toggle ── */}
             {mounted && (
                 <button className={s.floatingThemeBtn} onClick={toggleTheme}>
-                    {theme === 'dark' ? <Moon size={22} color="var(--brand-primary)" /> : <Sun size={22} color="var(--brand-primary)" />}
+                    {theme === 'dark' ? <Moon size={22} color="#3D7BFF" /> : <Sun size={22} color="#3D7BFF" />}
                 </button>
             )}
         </div>

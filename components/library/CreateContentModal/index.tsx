@@ -29,9 +29,16 @@ export default function CreateContentModal({ onClose, onSuccess }: CreateContent
             await https.content.generate(topic, type);
             onSuccess();
             onClose();
-        } catch (error) {
+        } catch (error: any) {
             console.error('Failed to generate content:', error);
-            alert('콘텐츠 생성에 실패했습니다.');
+            const errorMessage = error.response?.data?.message;
+            if (errorMessage === 'FREE_TIER_DAILY_LIMIT_REACHED') {
+                if (confirm('무료 티어 사용자는 하루 2개까지만 생성이 가능합니다. 프리미엄으로 업그레이드하여 무제한으로 이용하시겠습니까?')) {
+                    router.push('/profile/plan');
+                }
+            } else {
+                alert('콘텐츠 생성에 실패했습니다.');
+            }
         } finally {
             setIsLoading(false);
         }

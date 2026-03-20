@@ -27,6 +27,7 @@ export interface Content {
   thumbnail_image?: string;
   published_date: string;
   created_at: string;
+  user_id?: string;
 }
 
 export interface AnswerSubmission {
